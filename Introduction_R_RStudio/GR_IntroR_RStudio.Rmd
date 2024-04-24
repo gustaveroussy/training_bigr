@@ -604,7 +604,7 @@ three4five6
 
 Exercise: Use the _Help pane_ to find how to use the function [`read.csv()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table).
 
-You can find example_table.csv [here](https://github.com/gustaveroussy/training_bigr/Introduction_R_RStudio/example_table.csv) ###TO DO!!!
+You can find example_table.csv [here](https://github.com/gustaveroussy/training_bigr/blob/main/Introduction_R_RStudio/example_table.csv)(download it by clocking on the "Download raw file" button).
 
 Use the function [`read.csv()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table) to:
 
