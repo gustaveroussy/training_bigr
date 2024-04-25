@@ -324,12 +324,11 @@ mysterious_number_7 <- 7.0000001
 suspicious_number_7 <- 7
 ```
 
-<details>
 
-<summary>Tricky Question: </summary>
-
+*Question*:  
 I have two numbers: `mysterious_number_7`,  and `suspicious_number_7`. When I apply the function [`print()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print) on them, it return `7`. They are both numeric. However, they are not equal ... Why ?
-
+<details>
+<summary>Code to check question facts</summary>
 ```{r tricky_exercise_shown, eval=TRUE}
 # Show the value of the variable mysterious_number_7
 print(mysterious_number_7)
@@ -369,10 +368,15 @@ mysterious_number_7 == suspicious_number_7
 identical(mysterious_number_7, suspicious_number_7)
 ```
 
-You can change the number of displayed digits with the function [`options()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/options): `options(digits=100)`
+You can change the number of displayed digits with the function [`options()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/options):
+
+```{r options_digits_change, eval=TRUE, echo=TRUE}
+options(digits=8) #allows you to print up to 8 digits
+print(mysterious_number_7)
+```
 
 </details>
-
+<br>
 
 ### Boolean
 
@@ -453,10 +457,16 @@ Another example, mixing numeric and boolans:
 identical(1, TRUE)
 ```
 
-In computer science, there is a reason why boolean and integers are mixed. We won't cover this reason now. It's out of our scope. Feel free to ask if you're interested in history and maths. ###TO DO!!!
-
+In computer science, there is a historical reason why booleans and integers are mixed.
+<details>
+<summary>More information about that</summary>
+It is linked with history of computing langages.
+Prior to introduction of an actual bool type (`TRUE` and `FALSE`), `0` and `1` were the official representation for truth value, similar to C89 (the first standardized version of the C programming language, in 1989).  
+To avoid unnecessarily breaking non-ideal but working code, the new bool type needed to work just like 0 and 1. This goes beyond merely truth value, but all integral operations. No one would recommend using a boolean result in a numeric context, nor would most people recommend testing equality to determine truth value, no one wanted to find out the hard way just how much existing code is that way. Thus the decision to make True and False masquerade as 1 and 0, respectively. This is merely a historical artifact of the linguistic evolution.
 </details>
 
+</details>
+<br>
 *Question 2*: Can I include both text and numbers in a vector ?
 
 ```{r mixed_basics_vectors, eval=TRUE}
@@ -482,7 +492,7 @@ print(all(is.character((mixed_vector))))
 Above, the function [`all()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/all) returns `TRUE` if all its content equals to `TRUE`.
 
 </details>
-
+<br>
 *Question 3*: How to create an histogram with a vector ?
 
 <details>
@@ -505,6 +515,7 @@ hist(n_vector) # worked perfectly !
 ```
 
 </details>
+<br>
 
 ### Data Frame
 
@@ -567,6 +578,7 @@ str(one2three4)
 ```
 
 </details>
+<br>
 
 *Question 2*: Can I mix characters and numbers in a data frame *column* ?
 
@@ -586,7 +598,7 @@ str(mixed_data_frame)
 ```
 
 </details>
-
+<br>
 *Question 3*: How can you add 2 for each cell of the dataframe ?
 
 <details>
@@ -599,6 +611,7 @@ three4five6
 ```
 
 </details>
+<br>
 
 ### Read a table as data frame
 
