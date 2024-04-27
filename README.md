@@ -5,7 +5,7 @@ All courses are free, but registration is required!
 - ### Introduction to R and RStudio
   - Prerequisites:
     - a laptop with [R>4.0.0](https://cran.r-project.org/) and [RStudio](https://posit.co/download/rstudio-desktop/) installed  
-    Notes: If you can’t install R>4.0.0 or Rstudio, pre-sessions to get help is planned; if you don’t have a laptop, borrow one from the [DTNSI](5500.contact@gustaveroussy.fr).
+    Notes: If you can’t install R>4.0.0 or Rstudio, pre-sessions to get help is planned; if you don’t have a laptop, borrow one from the DTNSI(5500.contact@gustaveroussy.fr).
     - your motivation and smile ;)
   - Program:
     - Introduction to R bases
