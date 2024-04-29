@@ -1,0 +1,152 @@
+---
+title: "Introduction to R and RStudio"
+date: "`r Sys.Date()`"
+author:
+  - name: "BiGR: Bioinformatics core facility of Gustave Roussy"
+    email: "bigr@gustaveroussy.fr"
+output:
+  rmdformatsbigr::readthebigrdoc:  # if you'd like to have a nice theme
+    code_folding: show
+    thumbnails: false
+    lightbox: true
+    highlight: true
+    fig_caption: false
+
+# install.packages("remotes")
+# install.packages("git2r")
+# remotes::install_git("https://gitlab.com/bioinfo_gustaveroussy/bigr/rmdformatsbigr.git",
+#                      credentials=git2r::cred_user_pass("your_login", "your_password"))
+---
+
+```{r setup, include=FALSE}
+# options(width = 60);
+knitr::opts_chunk$set(
+  echo = TRUE,        # Print the code
+  eval = TRUE,        # Do not run command lines
+  message = FALSE,    # Print messages
+  prompt = FALSE,     # Do not display prompt
+  comment = NA,       # No comments on this section
+  warning = TRUE      # Display warnings
+);
+
+```
+
+<style type="text/css">
+summary {
+  display: list-item;
+}
+details:hover {
+  cursor: pointer
+}
+body {
+  text-align: justify
+}
+.column-left{
+  float: left;
+  width: 47%;
+  text-align: left;
+}
+.column-right{
+  float: right;
+  width: 47%;
+  text-align: left;
+}
+</style>
+
+
+# Introduction
+
+## Purpose
+
+Loading and filtering large tables is a common task in the fields of Biology and Bioinformatics.
+Being able to process all floating point, commas and power of 10 as numbers is a very simple thing
+with [`R`](https://en.wikipedia.org/wiki/R_(programming_language)), and other programming languages.
+
+This session focuces on R, and is divided in three parts:
+
+* R, without any additional libraries
+* R, using [`tidyverse`](https://www.tidyverse.org/) packages
+* Advanced R commands to save space, memory, and time
+
+## Expectations
+
+At the end of this session, you will be able to:
+
+1. Load large tables in memory (and save space/time as much as possible)
+1. Search any range of values within a numeric table
+1. Identify normalized data, raw data
+1. Convert TPM to raw counts
+1. Normalize raw counts to TPM
+1. Sort a numeric table accoring to a criterion of your choice
+1. FIlter a numeric table given a range of values
+1. Produce and save a PCA
+1. Produce and save a clustered heatmap on differentially expressed genes
+1. Produce and save a table including rRNA ratio
+1. Produce and save a R object with the whole session objects
+
+
+# Natural R
+
+Loading a table in R is being done with the function [`read.table`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table) 
+form the package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
+Remember, specifying the package name is facultative, but very
+important when you want to share, reproduce, and make your work
+accessible. These are the keys of the [FAIR principles](https://fr.wikipedia.org/wiki/Fair_data).
+
+```{r NR_load_table}
+counts <- utils::read.table(
+    file="small_table.csv",   # Path to the table
+)
+```
+
+Let's see the content of the table, using the function [`head`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head)
+from package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
+
+```{r NR_head_loaded_table, eval=FALSE}
+utils::head(x = counts)
+```
+
+```{r NR_kittr_head_loaded_table, echo=FALSE, results='asis'}
+knitr::kable(
+  x = utils::head(x=counts),
+  caption = "First five lines of the table"
+)
+```
+
+Oh, there is a problem here...
+Help me identify all our issues here.
+
+<details>
+
+<summary>List of issues</summary>
+
+1. Columns are not separated correctly
+1. Header is not recognized
+
+</details>
+<br />
+
+
+```{r NR_correctly_load_table}
+counts <- utils::read.table(
+    file="small_table.csv",
+    header=TRUE,
+    sep=",",
+)
+```
+
+We use the [`head`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head)
+function again...
+
+```{r NR_kittr_head_loaded_table, echo=FALSE, results='asis'}
+knitr::kable(
+  x = utils::head(x=counts),
+  caption = "First five lines of the table"
+)
+```
+
+It looks just as it shoud!
+
+# R with `tidyverse`
+
+# Memory efficient processing
