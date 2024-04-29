@@ -1,4 +1,25 @@
-# training_bigr
-This repository containing all trainings from bioinformatics platform of Gustave Roussy
+# Bioinformatics trainings for newbies
+This repository containing all trainings from bioinformatics platform of Gustave Roussy BiGR.  
+All courses are free, but registration is required!  
 
-- [Introduction to R and RStudio](https://github.com/gustaveroussy/training_bigr/blob/main/Introduction_R_RStudio/GR_IntroR_RStudio.html)
+- ### Introduction to R and RStudio
+  - Prerequisites:
+    - a laptop with [R>4.0.0](https://cran.r-project.org/) and [RStudio](https://posit.co/download/rstudio-desktop/) installed  
+    Notes: If you can’t install R>4.0.0 or Rstudio, pre-sessions to get help is planned; if you don’t have a laptop, borrow one from the DTNSI (5500.contact@gustaveroussy.fr or https://5500.gustaveroussy.fr/HEAT/).
+    - your motivation and smile ;)
+  - Program:
+    - Introduction to R bases
+    - RStudio interface using
+    - Installation of [swirl R package](https://swirlstats.com/)
+  - Next pre-sessions: 21 & 30 May, during working hour, in 101 room (B2M).
+  - Next sessions (10 students max per session):
+    - French: 23th of May 2023, 10:00-12:00, in the Quartz room (B2M).
+    - French: 23th of May 2023, 14:00-16:00, in the Quartz room (B2M).
+    - French: 31th of May 2023, 10:00-12:00, in the Quartz room (B2M).
+    - English: 31th of May 2023, 14:00-16:00, in the Quartz room (B2M).
+    - other sessions in November 2023 will be planned.
+  - Registration [here](https://docs.google.com/forms/d/e/1FAIpQLScuym-rpaFEEZ9rvP1yY7DMWgm0MlHVLFGa57iyZiZ3LXwquw/viewform?usp=sf_link).
+  - Html resources of this course [here](https://github.com/gustaveroussy/training_bigr/blob/main/Introduction_R_RStudio/For_Students/GR_IntroR_RStudio.html) (download it and open it in you browser).
+
+- ### other courses soon!!
+A problem, a question? Send us an email to bigr@gustaveroussy.fr
