@@ -19,7 +19,7 @@ All courses are free, but registration is required!
     - English: 31th of May 2023, 14:00-16:00, in the Quartz room (B2M).
     - other sessions in November 2023 will be planned.
   - Registration [here](https://docs.google.com/forms/d/e/1FAIpQLScuym-rpaFEEZ9rvP1yY7DMWgm0MlHVLFGa57iyZiZ3LXwquw/viewform?usp=sf_link).
-  - Html resources of this course [here](https://github.com/gustaveroussy/training_bigr/blob/main/Introduction_R_RStudio/GR_IntroR_RStudio.html) (download it and open it in you browser).
+  - Html resources of this course [here](https://github.com/gustaveroussy/training_bigr/blob/main/Introduction_R_RStudio/For_Students/GR_IntroR_RStudio.html) (download it and open it in you browser).
 
 - ### other courses soon!!
 A problem, a question? Send us an email to bigr@gustaveroussy.fr
