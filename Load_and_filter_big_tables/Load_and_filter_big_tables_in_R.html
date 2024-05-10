@@ -1711,23 +1711,30 @@ margin-left: 0 !important;
       table</a>
       <ul>
       <li><a href="#usage-of-utilsread.table" id="toc-usage-of-utilsread.table">Usage of
-      utils::read.table</a></li>
+      <code>utils::read.table</code></a></li>
       <li><a href="#checking-content-and-format-of-a-table" id="toc-checking-content-and-format-of-a-table">Checking content
       and format of a table</a></li>
       </ul></li>
       <li><a href="#loading-an-oddly-formatted-table" id="toc-loading-an-oddly-formatted-table">Loading an oddly
       formatted table</a>
       <ul>
-      <li><a href="#casting" id="toc-casting">Casting</a></li>
-      <li><a href="#local-settings" id="toc-local-settings">Local
-      settings</a></li>
+      <li><a href="#dealing-with-zip-compression" id="toc-dealing-with-zip-compression">Dealing with (zip)
+      compression</a></li>
+      <li><a href="#dealing-with-wrong-number-of-columns" id="toc-dealing-with-wrong-number-of-columns">Dealing with wrong
+      number of columns</a></li>
+      <li><a href="#first-line-as-column" id="toc-first-line-as-column">First line as column</a></li>
+      <li><a href="#dealing-with-characters-and-numbers" id="toc-dealing-with-characters-and-numbers">Dealing with
+      characters and numbers</a></li>
+      <li><a href="#dealing-with-commas-and-floating-points" id="toc-dealing-with-commas-and-floating-points">Dealing with
+      commas and floating points</a></li>
       <li><a href="#remove-invisible-characters" id="toc-remove-invisible-characters">Remove invisible
       characters</a></li>
       <li><a href="#the-first-column-is-a-row-name" id="toc-the-first-column-is-a-row-name">The first column is a row
       name</a></li>
-      <li><a href="#converting-selected-columns-to-numeric" id="toc-converting-selected-columns-to-numeric">Converting
-      selected columns to numeric</a></li>
+      <li><a href="#dealing-with-empty-cells-and-na" id="toc-dealing-with-empty-cells-and-na">Dealing with empty cells
+      and <code>&lt;NA&gt;</code></a></li>
       </ul></li>
+      <li><a href="#loading-excel-table" id="toc-loading-excel-table">Loading Excel table</a></li>
       </ul>
     </div>
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
@@ -1789,7 +1796,7 @@ expression during Epithelial-Mesenchymal transition.</p>
 <div id="loading-a-well-formatted-table" class="section level1">
 <h1>Loading a well-formatted table</h1>
 <div id="usage-of-utilsread.table" class="section level2">
-<h2>Usage of <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table">utils::read.table</a></h2>
+<h2>Usage of <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table"><code>utils::read.table</code></a></h2>
 <p>To load a table in memory, one can use the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table"><code>read.table</code></a>
 form the package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.
 Remember, while specifying the package name is facultative, it remains
@@ -1934,7 +1941,7 @@ objects stored in each column of the dataframe.</p>
 <p>For this, we are going to use the functions <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/apply"><code>apply</code></a>
 and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/class"><code>class</code></a>,
 both from tha package <a href="https://www.rdocucentation.org/packages/base/versions/3.6.2/"><code>base</code></a>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">apply</span>(<span class="at">X=</span>counts, <span class="at">MARGIN=</span><span class="dv">2</span>, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code> Day_0_R1  Day_0_R2  Day_0_R3  Day_7_R1  Day_7_R2  Day_7_R3 
 &quot;integer&quot; &quot;integer&quot; &quot;integer&quot; &quot;integer&quot; &quot;integer&quot; &quot;integer&quot; </code></pre>
 <p>We only have numbers, it seems that we can start to work further with
@@ -1943,24 +1950,22 @@ this table.</p>
 </div>
 <div id="loading-an-oddly-formatted-table" class="section level1">
 <h1>Loading an oddly formatted table</h1>
-<div id="casting" class="section level2">
-<h2>Casting</h2>
-<p>Usually, a table provided by a person not familiar with informatics
-won’t fit. Using Excel ou LibreOffice will add lots of unnecessary
-information. Using a Windows or a Mac will add strange values to the end
-of lines, format commas and quotes differently, etc.</p>
-<p>The file <code>EMT_counts_odds.tsv</code> is a good starting example.
-Let’s try to load it:</p>
+<div id="dealing-with-zip-compression" class="section level2">
+<h2>Dealing with (zip) compression</h2>
+<p><a href="https://en.wikipedia.org/wiki/ZIP_(file_format)">Zip</a>
+compression is quite common, alongside with <a href="https://en.wikipedia.org/wiki/Gzip">gzip</a> and <a href="https://en.wikipedia.org/wiki/Bzip2">bz2</a>.</p>
+<p>One can handle these compression formats easily with the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/unzip"><code>unzip</code></a>,
+or any of the functions presented in the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/connections">documentation</a>
+about compression formats.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>    <span class="at">file=</span>utils<span class="sc">::</span><span class="fu">unzip</span>(<span class="at">zipfile=</span><span class="st">&quot;EMT_counts_odds.tsv.zip&quot;</span>),</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>)</span></code></pre></div>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
 from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
 <table style="width:100%;">
-<caption>First five lines of the correctly parsed table</caption>
+<caption>First five lines of the parsed table</caption>
 <colgroup>
 <col width="8%" />
 <col width="13%" />
@@ -1973,13 +1978,229 @@ from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">Gene_Symbol</th>
-<th align="left">Day_0_R1</th>
-<th align="left">Day_0_R2</th>
-<th align="left">Day_0_R3</th>
-<th align="left">Day_7_R1</th>
-<th align="left">Day_7_R2</th>
-<th align="left">Day_7_R3</th>
+<th align="left">V1</th>
+<th align="left">V2</th>
+<th align="left">V3</th>
+<th align="left">V4</th>
+<th align="left">V5</th>
+<th align="left">V6</th>
+<th align="left">V7</th>
+<th align="left">V8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Gene_Symbol</td>
+<td align="left">Day_0_R1</td>
+<td align="left">Day_0_R2</td>
+<td align="left">Day_0_R3</td>
+<td align="left">Day_7_R1</td>
+<td align="left">Day_7_R2</td>
+<td align="left">Day_7_R3</td>
+<td align="left">Comments</td>
+</tr>
+<tr class="even">
+<td align="left">A1BG</td>
+<td align="left">16,22562695206495</td>
+<td align="left">0,0</td>
+<td align="left">12,689757042464343</td>
+<td align="left">15,868383762680608</td>
+<td align="left">9,084767954248493</td>
+<td align="left">22,050322538976864</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">A1CF</td>
+<td align="left">33,93537227810314</td>
+<td align="left">34,913946895169495</td>
+<td align="left">47,18619439635268</td>
+<td align="left">30,83396316950128</td>
+<td align="left">39,5801367060203</td>
+<td align="left">35,07943986358688</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">A2M</td>
+<td align="left">6,774047975007772</td>
+<td align="left">0,0</td>
+<td align="left">4,7584056039897575</td>
+<td align="left">0,0</td>
+<td align="left">12,03068892267499</td>
+<td align="left">8,93272401800271</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">A2ML1</td>
+<td align="left">10,037491101206765</td>
+<td align="left">0,11475905178564894</td>
+<td align="left">15,291430952474473</td>
+<td align="left">18,17768060227953</td>
+<td align="left">11,799351016293127</td>
+<td align="left">4,157821466778454</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">A2MP1</td>
+<td align="left">9,900508551201543</td>
+<td align="left">4,206541076889792</td>
+<td align="left">1,0375968882747322</td>
+<td align="left">0,0</td>
+<td align="left">11,810838524234368</td>
+<td align="left">0,0</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p>One does not have to unzip a table <em>before</em> loading it into R.
+This saves disk space, but consumes a bit more memory.</p>
+</div>
+<div id="dealing-with-wrong-number-of-columns" class="section level2">
+<h2>Dealing with wrong number of columns</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>)</span></code></pre></div>
+<p>What happens with this command line?</p>
+<p>This is due to missing fields at line 10. There may be more of these
+missing fields, we cannot know how many missing fields are in this file.
+However, we can try “fix” these missing fields, by adding blanks.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    <span class="at">fill=</span><span class="cn">TRUE</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>)</span></code></pre></div>
+<p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
+from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
+<table style="width:100%;">
+<caption>First five lines of the parsed table with column separators and
+right number of columns</caption>
+<colgroup>
+<col width="8%" />
+<col width="13%" />
+<col width="14%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">V1</th>
+<th align="left">V2</th>
+<th align="left">V3</th>
+<th align="left">V4</th>
+<th align="left">V5</th>
+<th align="left">V6</th>
+<th align="left">V7</th>
+<th align="left">V8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Gene_Symbol</td>
+<td align="left">Day_0_R1</td>
+<td align="left">Day_0_R2</td>
+<td align="left">Day_0_R3</td>
+<td align="left">Day_7_R1</td>
+<td align="left">Day_7_R2</td>
+<td align="left">Day_7_R3</td>
+<td align="left">Comments</td>
+</tr>
+<tr class="even">
+<td align="left">A1BG</td>
+<td align="left">16,22562695206495</td>
+<td align="left">0,0</td>
+<td align="left">12,689757042464343</td>
+<td align="left">15,868383762680608</td>
+<td align="left">9,084767954248493</td>
+<td align="left">22,050322538976864</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">A1CF</td>
+<td align="left">33,93537227810314</td>
+<td align="left">34,913946895169495</td>
+<td align="left">47,18619439635268</td>
+<td align="left">30,83396316950128</td>
+<td align="left">39,5801367060203</td>
+<td align="left">35,0794398635868</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">A2M</td>
+<td align="left">6,774047975007772</td>
+<td align="left">0,0</td>
+<td align="left">4,7584056039897575</td>
+<td align="left">0,0</td>
+<td align="left">12,03068892267499</td>
+<td align="left">8,93272401800271</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">A2ML1</td>
+<td align="left">10,037491101206765</td>
+<td align="left">0,11475905178564894</td>
+<td align="left">15,291430952474473</td>
+<td align="left">18,17768060227953</td>
+<td align="left">11,799351016293127</td>
+<td align="left">4,157821466778454</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">A2MP1</td>
+<td align="left">9,900508551201543</td>
+<td align="left">4,206541076889792</td>
+<td align="left">1,0375968882747322</td>
+<td align="left">0,0</td>
+<td align="left">11,810838524234368</td>
+<td align="left">0,0</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p>The table looks correct. The last field, a commantary, may have been
+broken by the previous person editing that count file.</p>
+<p>However, it is not possible to know if a column has been shifted,
+mixed, or deleted. I strongly encourage you to contact the author of a
+file with missing fields.</p>
+</div>
+<div id="first-line-as-column" class="section level2">
+<h2>First line as column</h2>
+<p>One can tell R that the first line should be considered as a header
+with the argument in the function <a href><code>read.table</code></a>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>    <span class="at">fill=</span><span class="cn">TRUE</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>)</span></code></pre></div>
+<p>The table looks even better now!</p>
+<p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
+from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
+<table style="width:100%;">
+<caption>First five lines of the parsed table with headers</caption>
+<colgroup>
+<col width="8%" />
+<col width="13%" />
+<col width="14%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Gene Symbol</th>
+<th align="left">Day 0 R1</th>
+<th align="left">Day 0 R2</th>
+<th align="left">Day 0 R3</th>
+<th align="left">Day 7 R1</th>
+<th align="left">Day 7 R2</th>
+<th align="left">Day 7 R3</th>
 <th align="left">Comments</th>
 </tr>
 </thead>
@@ -2001,7 +2222,112 @@ from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6
 <td align="left">47,18619439635268</td>
 <td align="left">30,83396316950128</td>
 <td align="left">39,5801367060203</td>
-<td align="left">35,07943986358688</td>
+<td align="left">35,0794398635868</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">A2M</td>
+<td align="left">6,774047975007772</td>
+<td align="left">0,0</td>
+<td align="left">4,7584056039897575</td>
+<td align="left">0,0</td>
+<td align="left">12,03068892267499</td>
+<td align="left">8,93272401800271</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">A2ML1</td>
+<td align="left">10,037491101206765</td>
+<td align="left">0,11475905178564894</td>
+<td align="left">15,291430952474473</td>
+<td align="left">18,17768060227953</td>
+<td align="left">11,799351016293127</td>
+<td align="left">4,157821466778454</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">A2MP1</td>
+<td align="left">9,900508551201543</td>
+<td align="left">4,206541076889792</td>
+<td align="left">1,0375968882747322</td>
+<td align="left">0,0</td>
+<td align="left">11,810838524234368</td>
+<td align="left">0,0</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">A3GALT2</td>
+<td align="left">15,029388472349368</td>
+<td align="left">8,855866220085158</td>
+<td align="left">7,231472189827109</td>
+<td align="left">0,2528135416926549</td>
+<td align="left">0,1934544984878772</td>
+<td align="left">7,175310143549632</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="dealing-with-characters-and-numbers" class="section level2">
+<h2>Dealing with characters and numbers</h2>
+<p>Usually, a table provided by a person not familiar with informatics
+won’t fit. Using Excel ou LibreOffice will add lots of unnecessary
+information. Using a Windows or a Mac will add strange values to the end
+of lines, format commas and quotes differently, etc.</p>
+<p>The file <code>EMT_counts_odds.tsv</code> is a good starting example.
+Let’s try to load it:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>    <span class="at">fill=</span><span class="cn">TRUE</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>)</span></code></pre></div>
+<p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
+from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
+<table style="width:100%;">
+<caption>First five lines of the parsed table</caption>
+<colgroup>
+<col width="8%" />
+<col width="13%" />
+<col width="14%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Gene Symbol</th>
+<th align="left">Day 0 R1</th>
+<th align="left">Day 0 R2</th>
+<th align="left">Day 0 R3</th>
+<th align="left">Day 7 R1</th>
+<th align="left">Day 7 R2</th>
+<th align="left">Day 7 R3</th>
+<th align="left">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A1BG</td>
+<td align="left">16,22562695206495</td>
+<td align="left">0,0</td>
+<td align="left">12,689757042464343</td>
+<td align="left">15,868383762680608</td>
+<td align="left">9,084767954248493</td>
+<td align="left">22,050322538976864</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">A1CF</td>
+<td align="left">33,93537227810314</td>
+<td align="left">34,913946895169495</td>
+<td align="left">47,18619439635268</td>
+<td align="left">30,83396316950128</td>
+<td align="left">39,5801367060203</td>
+<td align="left">35,0794398635868</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
@@ -2048,7 +2374,7 @@ from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6
 </table>
 <p>It looks great! Why does this section say it would be hard?</p>
 <p>Let’s check the column types:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">apply</span>(<span class="at">X=</span>counts, <span class="at">MARGIN=</span><span class="dv">2</span>, <span class="at">FUN=</span>class)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code>Gene_Symbol    Day_0_R1    Day_0_R2    Day_0_R3    Day_7_R1    Day_7_R2 
 &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; 
    Day_7_R3    Comments 
@@ -2060,7 +2386,7 @@ cant to change the type of each cells in the dataframe from
 <p>This can be done with the function <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/numeric"><code>as.numeric</code></a>
 from the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/"><code>base</code></a>
 package.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">apply</span>(<span class="at">X=</span>counts, <span class="at">MARGIN=</span><span class="dv">2</span>, <span class="at">FUN=</span>base<span class="sc">::</span>as.numeric)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">apply</span>(<span class="at">X=</span>counts, <span class="at">MARGIN=</span><span class="dv">2</span>, <span class="at">FUN=</span>base<span class="sc">::</span>as.numeric)</span></code></pre></div>
 <pre><code>Warning in base::apply(X = counts, MARGIN = 2, FUN = base::as.numeric): NAs
 introduced by coercion
 Warning in base::apply(X = counts, MARGIN = 2, FUN = base::as.numeric): NAs
@@ -2080,9 +2406,9 @@ introduced by coercion</code></pre>
 <p>There are a lot of warning messages. What changed?</p>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
 from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
 <table>
-<caption>First five lines of the wrongly parsed table</caption>
+<caption>First five lines of the wrongly casted table</caption>
 <colgroup>
 <col width="16%" />
 <col width="12%" />
@@ -2095,13 +2421,13 @@ from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6
 </colgroup>
 <thead>
 <tr class="header">
-<th align="right">Gene_Symbol</th>
-<th align="right">Day_0_R1</th>
-<th align="right">Day_0_R2</th>
-<th align="right">Day_0_R3</th>
-<th align="right">Day_7_R1</th>
-<th align="right">Day_7_R2</th>
-<th align="right">Day_7_R3</th>
+<th align="right">Gene Symbol</th>
+<th align="right">Day 0 R1</th>
+<th align="right">Day 0 R2</th>
+<th align="right">Day 0 R3</th>
+<th align="right">Day 7 R1</th>
+<th align="right">Day 7 R2</th>
+<th align="right">Day 7 R3</th>
 <th align="right">Comments</th>
 </tr>
 </thead>
@@ -2170,20 +2496,22 @@ from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6
 </table>
 <p>Okay, it does not work.</p>
 </div>
-<div id="local-settings" class="section level2">
-<h2>Local settings</h2>
+<div id="dealing-with-commas-and-floating-points" class="section level2">
+<h2>Dealing with commas and floating points</h2>
 <p>The author of this file uses a French number formats</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>    <span class="at">header =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>    <span class="at">dec =</span> <span class="st">&quot;,&quot;</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>    <span class="at">fill =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>    <span class="at">header =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>    <span class="at">dec =</span> <span class="st">&quot;,&quot;</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>)</span></code></pre></div>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
 from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
 <table style="width:100%;">
-<caption>First five lines of the wrongly parsed table</caption>
+<caption>First five lines of the parsed table with floating
+<strong>points</strong></caption>
 <colgroup>
 <col width="14%" />
 <col width="11%" />
@@ -2196,13 +2524,13 @@ from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">Gene_Symbol</th>
-<th align="right">Day_0_R1</th>
-<th align="right">Day_0_R2</th>
-<th align="right">Day_0_R3</th>
-<th align="right">Day_7_R1</th>
-<th align="right">Day_7_R2</th>
-<th align="right">Day_7_R3</th>
+<th align="left">Gene Symbol</th>
+<th align="right">Day 0 R1</th>
+<th align="right">Day 0 R2</th>
+<th align="right">Day 0 R3</th>
+<th align="right">Day 7 R1</th>
+<th align="right">Day 7 R2</th>
+<th align="right">Day 7 R3</th>
 <th align="left">Comments</th>
 </tr>
 </thead>
@@ -2270,53 +2598,57 @@ from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6
 </tbody>
 </table>
 <p>It looks good again. How about the type of the columns:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">apply</span>(<span class="at">X=</span>counts, <span class="at">MARGIN=</span><span class="dv">2</span>, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code>Gene_Symbol    Day_0_R1    Day_0_R2    Day_0_R3    Day_7_R1    Day_7_R2 
-&quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; 
+&quot;character&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot; 
    Day_7_R3    Comments 
-&quot;character&quot; &quot;character&quot; </code></pre>
-<p>While commas were now detected as decimal separator, it didn’t solve
-the problem.</p>
+  &quot;numeric&quot; &quot;character&quot; </code></pre>
+<p>Commas have been identified as decimal separator, it solved the
+problem.</p>
 </div>
 <div id="remove-invisible-characters" class="section level2">
 <h2>Remove invisible characters</h2>
 <p>Excel and LibreOffice often include spaces when user clicks on a
 cell. Fortunately, we can remove these spaces.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,</span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>    <span class="at">dec=</span><span class="st">&quot;,&quot;</span>,</span>
-<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>    <span class="at">strip.white=</span><span class="cn">TRUE</span></span>
-<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>)</span>
-<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">apply</span>(<span class="at">X=</span>counts, <span class="at">MARGIN=</span><span class="dv">2</span>, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>    <span class="at">fill =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>    <span class="at">dec=</span><span class="st">&quot;,&quot;</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>    <span class="at">strip.white=</span><span class="cn">TRUE</span></span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>)</span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code>Gene_Symbol    Day_0_R1    Day_0_R2    Day_0_R3    Day_7_R1    Day_7_R2 
-&quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; 
+&quot;character&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot; 
    Day_7_R3    Comments 
-&quot;character&quot; &quot;character&quot; </code></pre>
+  &quot;numeric&quot; &quot;character&quot; </code></pre>
+<p>Note that this is the default behavior for numeric fields.</p>
 </div>
 <div id="the-first-column-is-a-row-name" class="section level2">
 <h2>The first column is a row name</h2>
 <p>Giving R information about column name(s) and row name(s) is a good
 practice to help it understand the content of our talbe.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,</span>
-<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>    <span class="at">dec=</span><span class="st">&quot;,&quot;</span>,</span>
-<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>    <span class="at">strip.white=</span><span class="cn">TRUE</span>,</span>
-<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>    <span class="at">row.name=</span><span class="st">&quot;Gene_Symbol&quot;</span></span>
-<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>)</span>
-<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">apply</span>(<span class="at">X=</span>counts, <span class="at">MARGIN=</span><span class="dv">2</span>, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>    <span class="at">dec=</span><span class="st">&quot;,&quot;</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a>    <span class="at">fill=</span><span class="cn">TRUE</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>    <span class="at">strip.white=</span><span class="cn">TRUE</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a>    <span class="at">row.name=</span><span class="st">&quot;Gene_Symbol&quot;</span></span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a>)</span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code>   Day_0_R1    Day_0_R2    Day_0_R3    Day_7_R1    Day_7_R2    Day_7_R3 
-&quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; 
+  &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot; 
    Comments 
 &quot;character&quot; </code></pre>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
 from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
 <table>
-<caption>First five lines of the wrongly parsed table</caption>
+<caption>First five lines of the parsed table with correct row
+names</caption>
 <colgroup>
 <col width="10%" />
 <col width="12%" />
@@ -2330,12 +2662,12 @@ from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6
 <thead>
 <tr class="header">
 <th align="left"></th>
-<th align="right">Day_0_R1</th>
-<th align="right">Day_0_R2</th>
-<th align="right">Day_0_R3</th>
-<th align="right">Day_7_R1</th>
-<th align="right">Day_7_R2</th>
-<th align="right">Day_7_R3</th>
+<th align="right">Day 0 R1</th>
+<th align="right">Day 0 R2</th>
+<th align="right">Day 0 R3</th>
+<th align="right">Day 7 R1</th>
+<th align="right">Day 7 R2</th>
+<th align="right">Day 7 R3</th>
 <th align="left">Comments</th>
 </tr>
 </thead>
@@ -2402,38 +2734,33 @@ from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6
 </tr>
 </tbody>
 </table>
-<p>The table still looks good, but numbers are still not considered as
-numbers.</p>
+<p>The table looks even better now.</p>
 </div>
-<div id="converting-selected-columns-to-numeric" class="section level2">
-<h2>Converting selected columns to numeric</h2>
+<div id="dealing-with-empty-cells-and-na" class="section level2">
+<h2>Dealing with empty cells and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/NA"><code>&lt;NA&gt;</code></a></h2>
 <p>We can provide a list of columns to convert</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
-<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
-<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,</span>
-<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>    <span class="at">dec=</span><span class="st">&quot;,&quot;</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>    <span class="at">strip.white=</span><span class="cn">TRUE</span>,</span>
-<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>    <span class="at">row.name=</span><span class="st">&quot;Gene_Symbol&quot;</span>,</span>
-<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>    <span class="at">na.strings=</span><span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;NA&quot;</span>)</span>
-<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>)</span>
-<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">apply</span>(<span class="at">X=</span>counts, <span class="at">MARGIN=</span><span class="dv">2</span>, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_odds.tsv&quot;</span>,</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>    <span class="at">fill=</span><span class="cn">TRUE</span>,</span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>    <span class="at">dec=</span><span class="st">&quot;,&quot;</span>,</span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a>    <span class="at">strip.white=</span><span class="cn">TRUE</span>,</span>
+<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a>    <span class="at">row.name=</span><span class="st">&quot;Gene_Symbol&quot;</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a>    <span class="at">na.strings=</span><span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;NA&quot;</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a>)</span>
+<span id="cb30-11"><a href="#cb30-11" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code>   Day_0_R1    Day_0_R2    Day_0_R3    Day_7_R1    Day_7_R2    Day_7_R3 
-&quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; 
+  &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot; 
    Comments 
 &quot;character&quot; </code></pre>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
 from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
-<pre><code>         Day_0_R1   Day_0_R2  Day_0_R3   Day_7_R1   Day_7_R2  Day_7_R3 Comments
-A1BG    16.225627  0.0000000 12.689757 15.8683838  9.0847680 22.050323     &lt;NA&gt;
-A1CF    33.935372 34.9139469 47.186194 30.8339632 39.5801367 35.079440     &lt;NA&gt;
-A2M      6.774048  0.0000000  4.758406  0.0000000 12.0306889  8.932724     &lt;NA&gt;
-A2ML1   10.037491  0.1147591 15.291431 18.1776806 11.7993510  4.157821     &lt;NA&gt;
-A2MP1    9.900509  4.2065411  1.037597  0.0000000 11.8108385  0.000000     &lt;NA&gt;
-A3GALT2 15.029388  8.8558662  7.231472  0.2528135  0.1934545  7.175310     &lt;NA&gt;</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
 <table>
-<caption>First five lines of the wrongly parsed table</caption>
+<caption>First five lines of the parsed table with empty cells
+identified</caption>
 <colgroup>
 <col width="10%" />
 <col width="12%" />
@@ -2447,12 +2774,12 @@ A3GALT2 15.029388  8.8558662  7.231472  0.2528135  0.1934545  7.175310     &lt;N
 <thead>
 <tr class="header">
 <th align="left"></th>
-<th align="right">Day_0_R1</th>
-<th align="right">Day_0_R2</th>
-<th align="right">Day_0_R3</th>
-<th align="right">Day_7_R1</th>
-<th align="right">Day_7_R2</th>
-<th align="right">Day_7_R3</th>
+<th align="right">Day 0 R1</th>
+<th align="right">Day 0 R2</th>
+<th align="right">Day 0 R3</th>
+<th align="right">Day 7 R1</th>
+<th align="right">Day 7 R2</th>
+<th align="right">Day 7 R3</th>
 <th align="left">Comments</th>
 </tr>
 </thead>
@@ -2520,6 +2847,238 @@ A3GALT2 15.029388  8.8558662  7.231472  0.2528135  0.1934545  7.175310     &lt;N
 </tbody>
 </table>
 </div>
+</div>
+<div id="loading-excel-table" class="section level1">
+<h1>Loading Excel table</h1>
+<p>Loading Excel sheets require a special package named <a href="https://www.rdocumentation.org/packages/readxl/versions/1.4.3/"><code>readxl</code></a>
+and its dedicated function <a href="https://www.rdocumentation.org/packages/readxl/versions/1.4.3/topics/read_excel"><code>read_excel</code></a>.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">library</span>(<span class="at">package=</span><span class="st">&quot;readxl&quot;</span>, <span class="at">character.only=</span><span class="cn">TRUE</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>counts <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>    <span class="at">path=</span><span class="st">&quot;counts.xlsx&quot;</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>Warning: Expecting logical in H4614 / R4614C8: got &#39;Important!&#39;</code></pre>
+<pre><code>Warning: Expecting logical in H5342 / R5342C8: got &#39;Important!&#39;</code></pre>
+<pre><code>Warning: Expecting logical in H6010 / R6010C8: got &#39;Important!&#39;</code></pre>
+<pre><code>Warning: Expecting logical in H6351 / R6351C8: got &#39;Important!&#39;</code></pre>
+<pre><code>Warning: Expecting logical in H6674 / R6674C8: got &#39;Important!&#39;</code></pre>
+<pre><code>Warning: Expecting logical in H9142 / R9142C8: got &#39;Important!&#39;</code></pre>
+<pre><code>Warning: Expecting logical in H19758 / R19758C8: got &#39;Important!&#39;</code></pre>
+<pre><code>Warning: Expecting logical in H19906 / R19906C8: got &#39;Important!&#39;</code></pre>
+<pre><code>Warning: Expecting logical in H24450 / R24450C8: got &#39;Important!&#39;</code></pre>
+<pre><code>Warning: Expecting logical in H24584 / R24584C8: got &#39;Important!&#39;</code></pre>
+<p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
+from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
+<table>
+<caption>First five lines of the parsed Excel table</caption>
+<colgroup>
+<col width="11%" />
+<col width="9%" />
+<col width="10%" />
+<col width="18%" />
+<col width="10%" />
+<col width="10%" />
+<col width="18%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Gene Symbol</th>
+<th align="right">Day 0 R1</th>
+<th align="right">Day 0 R2</th>
+<th align="left">Day 0 R3</th>
+<th align="right">Day 7 R1</th>
+<th align="right">Day 7 R2</th>
+<th align="left">Day 7 R3</th>
+<th align="left">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A1BG</td>
+<td align="right">16.225627</td>
+<td align="right">0.0000000</td>
+<td align="left">12.689757042464343</td>
+<td align="right">15.8683838</td>
+<td align="right">9.0847680</td>
+<td align="left">22.050322538976864</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">A1CF</td>
+<td align="right">33.935372</td>
+<td align="right">34.9139469</td>
+<td align="left">47.18619439635268</td>
+<td align="right">30.8339632</td>
+<td align="right">39.5801367</td>
+<td align="left">35.07943986358688</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">A2M</td>
+<td align="right">6.774048</td>
+<td align="right">0.0000000</td>
+<td align="left">4.758405603989758</td>
+<td align="right">0.0000000</td>
+<td align="right">12.0306889</td>
+<td align="left">8.932724018002711</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">A2ML1</td>
+<td align="right">10.037491</td>
+<td align="right">0.1147591</td>
+<td align="left">15.291430952474473</td>
+<td align="right">18.1776806</td>
+<td align="right">11.7993510</td>
+<td align="left">4.157821466778454</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">A2MP1</td>
+<td align="right">9.900509</td>
+<td align="right">4.2065411</td>
+<td align="left">1.0375968882747322</td>
+<td align="right">0.0000000</td>
+<td align="right">11.8108385</td>
+<td align="left">0</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">A3GALT2</td>
+<td align="right">15.029388</td>
+<td align="right">8.8558662</td>
+<td align="left">7.231472189827109</td>
+<td align="right">0.2528135</td>
+<td align="right">0.1934545</td>
+<td align="left">7.175310143549632</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p>Your turn now:</p>
+<ol style="list-style-type: decimal">
+<li>Explore the function <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row.names"><code>read_excel</code></a>
+and search how to make the column <code>Gene_Symbol</code> as <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row.names"><code>row.names</code></a>,
+how to be sure the column <code>Comments</code> is ideally loaded.</li>
+<li>Use the functions <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/lapply"><code>sapply</code></a>
+and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/class"><code>class</code></a>
+from <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/"><code>base</code></a>
+package to ensure R knows your numbers <em>are</em> numbers and not
+text.</li>
+</ol>
+<details>
+<summary>
+Solution for the first exercise.
+</summary>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(</span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a>    <span class="at">path=</span><span class="st">&quot;counts.xlsx&quot;</span>,</span>
+<span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a>    <span class="at">col_names=</span><span class="cn">TRUE</span>,</span>
+<span id="cb45-4"><a href="#cb45-4" tabindex="-1"></a>    <span class="at">trim_ws=</span><span class="cn">TRUE</span>,</span>
+<span id="cb45-5"><a href="#cb45-5" tabindex="-1"></a>    <span class="at">col_types=</span><span class="fu">c</span>(<span class="st">&quot;text&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;text&quot;</span>)</span>
+<span id="cb45-6"><a href="#cb45-6" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
+<table style="width:100%;">
+<caption>First five lines of the parsed table with correct
+types</caption>
+<colgroup>
+<col width="14%" />
+<col width="11%" />
+<col width="13%" />
+<col width="11%" />
+<col width="13%" />
+<col width="13%" />
+<col width="11%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Gene Symbol</th>
+<th align="right">Day 0 R1</th>
+<th align="right">Day 0 R2</th>
+<th align="right">Day 0 R3</th>
+<th align="right">Day 7 R1</th>
+<th align="right">Day 7 R2</th>
+<th align="right">Day 7 R3</th>
+<th align="left">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A1BG</td>
+<td align="right">16.225627</td>
+<td align="right">0.0000000</td>
+<td align="right">12.689757</td>
+<td align="right">15.8683838</td>
+<td align="right">9.0847680</td>
+<td align="right">22.050323</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">A1CF</td>
+<td align="right">33.935372</td>
+<td align="right">34.9139469</td>
+<td align="right">47.186194</td>
+<td align="right">30.8339632</td>
+<td align="right">39.5801367</td>
+<td align="right">35.079440</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">A2M</td>
+<td align="right">6.774048</td>
+<td align="right">0.0000000</td>
+<td align="right">4.758406</td>
+<td align="right">0.0000000</td>
+<td align="right">12.0306889</td>
+<td align="right">8.932724</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">A2ML1</td>
+<td align="right">10.037491</td>
+<td align="right">0.1147591</td>
+<td align="right">15.291431</td>
+<td align="right">18.1776806</td>
+<td align="right">11.7993510</td>
+<td align="right">4.157821</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">A2MP1</td>
+<td align="right">9.900509</td>
+<td align="right">4.2065411</td>
+<td align="right">1.037597</td>
+<td align="right">0.0000000</td>
+<td align="right">11.8108385</td>
+<td align="right">0.000000</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">A3GALT2</td>
+<td align="right">15.029388</td>
+<td align="right">8.8558662</td>
+<td align="right">7.231472</td>
+<td align="right">0.2528135</td>
+<td align="right">0.1934545</td>
+<td align="right">7.175310</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+</details>
+<p><br /></p>
+<details>
+<summary>
+Solution for the second exercise.
+</summary>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<pre><code>Gene_Symbol    Day_0_R1    Day_0_R2    Day_0_R3    Day_7_R1    Day_7_R2 
+&quot;character&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot; 
+   Day_7_R3    Comments 
+  &quot;numeric&quot; &quot;character&quot; </code></pre>
+</details>
+<p><br /></p>
 </div>
 </div>
 
