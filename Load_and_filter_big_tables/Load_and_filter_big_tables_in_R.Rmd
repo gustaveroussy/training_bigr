@@ -1,0 +1,354 @@
+---
+title: "Load tables in memory with R"
+date: "`r Sys.Date()`"
+author:
+  - name: "BiGR: Bioinformatics core facility of Gustave Roussy"
+    email: "bigr@gustaveroussy.fr"
+output:
+  rmdformatsbigr::readthebigrdoc:  # if you'd like to have a nice theme
+    code_folding: show
+    thumbnails: false
+    lightbox: true
+    highlight: true
+    fig_caption: false
+
+# install.packages("remotes")
+# install.packages("git2r")
+# remotes::install_git("https://gitlab.com/bioinfo_gustaveroussy/bigr/rmdformatsbigr.git",
+#                      credentials=git2r::cred_user_pass("your_login", "your_password"))
+---
+
+```{r setup, include=FALSE}
+# options(width = 60);
+knitr::opts_chunk$set(
+  echo = TRUE,        # Print the code
+  eval = TRUE,       # Do not run command lines
+  message = FALSE,    # Print messages
+  prompt = FALSE,     # Do not display prompt
+  comment = NA,       # No comments on this section
+  warning = TRUE      # Display warnings
+);
+
+#base::library(package = "dplyr")
+```
+
+<style type="text/css">
+summary {
+  display: list-item;
+}
+details:hover {
+  cursor: pointer
+}
+body {
+  text-align: justify
+}
+.column-left{
+  float: left;
+  width: 47%;
+  text-align: left;
+}
+.column-right{
+  float: right;
+  width: 47%;
+  text-align: left;
+}
+</style>
+
+
+# Purpose
+
+At the end of this session, you will be able to:
+
+1. Load a table in R
+1. Identify formatting issues
+1. Load a table in R, accounting for local number formats (commas, spaces, ...)
+1. Load a table in R, accounting for irregular string formats (random capitalization, invisible characters, ...)
+1. Load a table in R, accounting for unreadable formats (excel, compression, ...)
+1. Load a table in R, accounting for formatting issues (missing headers, free comments column, ...)
+1. Save a table in multiple formats (csv, tsv, excel, ...)
+1. Save and export your working session
+
+During this session, we will use a rnaseq count table displaying 
+gene expression during Epithelial-Mesenchymal transition.
+
+# Loading a well-formatted table
+
+## Usage of [utils::read.table](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table)
+
+To load a table in memory, one can use the function [`read.table`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table) 
+form the package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
+Remember, while specifying the package name is facultative, it remains
+very important when you want to share, reproduce, and make your work
+accessible. These are the keys of the [FAIR principles](https://fr.wikipedia.org/wiki/Fair_data).
+
+
+```{r}
+counts <- utils::read.table(file="EMT_count_data.txt")
+```
+
+Let's see the content of the table, using the function [`head`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head)
+from package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
+
+```{r, eval=FALSE}
+utils::head(x = counts)
+```
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(
+  x = utils::head(x=counts),
+  caption = "First five lines of the wrongly parsed table"
+)
+```
+
+Oh, there is a problem here...
+Help me identify all our issues here.
+
+<details>
+
+<summary>List of issues</summary>
+
+1. Columns are not separated correctly
+1. Header is not recognized
+1. Row names are considered as a column
+
+</details>
+<br />
+
+
+<details>
+
+<summary>Solution</summary>
+
+```{r}
+counts <- utils::read.table(
+    file="EMT_count_data.txt",
+    header=TRUE,
+    sep=",",
+    row.names=1
+)
+```
+
+We use the [`head`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head)
+function again...
+
+```{r, eval=FALSE}
+utils::head(x = counts)
+```
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(
+  x = utils::head(x=counts),
+  caption = "First five lines of the correctly parsed table"
+)
+```
+
+It looks just as it shoud!
+
+</details>
+<br />
+
+## Checking content and format of a table
+
+We should have a table full of numbers. Let's check the type of objects
+stored in each column of the dataframe.
+
+For this, we are going to use the functions [`apply`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/apply)
+and [`class`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/class),
+both from tha package [`base`](https://www.rdocucentation.org/packages/base/versions/3.6.2/).
+
+```{r}
+base::apply(X=counts, MARGIN=2, FUN=base::class)
+```
+
+We only have numbers, it seems that we can start to work further with this table.
+
+# Loading an oddly formatted table
+
+## Casting
+
+Usually, a table provided by a person not familiar with informatics won't
+fit. Using Excel ou LibreOffice will add lots of unnecessary information.
+Using a Windows or a Mac will add strange values to the end of lines, format
+commas and quotes differently, etc.
+
+The file `EMT_counts_odds.tsv` is a good starting example. Let's try to load it:
+
+```{r}
+counts <- utils::read.table(
+    file="EMT_counts_odds.tsv",
+    sep="\t",
+    header=TRUE
+)
+```
+
+Let's see the content of the table, using the function [`head`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head)
+from package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
+
+```{r, eval=FALSE}
+utils::head(x = counts)
+```
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(
+  x = utils::head(x=counts),
+  caption = "First five lines of the correctly parsed table"
+)
+```
+
+It looks great! Why does this section say it would be hard?
+
+Let's check the column types:
+
+```{r}
+base::apply(X=counts, MARGIN=2, FUN=class)
+```
+
+We can try to cast the characters into numbers.
+In this context, `casting` means changing the type
+of a variable. Here, we cant to change the type of
+each cells in the dataframe from `characters` to
+something like `numric`.
+
+This can be done with the function [`as.numeric`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/numeric)
+from the [`base`](https://www.rdocumentation.org/packages/base/versions/3.6.2/)
+package.
+
+```{r}
+counts <- base::apply(X=counts, MARGIN=2, FUN=base::as.numeric)
+```
+
+There are a lot of warning messages. What changed?
+
+Let's see the content of the table, using the function [`head`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head)
+from package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
+
+```{r, eval=FALSE}
+utils::head(x = counts)
+```
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(
+  x = utils::head(x=counts),
+  caption = "First five lines of the wrongly parsed table"
+)
+```
+
+Okay, it does not work.
+
+## Local settings
+
+The author of this file uses a French number formats
+
+```{r}
+counts <- utils::read.table(
+    file = "EMT_counts_odds.tsv",
+    sep = "\t",
+    header = TRUE,
+    dec = ","
+)
+```
+
+
+Let's see the content of the table, using the function [`head`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head)
+from package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
+
+```{r, eval=FALSE}
+utils::head(x = counts)
+```
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(
+  x = utils::head(x=counts),
+  caption = "First five lines of the wrongly parsed table"
+)
+```
+It looks good again.
+How about the type of the columns:
+
+```{r}
+base::apply(X=counts, MARGIN=2, FUN=base::class)
+```
+
+While commas were now detected as decimal separator, it didn't solve the problem.
+
+
+## Remove invisible characters
+
+Excel and LibreOffice often include spaces when user clicks
+on a cell. Fortunately, we can remove these spaces.
+
+```{r}
+counts <- utils::read.table(
+    file="EMT_counts_odds.tsv",
+    sep="\t",
+    header=TRUE,
+    dec=",",
+    strip.white=TRUE
+)
+base::apply(X=counts, MARGIN=2, FUN=base::class)
+```
+
+## The first column is a row name
+
+Giving R information about column name(s) and row name(s) is
+a good practice to help it understand the content of our talbe.
+
+```{r}
+counts <- utils::read.table(
+    file="EMT_counts_odds.tsv",
+    sep="\t",
+    header=TRUE,
+    dec=",",
+    strip.white=TRUE,
+    row.name="Gene_Symbol"
+)
+base::apply(X=counts, MARGIN=2, FUN=base::class)
+```
+
+Let's see the content of the table, using the function [`head`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head)
+from package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
+
+```{r, eval=FALSE}
+utils::head(x = counts)
+```
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(
+  x = utils::head(x=counts),
+  caption = "First five lines of the wrongly parsed table"
+)
+```
+
+The table still looks good, but numbers are still not considered as numbers.
+
+## Converting selected columns to numeric
+
+We can provide a list of columns to convert
+
+```{r}
+counts <- utils::read.table(
+    file="EMT_counts_odds.tsv",
+    sep="\t",
+    header=TRUE,
+    dec=",",
+    strip.white=TRUE,
+    row.name="Gene_Symbol",
+    na.strings=c("", "NA")
+)
+base::apply(X=counts, MARGIN=2, FUN=base::class)
+```
+
+Let's see the content of the table, using the function [`head`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head)
+from package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
+
+```{r}
+utils::head(x = counts)
+```
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(
+  x = utils::head(x=counts),
+  caption = "First five lines of the wrongly parsed table"
+)
+```
+
