@@ -44,8 +44,11 @@ summary {
 # Introduction
 
 ## General information
+A programming language is a communication code between a human and a machine (usually a computer).
+This allows you to give instructions to the computer. And the computer is very wise, it stupidly carries out each instruction that we give it.  
+There is a huge number of [programming languages](https://en.wikipedia.org/wiki/List_of_programming_languages) and they evolve.
 
-Programming language that allows you to:
+R is a programming language that allows you to:
 
 1. manipulate data: import, transform, export, etc.
 2. carry out more or less complex statistical analyses: description, exploration,
@@ -55,22 +58,27 @@ modelization...
 
 Features:
 
-* available on mainstream OS'es (Windows, Mac and Linux)
-* free and open source (GNU)
+* available on mainstream OS'es (Windows, Mac and Linux).
+* free and open source (GNU).
 * large user community / online help.
-* numerous additional packages for any purpose
+* numerous additional packages for any purpose.
 
 History:
 
-* **1993/08** : First official release of R as a _binary_
-  * Written by _**R**oss Ihaka_ and _**R**obert Gentleman_, simply aimed at being a programming language to teach introductory statistics at the University of Auckland
-  * Inspired by (and partially compatible with) the pre-existing, **S** programming language (BELL Labs, TIBCO Software)
-* **1997/04** : foundation of the Comprehensive R Archive Network, as the R central packages repository
-* **1997/12** : release of R v0.6.0 _sources_ under the GNU licence
-* **2000/02** : release of R v1.0.0
-* **2024/04** : realase of R v4.4.0
+* **1993/08** : First official release of R as a _binary_.
+  * Written by _**R**oss Ihaka_ and _**R**obert Gentleman_, simply aimed at being a programming language to teach introductory statistics at the University of Auckland.
+  * Inspired by (and partially compatible with) the pre-existing, **S** programming language (BELL Labs, TIBCO Software).
+* **1997/04** : foundation of the Comprehensive R Archive Network, as the R central packages repository.
+* **1997/12** : release of R v0.6.0 _sources_ under the GNU licence.
+* **2000/02** : release of R v1.0.0.
+* **2024/04** : realase of R v4.4.0.
 
-> _WARNING_ : R is not R ! The _R software_ you will use is **NOT** the _R language_ itself ! It is an **implementation** of the language, and [other implementations](https://learn.saylor.org/mod/book/view.php?id=58417&chapterid=44968) co-exist(ed). By example : Revolution Analytics (by Microsoft, now [defunct](https://techcommunity.microsoft.com/t5/azure-sql-blog/microsoft-r-application-network-retirement/ba-p/3707161)), [Renjin](https://www.renjin.org/) (active, Java), [FastR](https://github.com/oracle/fastr) (active, Java), [Riposte](https://github.com/jtalbot/riposte) (defunct), [CXXR](https://www.cs.kent.ac.uk/projects/cxxr/) (defunct, C++) ...
+<details>
+<summary>Details about implementations of R language</summary>
+_WARNING_ : R is not R ! The _R software_ you will use is **NOT** the _R language_ itself ! It is an **implementation** of the language, and [other implementations](https://learn.saylor.org/mod/book/view.php?id=58417&chapterid=44968) co-exist(ed). By example : Revolution Analytics (by Microsoft, now [defunct](https://techcommunity.microsoft.com/t5/azure-sql-blog/microsoft-r-application-network-retirement/ba-p/3707161)), [Renjin](https://www.renjin.org/) (active, Java), [FastR](https://github.com/oracle/fastr) (active, Java), [Riposte](https://github.com/jtalbot/riposte) (defunct), [CXXR](https://www.cs.kent.ac.uk/projects/cxxr/) (defunct, C++) ...
+<\details>
+
+R versus Excel:
 
 Fun fact (more _awkward_ than fun, actually) about why R is better than excel:  
 _In 2020, ["Covid : UK loses thousands of cases due to ... a saturated MS Excel file"](https://www.lesechos.fr/monde/europe/covid-le-royaume-uni-passe-a-cote-de-milliers-de-cas-a-cause-dun-fichier-excel-arrive-a-saturation-1251904)  _
@@ -82,6 +90,8 @@ More information comparing R and Excel [here](https://fantasyfootballanalytics.n
 After installing R, you can launch it by double-clicking on the R icon <img src="images/logo_R.png" alt="logo_R.png" width="50"/>
 
 <img src="images/RGui.jpg" alt="RGui" width="600"/>
+
+An interface is software placed between you and the computer that allows you to communicate more easily with the computer.
 
 As you can see, the default R interface (**RGui** console : GUI stands for _**G**raphical **U**ser **I**nterface_) is quite abrupt and bleak :S ...
 
@@ -113,9 +123,12 @@ knitr::kable(
 ## The console pane (lower left)
 
 ![console_pane_image](images/td_consolePane.png)
-This is a simple interactive R console, like in the RGui (see previous section).
+
+This is a simple interactive R console, like in the RGui (see previous section), that allows us to communicate with the computer.
 
 > <span style="color:#CD853F"> WARNING: Here is an example provided by the bioinformatics platform <B>BiGR</B>. Your local RStudio might differ: the version of R, the list of available packages, etc. On <B>your</B> local machine, RStudio console will match with the RGui. </span>
+
+Here, I gave an instruction to R, and he told me that he was unable to execute it with an "Error" message. We communicate.
 
 Let's try to enter the [`print()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print) command :
 
@@ -123,10 +136,11 @@ Let's try to enter the [`print()`](https://www.rdocumentation.org/packages/base/
 print("Hello World")
 ```
 
-Here, we just used a _function_, called [`print`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print). This function attempts to display on screen anything provided between parenthesis `(` and `)`. In our example, we provided the character string `"Hello World"` (thus, we used quotes), and the function `print` successfully printed it on screen !
+Here, we just used a _function_ (which is an instruction), called [`print`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print). This function attempts to display on screen anything provided between parenthesis `(` and `)`. In our example, we provided the character string `"Hello World"` (thus, we used quotes), and the function `print` successfully printed it on screen !  
+The information that is put between the parentheses of a function is called arguments.
 
-Now, click on **Session** -> **Save Workspace as** and name it as you wish (I named mine _"my_session.RData"_). This will save your current _work space_ (the _environment_ in which you are working : the custom objects and functions loaded into memory).
-What happened in the console pane? You nailed it! A command has been automatically written. For me, it is:
+Now, click on **Session** -> **Save Workspace As...** and name it as you wish (I named mine _"my_session.RData"_). This will save your current _work space_ (the _environment_ in which you are working : the custom objects and functions loaded into memory).
+What happened in the console pane? You nailed it! A command has been automatically written. I named the file "my_session.RData", so for me, it is:
 
 ```{r save_workspace_01}
 save.image("my_session.RData")
@@ -136,7 +150,11 @@ This is one of the many ways RStudio helps you in your work, by simplifying (mai
 
 > As a general recommendation, you should get to save your work space after any important step in your code. When you may need help, whether on a function error, a script result or anything alike, you would be able to share such save to your favorite R-developer next door. This file contains everything you did in your current session.
 
-> <span style="color:green"> NOTE: The Rstudio console allows **auto-completion** and **code suggestion** : when one uses the [TAB] key after writing the first few characters of a code function/variable, the console proposes possible names from a dictonary that fits your installation (R base and installed packages).
+Note that you can create your own functions in the future.
+
+A package is a collection of R functions that are not natively present in R.
+
+> <span style="color:green"> NOTE: The Rstudio console allows **auto-completion** and **code suggestion** : when one uses the [TAB] key after writing the first few characters of a code function/variable, the console proposes possible names from a dictonary that fits your installation.
 Any reputable bioinformatician uses auto-completion, but shhh ! It's one of our many secrets ! </span>
 
 ## The environment/history pane (upper right)
@@ -148,6 +166,9 @@ This pane has three main tabs: 'Environment', 'History' and 'Connections' (the '
 ### Environment
 
 'Environment' displays the list of every single variable, custom function, object or data loaded in R. This includes only what you defined by yourself and does not include environment variables nor base nor package-loaded functions.
+
+A variable allows you to store information in memory, by giving it a name (like a box containing an information, and a label).
+An object is a more complexe variable that allows you to save several information inside one name (see R - Basics section).
 
 Example : in your console pane, enter the following command:
 
@@ -164,7 +185,7 @@ You nailed it : a new **my_var** variable is now available in your environment !
 When a more complex object is declared in your work space, some general information may be displayed, too. By example :
 
 ```{r dataframe_pane_env, eval=TRUE}
-small_table <- data.frame("col_a"=c(1, 3), "col_b"=c(2, 4))
+df <- data.frame("a"=c(1, 3), "b"=c(2, 4))
 ```
 
 You can observe this _dataframe_ (something like a table, we'll see it later).
@@ -200,7 +221,7 @@ This pane has four main tabs: 'Files', 'Plots', 'Packages' and 'Help' (the 'View
 
 ### Help
 
-This is maybe the **most important/useful** pane of your R Studio, on a user POV. THIS is the difference between R Studio and another code editor. Search for any function **here**, locally and not on the internet. This pane shows you the available help for **YOUR** version of R, **YOUR** version of a given package.
+This is maybe the **most important/useful** pane of your R Studio, on a user POV. THIS is the difference between R Studio and another code editor. Search for any function **here, locally** and not on the internet. This pane shows you the available help for **YOUR** version of R, **YOUR** version of a given package.
 
 Effectively, a published function for which a help page does exist in a version of R or one of its packages, still can evolve in time, depending on its author. Thus, some parameters can be added, removed, renamed, and/or default values changed. Consequently, the help from a remote source (internet) may be inadequate for your current, installed version !
 
@@ -289,7 +310,9 @@ These can sometimes be _interactive_ plots (ability to zoom, scroll, etc...), de
 
 ![script_pane](images/td_scriptPane.png)
 
-This is where you will spend most of your time when writing your R scripts (next to the 'Help' pane !). This pane also accepts other languages (e.g. _bash_, _python_, ...) or different R flavors (R markdown, by example), but R Studio shines for its R integration, oviously.
+This is where you will spend most of your time when writing your R scripts (next to the 'Help' pane !).  
+A script is a text file, where you save your command line to use, in the order of using.  
+This pane also accepts other languages (e.g. _bash_, _python_, ...) or different R flavors (R markdown, by example), but R Studio shines for its R integration, oviously.  
 
 > <b>Please, please !</b> Write your commands in the 'Script' pane, <b>then</b> execute them (hitting [CTRL] + [Enter] with the cursor placed on the command to run), rather than directly writing them in the console ! This has only advantages : you can track, save, share your work, test variations, without relying on your (spoiler : imperfect) memory, ...
 
@@ -314,7 +337,8 @@ Graphic interface presentation :
 
 **Remember** : a **variable** is a name given to any value of any type stored in memory.
 
-Here, we will describe basic types.
+Here, we will describe basic types.  
+A type is a data type.  It can be an integer, a decimal number, a string, an array, etc.
 
 ### Number
 
@@ -327,6 +351,12 @@ three <- 3
 In the above code, the number 3 is stored in a variable called "three" (it could be any other name, as long as it avoids special characters).
 
 You can do this in R with quite anything. Literally anything. Whole files, pipelines, images, anything.
+
+```{r basic_chars_never_name_variable, eval=FALSE}
+# The example below is a very good example of
+# how to never ever name a variable:
+シ <- "happy"
+```
 
 Maths in R works the same as your regular calculator :
 
@@ -341,21 +371,15 @@ Maths in R works the same as your regular calculator :
 > <span style="color:green"> Info: `#` is the way to write a comment into your script. Any instruction after `#`, and as long as no line return is invoked, will be ignored by the R console. For example in `3 + three # Add`, `3 + three` will be executed, but `# Add` will not.
 A good coder uses comments, and a lot of them, and relevant ones, to explain the calculation one made ! </span>
 
-> NOTE : Here, we simplified how R is actually handling numbers. There are two main subtypes in numbers : 1) Integers 2) Numerics (called "floats" in most other languages)
+> NOTE : Here, we simplified how R is actually handling numbers. There are two main subtypes in numbers : 1) Integers 2) Numerics (called "floats" in most other languages).
 
 ### Character
 
-Characters correspond to letters and letter chains, and are delimited with quotes : be it double `"` or `'` single (as long as the same type is uesd in a pair : on cannot start the definition of a character with a single quote and end it with a double one !) :
+Characters correspond to letters and letter chains, and are delimited with quotes : be it single `'` or double `"` (as long as the same type is uesd in a pair : on cannot start the definition of a character with a single quote and end it with a double one !) :
 
 ```{r basic_chars, eval=TRUE}
 four <- "4"
 five <- '5'
-
-# The example below is a very good example of
-```
-```{r basic_chars_never_name_variable, eval=FALSE}
-# how to never ever name a variable.
-シ <- "happy"
 ```
 
 Mathematics do not work with characters at all ... Try the following:
@@ -364,8 +388,12 @@ Mathematics do not work with characters at all ... Try the following:
 "4" + 1
 four + 1
 ```
+<details>
+<summary>Computer answer</summary>
 
-> Question : in the above example, why did I **not** use quotes when I wrote _four_ ?
+> Error in "4" + 1 : non-numeric argument to binary operator
+
+<\details>
 
 You can try to turn characters in numbers with the function: [`as.numeric()`](https://www.rdocumentation.org/packages/h2o/versions/3.38.0.1/topics/as.numeric):
 
@@ -384,15 +412,10 @@ As previously described, you can store any of the previously typed commands into
 
 ```{r variable_post_command, eval=TRUE}
 five <- as.numeric("4") + 1
-two <- 1 + (0.5 * 2)
 print(five)
-print(two)
 ```
 
-> Question : can you guess what happened in the first command ?
-
-> <span style="color:green"> Please! Please! Give your variable explanatory names, so that its content is understandable by humans. I would be pissed off seeing any of you calling their variable "a", "b", "xyz, "my_awsome_var", "dunno_what_it_is", "thing1", "thing2", etc ... X( </span>
-
+> <span style="color:green"> Please! Please! Give your variable explanatory names, so that its content is understandable by humans. I would be pissed off seeing any of you calling their variable "a", "b", "xyz, "my_awsome_var", "dunno_what_it_is", "thing1", "thing2", etc ... </span>
 
 ```{r tricky_exercise_not_shown, eval=TRUE, echo=FALSE}
 options(digits = 7)
@@ -451,10 +474,6 @@ This is due to the number of digits displayed in R. You are very likely to have 
 ```{r tricky_exercise_answer, eval=TRUE, echo=TRUE}
 mysterious_number_7 <- 7.0000001
 suspicious_number_7 <- 7
-print(mysterious_number_7)
-print(suspicious_number_7)
-mysterious_number_7 == suspicious_number_7
-identical(mysterious_number_7, suspicious_number_7)
 ```
 
 You can change the number of displayed digits with the function [`options()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/options):
@@ -492,40 +511,44 @@ You can make vectors and tables in R. Don't panic, there will be no maths in thi
 In R, vectors can be created with the [`c()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/c) function ("c" for "concatenate") :
 
 ```{r first_vector_basics, eval=TRUE}
-one2three <- c("1", "2", "3", "4", "10", "20")
-print(one2three)
+one2twenty <- c("1", "2", "3", "4", "10", "20")
+print(one2twenty)
 ```
 
 One can **check** if a variable is a vector :
 
 ```{r first_vector_type, eval=TRUE}
-is.vector(one2three)
+is.vector(one2twenty)
 ```
 
 As a uni-dimensional object, one can get its **length** :
 
 ```{r vec_len, eval = TRUE}
-length(one2three)
+length(one2twenty)
 ```
 
 One can **select an element** of the vector using squared brackets `[` and `]` holding the desired element index :
 
 ```{r select_in_vector_basics, eval=TRUE}
-one2three[1] # select the first element
+one2twenty[1] # select the first element
 ```
 
 > NOTE : R index starts at the value 1 (many other languages start at 0)
 
+```{r select_in_vector_basics2, eval=TRUE}
+one2twenty[5] # select the fifth element
+```
+
 One can **select multiple elements** of a vector with a ranged index  `:`:
 
 ```{r mulitple_select_in_vector_basics, eval=TRUE}
-one2three[2:4] # select from second to fourth element
+one2twenty[2:4] # select from second to fourth element
 ```
 
 One can combine both ways :
 
 ```{r vec_both}
-one2three[1,3:5] # select the first and third to fifth elements
+one2twenty[1,3:5] # select the first and third to fifth elements
 ```
 
 *Question 1*: Is there a difference between these two vectors ?
@@ -589,17 +612,11 @@ mixed_vector <- c(1, "2", 3)
 
 YES and NO. The example shows that we technically can, we end with an unexpected results : Here, all our values have been turned into characters, as we can not mix types in a vector. Either all its content is made of number or all its content is made of characters.
 
-:
-
 ```{r mixed_basics_vectors_answer, eval=TRUE}
 print(mixed_vector)
 print(is.numeric(mixed_vector))
 print(is.character(mixed_vector))
-print(all(is.numeric((mixed_vector))))
-print(all(is.character((mixed_vector))))
 ```
-
-Above, the [`all()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/all) function returns `TRUE` if all its content equals to `TRUE`.
 
 </details>
 
@@ -719,19 +736,6 @@ All this is because the data.frame is a special sort of bidimensional object in 
 
 </details>
 <br>
-*Question 3*: How can you increase all values of our data.frame by 2 ?
-
-<details>
-
-<summary>Answer</summary>
-
-```{r three4five6, eval=TRUE}
-three4five6 <- one2three4 + 2
-three4five6
-```
-
-</details>
-<br>
 
 ### Read a table as data frame
 
@@ -741,7 +745,7 @@ You can find the example_table.csv input file [here](https://github.com/gustaver
 
 Use the [`read.csv()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table) function to:
 
-1. open the _file_ `example_table.csv`. 
+1. open the _file_ `example_table.csv`.
 2. this table has a _header_ (`TRUE`). A header is a title line that defines column names. 
 3. this table has _row names_ in the column called "Gene_id".
 4. as a CSV file, its field separator is a comma _,_.
@@ -755,11 +759,11 @@ Save the opened table in a _variable_ called `example_table`.
 <summary>Answer</summary>
 
 ```{r open_example_table_soluce, eval=TRUE}
-example_table <- read.csv(
-  file="example_table.csv", 
-  header=TRUE, 
-  row.names="Gene_id"
-)
+example_table <- read.csv(file="example_table.csv", 
+                          header=TRUE, 
+                          row.names="Gene_id",
+                          sep = ","
+                 )
 ```
 
 </details>
@@ -1014,7 +1018,6 @@ print(mean_expression_Samples123)
 ```
  
  - save your script frequently, as well as your working environment
- - use backspaces in your code. This brings fresh air into the compact mess of character your code can be.
  - save the versions of the loaded packages at the end of your analysis (you can print loaded packages thanks to the [`sessionInfo()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/sessionInfo) function and save the result into an on-disk file thanks to the [`capture.output()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/capture.output)) function.
  
 ```{r sessionInfo, eval=TRUE}
@@ -1042,7 +1045,6 @@ Hopefully, you can load a RDS content into a variable ! This is useful when you 
 
 ```{r load_rds, eval=FALSE}
 example_table <- readRDS(file = "example_table.RDS")
-head(example_table)
 ```
 
 > NOTE : You can see in the example above that loading an object save as a RDS requires to inject it in a _variable_. This means that the RDS contains the object, but unnamed. This is not the case when saving an environment (using `save()`), as _all_ loaded objects are saved, thus their respective names are kept.
@@ -1120,3 +1122,5 @@ Please, note that this advice is valid today, but may change. Mainy other progra
 <div style="float: right;">Thibault: "Anyway [_Python_](https://www.python.org/) is the best programming language in the WORLD. Don't listen to Bastien."</div>
 
 <div style="float: right;">Bastien: "Huh, Thibault.. Remember when one talked about _objectivity_ ? :p"</div>
+
+
