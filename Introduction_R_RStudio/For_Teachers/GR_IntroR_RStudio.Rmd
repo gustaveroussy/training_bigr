@@ -872,24 +872,24 @@ Modules and package are considered to be the same thing in this lesson. The diff
 Most of the work you are likely to do with R will require one or multiple additional packages. A package is a list of functions, pipelines, or datasets shipped under a given name. In general, a package groups together functions linked to an analysis scheme or theme towards a defined aim.
 Every single function you use through R comes from a package or another. Those used till now in this lesson come mostly from the 'base' package (R is shipped with a short list of mandatory packages)
 
-Invoke the help page for the `head` function, and read the very first line of the 'Help' pane :
+Invoke the help page for the `print` function, and read the very first line of the 'print' pane :
 
-```{r help_pane_package, eval=FALSE}
-help(head)
+```{r print_pane_package, eval=FALSE}
+help(print)
 ```
 
-It reads: `help {utils}` : The function `help` comes from the package `utils`.
+It reads: `print {base}` : The function `print` comes from the package `base`.
 
 ```{r head, eval=TRUE}
-# Call the function "help", with the argument "example_table", and show only the first line
-head(example_table, 1)
+# Call the function "print", with the argument "You're the best!"
+print("You're the best!")
 ```
 
-> <span style="color:#CD853F"> WARNING : Sometimes, two packages may share the same name for different functions ! They are most certainly not doing the exact same thing. IMHO, it is a good habbit to ALWAYS call a function while disambiguating the package name, using thins syntax : `package::function`. Writing `utils::help()` is better, clearer than using `help()` alone.</span>
+> <span style="color:#CD853F"> WARNING : Sometimes, two packages may share the same name for different functions ! They are most certainly not doing the exact same thing. IMHO, it is a good habbit to ALWAYS call a function while disambiguating the package name, using thins syntax : `package::function`. Writing `base::print()` is better, clearer than using `print()` alone.</span>
 
 ```{r use_package_name, eval=TRUE}
 # Call the function "help" ***from the package utils***, with the argument "example_table", and show only the first line
-utils::head(example_table, 1)
+base::print("You're the best!")
 ```
 
 ## Install a package
@@ -939,7 +939,7 @@ An _installed_ package is not actually _active_ by default (you can't use its fu
 You can load a package with the [`library()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/library) function :
 
 ```{r load_package}
-library(package="dplyr")
+library(package="dplyr") # or just library(dplyr)
 ```
 
 If the requested package is not locally installed, this will raise an error.
