@@ -76,7 +76,8 @@ History:
 <details>
 <summary>Details about implementations of R language</summary>
 _WARNING_ : R is not R ! The _R software_ you will use is **NOT** the _R language_ itself ! It is an **implementation** of the language, and [other implementations](https://learn.saylor.org/mod/book/view.php?id=58417&chapterid=44968) co-exist(ed). By example : Revolution Analytics (by Microsoft, now [defunct](https://techcommunity.microsoft.com/t5/azure-sql-blog/microsoft-r-application-network-retirement/ba-p/3707161)), [Renjin](https://www.renjin.org/) (active, Java), [FastR](https://github.com/oracle/fastr) (active, Java), [Riposte](https://github.com/jtalbot/riposte) (defunct), [CXXR](https://www.cs.kent.ac.uk/projects/cxxr/) (defunct, C++) ...
-<\details>
+
+</details>
 
 R versus Excel:
 
@@ -393,7 +394,7 @@ four + 1
 
 > Error in "4" + 1 : non-numeric argument to binary operator
 
-<\details>
+</details>
 
 You can try to turn characters in numbers with the function: [`as.numeric()`](https://www.rdocumentation.org/packages/h2o/versions/3.38.0.1/topics/as.numeric):
 
