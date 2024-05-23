@@ -79,6 +79,7 @@ _WARNING_ : R is not R ! The _R software_ you will use is **NOT** the _R languag
 
 </details>
 
+
 R versus Excel:
 
 Fun fact (more _awkward_ than fun, actually) about why R is better than excel:  
@@ -549,7 +550,7 @@ one2twenty[2:4] # select from second to fourth element
 One can combine both ways :
 
 ```{r vec_both}
-one2twenty[1,3:5] # select the first and third to fifth elements
+one2twenty[c(1,3:5)] # select the first and third to fifth elements
 ```
 
 *Question 1*: Is there a difference between these two vectors ?
@@ -620,7 +621,6 @@ print(is.character(mixed_vector))
 ```
 
 </details>
-
 <br>
 
 *Question 3*: How to create a histogram from a vector ?
