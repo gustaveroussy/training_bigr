@@ -71,7 +71,7 @@ History:
 * **1997/04** : foundation of the Comprehensive R Archive Network, as the R central packages repository.
 * **1997/12** : release of R v0.6.0 _sources_ under the GNU licence.
 * **2000/02** : release of R v1.0.0.
-* **2024/04** : realase of R v4.4.0.
+* **2024/04** : release of R v4.4.0.
 
 <details>
 <summary>Details about implementations of R language</summary>
