@@ -2,9 +2,9 @@ BootStrap: docker
 From: ubuntu:22.04
 
 #build image (don't forget to change id and pwd for gitlab, line 49):
-#sudo singularity build formation_bigr_introduction_R_RStudio.simg formation_bigr_introduction_R_RStudio.def
+#sudo singularity build formation_bigr_load_and_save_table.simg formation_bigr_load_and_save_table.def
 #using image:
-#singularity shell -B local_folder:/WORKDIR/container_folder formation_bigr_introduction_R_RStudio.simg
+#singularity shell -B local_folder:/WORKDIR/container_folder formation_bigr_load_and_save_table.simg
 
 %environment
     LANG=en_US.UTF-8
@@ -31,7 +31,7 @@ From: ubuntu:22.04
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
     add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/'
     apt-get -y update && apt-get -y upgrade
-    apt-get install -y r-base-core=4.3.3-1.2004.0 r-base-dev=4.3.3-1.2004.0
+    apt-get install -y r-base-core=4.4.0-1.2204.0 r-base-dev=4.4.0-1.2204.0
     apt-cache policy r-base r-base-dev
     
     echo "R version ######################"
@@ -46,7 +46,9 @@ From: ubuntu:22.04
     R -e 'install.packages("rmarkdown")'
     R -e 'library("rmarkdown")'   
     R -e 'remotes::install_git("https://gitlab.com/bioinfo_gustaveroussy/bigr/rmdformatsbigr.git",
-             credentials=git2r::cred_user_pass("your_login", "your_password"))'
-
+             credentials=git2r::cred_user_pass("your_login", "your_password!"))'
+    R -e 'install.packages("readxl")'
+    R -e 'library("readxl")'   
+    
 %labels
     Author Marine AGLAVE
