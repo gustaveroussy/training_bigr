@@ -19,16 +19,17 @@ All courses are free, but registration is required !
   - Registration [here](https://docs.google.com/forms/d/e/1FAIpQLScuym-rpaFEEZ9rvP1yY7DMWgm0MlHVLFGa57iyZiZ3LXwquw/viewform?usp=sf_link).
   - Html resources for this course [here](https://github.com/gustaveroussy/training_bigr/blob/main/Introduction_R_RStudio/For_Students/GR_IntroR_RStudio.html) (download and open in your favorite web browser. Firefox/Chrome recommended).
 
-  - ### Deepening of swirl
-    - Prerequisites:
-      - Have taken the Introduction to R and RStudio course.
-      - Finish the R package [Swirl](https://swirlstats.com/).
-    - Program:
-      - Review the last modules of [Swirl](https://swirlstats.com/).
-    - Next sessions (10 students max per session):
-      - French: 24th of June 2024, 14:00-16:00, in the Cristal room, B2M.
-      - other sessions will be planned in September 2024.
-    - Registration by email (you will be contacted by us).
+- ### Deepening of swirl
+  - Prerequisites:
+    - Have taken the Introduction to R and RStudio course.
+    - Finish the R package [Swirl](https://swirlstats.com/).
+  - Program:
+    - Review the last modules of [Swirl](https://swirlstats.com/).
+  - Next sessions (10 students max per session):
+    - French: 24th of June 2024, 14:00-16:00, in the Cristal room, B2M.
+    - French: 05th of September 2024, 14:00-17:00, in the Cristal room, B2M.
+    - English: 13th of September 2024, 14:00-17:00, the room has to be confirmed, B2M.
+  - Registration by email (you will be contacted by us).
 
 - ### Other courses to open "soon" !!
 
