@@ -549,7 +549,7 @@ one2twenty[2:4] # select from second to fourth element
 
 One can combine both ways :
 
-```{r vec_both}
+```{r vec_both, eval=TRUE}
 one2twenty[c(1,3:5)] # select the first and third to fifth elements
 ```
 
@@ -881,15 +881,12 @@ help(print)
 
 It reads: `print {base}` : The function `print` comes from the package `base`.
 
-```{r head, eval=TRUE}
-# Call the function "print", with the argument "You're the best!"
-print("You're the best!")
-```
-
 > <span style="color:#CD853F"> WARNING : Sometimes, two packages may share the same name for different functions ! They are most certainly not doing the exact same thing. IMHO, it is a good habbit to ALWAYS call a function while disambiguating the package name, using thins syntax : `package::function`. Writing `base::print()` is better, clearer than using `print()` alone.</span>
 
-```{r use_package_name, eval=TRUE}
-# Call the function "help" ***from the package utils***, with the argument "example_table", and show only the first line
+```{r use_package_name, eval=FALSE}
+# Call the function print(), with the argument "You're the best!"
+print("You're the best!")
+# Call the function print() from the package base, with the argument "You're the best!"
 base::print("You're the best!")
 ```
 
