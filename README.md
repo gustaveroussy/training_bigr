@@ -13,7 +13,6 @@ All courses are free, but registration is required !
     - Installation of the [swirl package](https://swirlstats.com/)
   - Next pre-sessions: 21st June & 1st July, during working hours, in 101 room (B2M).
   - Next sessions (10 students max per session):
-    - English: 2nd of July 2024, 10:00-12:00, in the Cristal room, B2M.
     - other sessions will be planned in March 2025.
   - Registration [here](https://docs.google.com/forms/d/e/1FAIpQLScuym-rpaFEEZ9rvP1yY7DMWgm0MlHVLFGa57iyZiZ3LXwquw/viewform?usp=sf_link).
   - Html resources for this course [here](https://github.com/gustaveroussy/training_bigr/blob/main/Introduction_R_RStudio/For_Students/GR_IntroR_RStudio.html) (download and open in your favorite web browser. Firefox/Chrome recommended).
