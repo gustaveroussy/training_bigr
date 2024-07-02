@@ -20,7 +20,7 @@ All courses are free, but registration is required !
 - ### Deepening of swirl
   - Prerequisites:
     - Have taken the Introduction to R and RStudio course.
-    - Finish the R package [Swirl](https://swirlstats.com/).
+    - Finish the R package [Swirl](https://swirlstats.com/) (mainly the 9 first modules + modules n°15).
   - Program:
     - Review the last modules of [Swirl](https://swirlstats.com/).
   - Next sessions (10 students max per session):
