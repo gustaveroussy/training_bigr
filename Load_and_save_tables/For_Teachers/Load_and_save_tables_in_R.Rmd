@@ -85,11 +85,8 @@ Be carreful this is not an absolute rule, and a .txt file could be a table too!
 
 ## Usage of [`utils::read.table`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table)
 
-To load a table in memory, one can use the function [`read.table`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table) 
-form the package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
-Remember, while specifying the package name is facultative, it remains
-very important when you want to share, reproduce, and make your work
-accessible. These are the keys of the [FAIR principles](https://fr.wikipedia.org/wiki/Fair_data).
+To load a table in memory, one can use the function [`read.table`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table) from the package [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2).
+Remember, while specifying the package name is facultative, it remains very important when you want to share, reproduce, and make your work accessible. These are the keys of the [FAIR principles](https://fr.wikipedia.org/wiki/Fair_data).
 
 
 ```{r}
