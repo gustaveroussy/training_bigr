@@ -1,0 +1,12 @@
+Subject_number,Sex,Age,NSCLC_type,Date_of_Diagnosis,Progression,Death_or_alive,Comments
+P0001,female,69.7,adenocarcinoma,19/01/2019,yes,dead,
+P0002,M,61.45,squamous cell carcinoma,01/07/2015,yes,dead,
+P0003,M,71.22,squamous cell carcinoma,20/03/2013,yes,dead,
+P0004,M,76.82,squamous cell carcinoma,15/12/2018,yes,dead,
+P0005,M,58.37,squamous cell carcinoma,04/09/2015,yes,dead,
+P0006,Female,49.98,large cell carcinoma ,08/03/2019,yes,dead,
+P0007,M,58.58,large cell carcinoma ,14/09/2012,yes,dead,
+P0008,F,61.43,adenocarcinoma,29/04/2019,no,alive,still in response
+P0009,M,71.2,adenocarcinoma,10/10/2017,yes,dead,
+P0010,M,69.02,adenocarcinoma,03/07/2019,no,alive,
+P0011,M,75.41,adenocarcinoma,11/06/2014,yes,dead,
