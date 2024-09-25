@@ -48,8 +48,10 @@ From: ubuntu:22.04
     R -e 'remotes::install_git("https://gitlab.com/bioinfo_gustaveroussy/bigr/rmdformatsbigr.git",
              credentials=git2r::cred_user_pass("your_login", "your_password!"))'
     R -e 'install.packages("dplyr")'
+    R -e 'install.packages("tidyr")'
     R -e 'install.packages("stringr")'
     R -e 'library("dplyr")'
+    R -e 'library("tidyr")'
     R -e 'library("stringr")'
 
 %labels

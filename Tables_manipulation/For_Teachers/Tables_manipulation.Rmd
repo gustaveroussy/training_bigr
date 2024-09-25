@@ -161,7 +161,7 @@ And this dataframe contains 0 rows.
 
 ### Observation of our data
 
-For the rest of the course, we will use the Clinical_Cohort.csv table which you can find there XXX.
+For the rest of the course, we will use the Clinical_Cohort.csv table which you can find here https://github.com/gustaveroussy/training_bigr/blob/main/Tables_manipulation/For_Students/Clinical_Cohort.csv.
 ```{r}
 clinical_data <- utils::read.table("Clinical_Cohort.csv", sep = ",", header = TRUE)
 ```
@@ -352,7 +352,7 @@ clinical_data[,c(-2,-3)] #same
 *Question* : 
 
 Does it work with column names like for selection?
-```{r, eval = FLASE}
+```{r, eval = FALSE}
 clinical_data[,-"Subject_number"]
 clinical_data[,-c("Subject_number","Age")]
 ```
@@ -870,10 +870,10 @@ Be careful!!
 
 To merge big or complex dataframe, the [`merge()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/merge) function is preferable.
 
+We will work with a complementary table that you can find here: https://github.com/gustaveroussy/training_bigr/blob/main/Tables_manipulation/For_Students/Clinical_Cohort_Complement.csv
 ```{r}
 # read the complementary dataframe
 clinical_data_complement <- utils::read.table("Clinical_Cohort_Complement.csv", sep = ",", header = TRUE)
-
 ```
 
 As usual, look at the new table:
@@ -1138,11 +1138,9 @@ gc()
 You will work on VCF files.
 The Variant Call Format (or VCF) is a standard text file format used in bioinformatics for storing gene sequence variations. It is a common output format for variant calling programs.
 The header begins the file and provides metadata describing the body of the file. Header lines are denoted as starting with #. The header contains keywords that optionally semantically and syntactically describe the fields used in the body of the file, notably INFO, FILTER, and FORMAT.
-More information here: https://en.wikipedia.org/wiki/Variant_Call_Format
+More information about VCF files here: https://en.wikipedia.org/wiki/Variant_Call_Format
 
-Here we will work with the VCF avaiable here: "TO DO".
-
-1) Load and see what the provided vcf named "Sample1.vcf.gz" looks like.
+1) Load and see what the provided vcf (https://github.com/gustaveroussy/training_bigr/blob/main/Tables_manipulation/For_Students/Sample1.vcf.gz) named "Sample1.vcf.gz" looks like.
 
 Tips: if you don't have columns name you can set them. They are "CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO", "FORMAT" and "SAMPLE_INFO", in this order.
 <details>
@@ -1165,10 +1163,13 @@ colnames(vcf1) <- c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO","FORMA
 head(vcf1)
 
 ```
+
+> Note: by default read.table() ignore lines which begins by `#`. So it doesn't load the header.
+
 </details>
 <br>
 
-2) Load and see what the provided vcf named "Sample2.vcf.gz" looks like, then assemble the 2 files into one. Remember to keep the original patient information for each mutation.
+2) Load and see what the provided vcf (https://github.com/gustaveroussy/training_bigr/blob/main/Tables_manipulation/For_Students/Sample2.vcf.gz) named "Sample2.vcf.gz" looks like, then assemble the 2 VCF files into one. Remember to keep the original patient information for each mutation.
 
 <details>
 <summary>Answer</summary>
@@ -1218,15 +1219,15 @@ nb_lost
 </details>
 <br>
 
-4) What is the number of “PASS” variants in the X chromosome in patient Sample1.
+4) What is the number of “PASS” variants in the X chromosome in patient Sample2.
 
 <details>
 <summary>Answer</summary>
 ```{r}
-#get variants from the chromosome X in the patient Sample1
-X_Sample1_vcf <- subset(PASS_vcf, CHROM == "X" & SAMPLE_NAME == "Sample1")
+#get variants from the chromosome X in the patient Sample2
+X_Sample2_vcf <- subset(PASS_vcf, CHROM == "X" & SAMPLE_NAME == "Sample2")
 # get the number of variants
-nrow(X_Sample1_vcf)
+nrow(X_Sample2_vcf)
 
 ```
 </details>
@@ -1267,7 +1268,7 @@ nrow(occurrenceis2_PASS_variant)
 <br>
 
 
-To go further:
-https://bookdown.org/ndphillips/YaRrr/
-https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
+To go further:  
+https://bookdown.org/ndphillips/YaRrr/  
+https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf  
 
