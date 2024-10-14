@@ -24,8 +24,7 @@ All courses are free, but registration is required !
   - Program:
     - Review the last modules of [Swirl](https://swirlstats.com/).
   - Next sessions (10 students max per session):
-    - French: 30th of September 2024, 14:00-17:00, in the Quartz room, B2M.
-    - English: 25th of September 2024, 14:00-17:00, in the Cristal room, B2M.
+    - other sessions will be planned in March 2025.
   - Registration by email (you will be contacted by us).
 
 - ### Other courses to open "soon" !!
