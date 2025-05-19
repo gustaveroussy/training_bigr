@@ -7,7 +7,7 @@ Prerequisites:
   Notes: If you can’t install R>4.0.0 or Rstudio, pre-sessions to get help is planned; if you don’t have a laptop, borrow one from the DTNSI (5500.contact@gustaveroussy.fr or https://5500.gustaveroussy.fr/HEAT/).
   - Your motivation, smile and kindness :D
 
-To see the planning, click [here](https://gustaveroussyfr.sharepoint.com/:l:/s/Plateformedebioinformatique-Formationsinternes/FA02Wok_gEVKn_WrC000wOUBkXVcZUHym7GgyN7-pvFzbA?e=fhDNn7)
+**To see the planning, click [here](https://gustaveroussyfr.sharepoint.com/:l:/s/Plateformedebioinformatique-Formationsinternes/FA02Wok_gEVKn_WrC000wOUBkXVcZUHym7GgyN7-pvFzbA?e=fhDNn7)**
 
 - ### Introduction to R and RStudio
   - Special Prerequisites:
