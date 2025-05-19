@@ -40,6 +40,6 @@ Prerequisites:
     - Combine plots
     - Save plots
 
-- ### Other courses are planned!
+- ### Other courses will be planned!
 
 A problem, a question? Send us an email to bigr@gustaveroussy.fr
