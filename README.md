@@ -2,7 +2,7 @@
 This repository contains all training material from the bioinformatics platform at Gustave Roussy (BiGR).  
 All courses are free, no registration, you can come as long as there are free seats in the room!
 
-### To see the planning (what/when/where), click [here](https://gustaveroussyfr.sharepoint.com/:l:/s/Plateformedebioinformatique-Formationsinternes/FA02Wok_gEVKn_WrC000wOUBkXVcZUHym7GgyN7-pvFzbA?e=fhDNn7)
+### To see the planning (what/when/where), click [here](https://gustaveroussyfr.sharepoint.com/:l:/s/Plateformedebioinformatique-Formationsinternes/FA02Wok_gEVKn_WrC000wOUBkXVcZUHym7GgyN7-pvFzbA?e=fhDNn7)!
 
 Prerequisites:
   - A laptop with [R>4.0.0](https://cran.r-project.org/) and [RStudio](https://posit.co/download/rstudio-desktop/) installed  
