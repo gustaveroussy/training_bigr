@@ -3,7 +3,7 @@ This repository contains all training material from the bioinformatics platform 
 All courses are free, no registration, you can come as long as there are free seats in the room!
 
 ### To see the planning (what/when/where), click [here](https://gustaveroussyfr.sharepoint.com/:l:/s/Plateformedebioinformatique-Formationsinternes/FA02Wok_gEVKn_WrC000wOUBkXVcZUHym7GgyN7-pvFzbA?e=fhDNn7) or scan the next QR code!
-<img src="[Assets/icon.png](https://github.com/user-attachments/assets/5a58aaf8-9e65-4a12-98b5-06e2dc350d6c)" width="200">  
+<p align="center"><img src="qr-code.png" alt="QR code" style="width:20%; height:20%;"><p/>
 
 Prerequisites:
   - A laptop with [R>4.0.0](https://cran.r-project.org/) and [RStudio](https://posit.co/download/rstudio-desktop/) installed.  
