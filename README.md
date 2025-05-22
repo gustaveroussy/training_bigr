@@ -6,7 +6,7 @@ All courses are free, no registration, you can come as long as there are free se
 
 Prerequisites:
   - A laptop with [R>4.0.0](https://cran.r-project.org/) and [RStudio](https://posit.co/download/rstudio-desktop/) installed  
-  Notes: If you can’t install R>4.0.0 or Rstudio, pre-sessions to get help is planned; if you don’t have a laptop, borrow one from the DTNSI (5500.contact@gustaveroussy.fr or https://5500.gustaveroussy.fr/HEAT/).
+  Notes: If you can’t install R>4.0.0 or Rstudio, pre-sessions to get help is planned; if you don’t have a laptop, borrow one from the DTNSI (https://5500.gustaveroussy.fr/HEAT/).
   - Your motivation, smile and kindness :D
 
 - ### Introduction to R and RStudio
@@ -29,6 +29,7 @@ Prerequisites:
     - Replace elements in a dataframe
     - Merge 2 dataframes
     - Make operations on a dataframe
+  - Html resources for this course [here]([https://github.com/gustaveroussy/training_bigr/blob/main/Introduction_R_RStudio/For_Students/GR_IntroR_RStudio.html](https://github.com/gustaveroussy/training_bigr/blob/main/Load_and_save_tables/For_Students/Load_and_save_tables_in_R.html)) and [here](https://github.com/gustaveroussy/training_bigr/blob/main/Tables_manipulation/For_Students/Tables_manipulation.html) (download and open in your favorite web browser. Firefox/Chrome recommended).
 
 - ### Make graphs with ggplot2
   - Prerequisites:
@@ -39,6 +40,7 @@ Prerequisites:
     - Change colors
     - Combine plots
     - Save plots
+  - Html resources for this course [here](https://github.com/gustaveroussy/training_bigr/blob/main/Make_graphs_under_R_with_ggplot2/For_Students/Make_graphs_under_R_with_ggplot2.html) (download and open in your favorite web browser. Firefox/Chrome recommended).
 
 - ### Other courses will be planned!
 
