@@ -1105,7 +1105,7 @@ info()
 
 # Conclusion
 
-No programming language is better than any other. They all serve different purposes. Anyone telling the opposite is (over)-specialized in the language they are advertising (and probably have a strong lack of objectivity.
+No programming language is better than any other. They all serve different purposes. Anyone telling the opposite is (over)-specialized in the language they are advertising (and probably have a strong lack of objectivity).
 
 In the field of bioinformatics, languages used by the community are quite limited. The main, widely adopted options are :
 
