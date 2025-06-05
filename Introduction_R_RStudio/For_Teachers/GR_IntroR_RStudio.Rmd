@@ -213,7 +213,7 @@ This tab is quite mandatory when coding and testing : while you test and search 
 
 Each history is related to a session. You may see many commands in your history, even some you never entered manually : when a RStudio "assist" menu/button is used (ex : knitting commands, display commands, help commands, etc...), in most case it auto-runs a R command that will be stored in the history as well as the one you manually entered.
 
-Please note that your history has a limit (512 entries by default) and only saves the latest command lines. The default value can be changed (but it's something to reserve to more advanced users)
+Please note that your history has a limit (512 entries by default) and only saves the latest command lines. The default value can be changed (but it's something to reserve to more advanced users).
 
 ## The help/plots/packages/files pane (lower right)
 
@@ -247,7 +247,7 @@ Initially, this file explorer is set at your **current working position**. This 
 
 Here, we will create a new directory, using two methods :
 
-1. With the GUI
+1. With the GUI :
 
 ![create_working_dir_rstudio](images/create_working_dir_rstudio.png)
 
@@ -267,7 +267,7 @@ One can change one's working directory :
 
 ![setwd](images/clange_wd_rstudio.png)
 
-2. With a command :
+2. With a command line :
 
 Use [`setwd()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/getwd):
 
@@ -279,11 +279,11 @@ setwd("Intro_R")
 
 You can delete files:
 
-1. With the GUI
+1. With the GUI :
 
 <img src="images/delete_files_from_rstudio.png" alt="download" width="500"/>
 
-2. With a command
+2. With a command line :
 
 Use the [`file.remove()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/files) function:
 
@@ -328,9 +328,9 @@ The default file extension for a R script saved is `.R` or `.r` (or `.RMD`, `.Rm
 
 Graphic interface presentation :
 
-1. **Write command lines in the **'Script'** pane (upper left)
+1. **Write command lines in the 'Script'** pane (upper left).
 2. **Execute** command lines by hitting [CTRL] + [Enter] from the script pane, then observe their output in the 'Console' / 'Plots' panes.
-3. Take a look at your **environment** and **history** in the upper right pane
+3. Take a look at your **environment** and **history** in the upper right pane.
 4. **Search** for **help** in the lower right pane.
 
 # R – Basics
