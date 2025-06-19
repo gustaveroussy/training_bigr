@@ -6,7 +6,7 @@
     <meta name="generator" content="pandoc" />
 
     
-        <meta name="date" content="2024-06-05" />
+        <meta name="date" content="2025-06-19" />
     
     <title>Load and save tables with R</title>
 
@@ -1753,7 +1753,7 @@ margin-left: 0 !important;
 Bioinformatics core facility of Gustave Roussy
 			<br /><a class="author_email" href="mailto:#"><a href="mailto:bigr@gustaveroussy.fr" class="email">bigr@gustaveroussy.fr</a></a>
 	      </p>
-                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2024-06-05</p>
+                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2025-06-19</p>
           </div>
    </div>
    
@@ -1806,7 +1806,7 @@ expression during Epithelial-Mesenchymal transition.</p>
 <div id="different-table-formats" class="section level1">
 <h1>Different table formats</h1>
 <p>We can often get an indication on table’s format thanks to the
-extentionof the file:</p>
+extention of the file:</p>
 <ul>
 <li>.tsv: tabulation separated values (columns are separated by
 tabulations).</li>
@@ -1815,7 +1815,7 @@ English, or by semicolon in French).</li>
 <li>.xlsx or .xls: excel format.</li>
 <li>.zip: compressed table in zip format (example file.tsv.zip).</li>
 </ul>
-<p>Be carreful this is not an absolute rule, and a .txt file could be a
+<p>Be careful this is not an absolute rule, and a .txt file could be a
 table too!</p>
 </div>
 <div id="loading-a-well-formatted-table" class="section level1">
@@ -1823,11 +1823,11 @@ table too!</p>
 <div id="usage-of-utilsread.table" class="section level2">
 <h2>Usage of <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table"><code>utils::read.table</code></a></h2>
 <p>To load a table in memory, one can use the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table"><code>read.table</code></a>
-form the package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.
+from the package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.
 Remember, while specifying the package name is facultative, it remains
 very important when you want to share, reproduce, and make your work
 accessible. These are the keys of the <a href="https://fr.wikipedia.org/wiki/Fair_data">FAIR principles</a>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(<span class="at">file=</span><span class="st">&quot;EMT_counts_data.txt&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(<span class="at">file =</span> <span class="st">&quot;EMT_counts_data.txt&quot;</span>)</span></code></pre></div>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
 from package <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2"><code>utils</code></a>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
@@ -1879,10 +1879,10 @@ function or the help pane of RStudio).</p>
 Solution
 </summary>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_data.txt&quot;</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,                <span class="co"># set the first line as column names</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;,&quot;</span>,                    <span class="co"># set the character to separate columns</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">row.names=</span><span class="dv">1</span>                 <span class="co"># set the first column as row names</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;EMT_counts_data.txt&quot;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">header =</span> <span class="cn">TRUE</span>,                <span class="co"># set the first line as column names</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>,                    <span class="co"># set the character to separate columns</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">row.names =</span> <span class="dv">1</span>                 <span class="co"># set the first column as row names</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Then we use the <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>
 function again…</p>
@@ -1978,7 +1978,7 @@ several time (here on each column), we can use the function <a href="https://www
 from the package <a href="https://www.rdocucentation.org/packages/base/versions/3.6.2/"><code>base</code></a>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># X correspond to our counts table</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># FUN correspond to the function to apply</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X =</span> counts, <span class="at">FUN =</span> base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code> Day_0_R1  Day_0_R2  Day_0_R3  Day_7_R1  Day_7_R2  Day_7_R3 
 &quot;integer&quot; &quot;integer&quot; &quot;integer&quot; &quot;integer&quot; &quot;integer&quot; &quot;integer&quot; </code></pre>
 <p>We only have numbers, it seems that we can start to work further with
@@ -1992,10 +1992,10 @@ compression is quite common, alongside with <a href="https://en.wikipedia.org/wi
 or any of the functions presented in the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/connections">documentation</a>
 about compression formats.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file=</span>utils<span class="sc">::</span><span class="fu">unzip</span>(<span class="at">zipfile=</span><span class="st">&quot;EMT_counts_data.txt.zip&quot;</span>),</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;,&quot;</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">row.names=</span><span class="dv">1</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> utils<span class="sc">::</span><span class="fu">unzip</span>(<span class="at">zipfile=</span><span class="st">&quot;EMT_counts_data.txt.zip&quot;</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">header =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">row.names =</span> <span class="dv">1</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
@@ -2084,17 +2084,17 @@ starting example. Let’s try to load it!</p>
 <div id="dealing-with-wrong-number-of-columns" class="section level2">
 <h2>Dealing with wrong number of columns</h2>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>What happens with this command line?</p>
 <p>This is due to missing fields at line 10. There may be more of these
 missing fields, we cannot know how many missing fields are in this file.
 However, we can try “fix” these missing fields, by adding blanks.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill=</span><span class="cn">TRUE</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="cn">TRUE</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
@@ -2197,10 +2197,10 @@ file with missing fields.</p>
 <p>One can tell R that the first line should be considered as a header
 with the argument in the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table"><code>read.table</code></a>.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill=</span><span class="cn">TRUE</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">header =</span> <span class="cn">TRUE</span></span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
@@ -2298,7 +2298,7 @@ with the argument in the function <a href="https://www.rdocumentation.org/packag
 <p>To load this table, we just added blank and set the header, so easy!
 Why does this section say it would be hard?</p>
 <p>Let’s check the column types:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X =</span> counts, <span class="at">FUN =</span> base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code>Gene_Symbol    Day_0_R1    Day_0_R2    Day_0_R3    Day_7_R1    Day_7_R2 
 &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; 
    Day_7_R3    Comments 
@@ -2313,7 +2313,7 @@ package.<br />
 Thanks to the help of <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/numeric"><code>as.numeric</code></a>,
 we can see that this function works on values or on vectors, so we can
 apply it on each column where a column corresponds to a vector.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>as.numeric)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X =</span> counts, <span class="at">FUN =</span> base<span class="sc">::</span>as.numeric)</span></code></pre></div>
 <pre><code>Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion
 Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion
 Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion
@@ -2416,10 +2416,10 @@ Warning in lapply(X = X, FUN = FUN, ...): NAs introduced by coercion</code></pre
 so there is another underlying problem.</p>
 <p>Let’s try to cast only a cell:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill=</span><span class="cn">TRUE</span>,</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">header =</span> <span class="cn">TRUE</span></span>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(counts[<span class="dv">1</span>,<span class="dv">2</span>])</span></code></pre></div>
 <pre><code>[1] &quot;16,22562695206495&quot;</code></pre>
@@ -2534,7 +2534,7 @@ float numbers.</p>
 </table>
 <p>It looks good again!<br />
 How about the type of the columns:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X =</span> counts, <span class="at">FUN =</span> base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code>Gene_Symbol    Day_0_R1    Day_0_R2    Day_0_R3    Day_7_R1    Day_7_R2 
 &quot;character&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot; 
    Day_7_R3    Comments 
@@ -2548,12 +2548,12 @@ problem.</p>
 cell. Fortunately, we can remove these spaces with the option
 <code>strip.white</code>.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dec=</span><span class="st">&quot;,&quot;</span>,</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.white=</span><span class="cn">TRUE</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">header =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dec =</span> <span class="st">&quot;,&quot;</span>,</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.white =</span> <span class="cn">TRUE</span></span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Note that this is the default behavior for numeric fields.</p>
 </div>
@@ -2565,13 +2565,13 @@ We can set the row names with the option <code>row.name</code>.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># row.name=1 means the first column has to be considered as row names</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># row.name=&quot;Gene_Symbol&quot; means the column named &quot;Gene_Symbol&quot; has to be considered as row names</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">dec=</span><span class="st">&quot;,&quot;</span>,</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill=</span><span class="cn">TRUE</span>,</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.white=</span><span class="cn">TRUE</span>,</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">row.name=</span><span class="st">&quot;Gene_Symbol&quot;</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">header =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">dec =</span> <span class="st">&quot;,&quot;</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.white =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">row.name =</span> <span class="st">&quot;Gene_Symbol&quot;</span></span>
 <span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>.</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
@@ -2672,14 +2672,14 @@ them as <code>NA</code>, there are some functions related to
 <code>NA</code> values. We can provide a list of values (like empty
 values, “NA”, “na”, etc) to convert into <code>NA</code>.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file=</span><span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill=</span><span class="cn">TRUE</span>,</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">header=</span><span class="cn">TRUE</span>,</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dec=</span><span class="st">&quot;,&quot;</span>,</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.white=</span><span class="cn">TRUE</span>,</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">row.name=</span><span class="st">&quot;Gene_Symbol&quot;</span>,</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">na.strings=</span><span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;NA&quot;</span>) <span class="co"># convert empty and &quot;NA&quot; (word) values into NA values</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;EMT_counts_data_manip2_odds.tsv&quot;</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">header =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dec =</span> <span class="st">&quot;,&quot;</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.white =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">row.name =</span> <span class="st">&quot;Gene_Symbol&quot;</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">na.strings =</span> <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;NA&quot;</span>) <span class="co"># convert empty and &quot;NA&quot; (word) values into NA values</span></span>
 <span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Let’s see the content of the table, using the function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head</code></a>.</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
@@ -2782,7 +2782,7 @@ and its dedicated function <a href="https://www.rdocumentation.org/packages/read
 <code>install.packages(&quot;readxl&quot;)</code>.</p>
 </blockquote>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">path=</span><span class="st">&quot;EMT_counts_data_manip2.xlsx&quot;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="st">&quot;EMT_counts_data_manip2.xlsx&quot;</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>Warning: Expecting logical in H4614 / R4614C8: got &#39;Important!&#39;</code></pre>
 <pre><code>Warning: Expecting logical in H5342 / R5342C8: got &#39;Important!&#39;</code></pre>
@@ -2902,9 +2902,9 @@ And if not, correct that.</p>
 Solution for the Exercise 1
 </summary>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">path=</span><span class="st">&quot;EMT_counts_data_manip2.xlsx&quot;</span>,</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_names=</span><span class="cn">TRUE</span>, <span class="co"># set first line as column names</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">trim_ws=</span><span class="cn">TRUE</span>) <span class="co"># remove whitespace</span></span></code></pre></div>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="st">&quot;EMT_counts_data_manip2.xlsx&quot;</span>,</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_names =</span> <span class="cn">TRUE</span>, <span class="co"># set first line as column names</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">trim_ws =</span> <span class="cn">TRUE</span>) <span class="co"># remove whitespace</span></span></code></pre></div>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(<span class="at">x =</span> counts)</span></code></pre></div>
 <table>
 <caption>First lines of the parsed table with correct types</caption>
@@ -3010,9 +3010,9 @@ function <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/to
 before to add row names.</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co">#read table</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">path=</span><span class="st">&quot;EMT_counts_data_manip2.xlsx&quot;</span>,</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_names=</span><span class="cn">TRUE</span>, <span class="co"># set first line as column names</span></span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">trim_ws=</span><span class="cn">TRUE</span>) <span class="co"># remove whitespace</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="st">&quot;EMT_counts_data_manip2.xlsx&quot;</span>,</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_names =</span> <span class="cn">TRUE</span>, <span class="co"># set first line as column names</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">trim_ws =</span> <span class="cn">TRUE</span>) <span class="co"># remove whitespace</span></span>
 <span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="co">#convert tibble into data frame</span></span>
 <span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">as.data.frame</span>(counts)</span>
 <span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="co">#set row names</span></span>
@@ -3115,7 +3115,7 @@ names and without whitespaces</caption>
 <summary>
 Solution for the Exercise 2
 </summary>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X =</span> counts, <span class="at">FUN =</span> base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code>   Day_0_R1    Day_0_R2    Day_0_R3    Day_7_R1    Day_7_R2    Day_7_R3 
   &quot;numeric&quot;   &quot;numeric&quot; &quot;character&quot;   &quot;numeric&quot;   &quot;numeric&quot; &quot;character&quot; 
    Comments 
@@ -3123,10 +3123,10 @@ Solution for the Exercise 2
 <p>Some columns are “character” and “logical”, we have to correct that
 with the option <code>col_types</code>.</p>
 <div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(</span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">path=</span><span class="st">&quot;EMT_counts_data_manip2.xlsx&quot;</span>,</span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_names=</span><span class="cn">TRUE</span>,</span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">trim_ws=</span><span class="cn">TRUE</span>,</span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_types=</span><span class="fu">c</span>(<span class="st">&quot;text&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;text&quot;</span>) <span class="co"># set the type of each column</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="st">&quot;EMT_counts_data_manip2.xlsx&quot;</span>,</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">trim_ws =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_types =</span> <span class="fu">c</span>(<span class="st">&quot;text&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;text&quot;</span>) <span class="co"># set the type of each column</span></span>
 <span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>If you have a warning like “<em>Warning: Coercing text to numeric in
 D2 / R2C4: ‘12.689757042464343’</em>”, is not really important. It’s
@@ -3226,7 +3226,7 @@ into numeric. Just like we want!</p>
 </tbody>
 </table>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check type</span></span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X=</span>counts, <span class="at">FUN=</span>base<span class="sc">::</span>class)</span></code></pre></div>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">sapply</span>(<span class="at">X =</span> counts, <span class="at">FUN =</span> base<span class="sc">::</span>class)</span></code></pre></div>
 <pre><code>   Day_0_R1    Day_0_R2    Day_0_R3    Day_7_R1    Day_7_R2    Day_7_R3 
   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot;   &quot;numeric&quot; 
    Comments 
@@ -3279,24 +3279,24 @@ Solution
 <p>Change the value of <code>sep</code> option. And don’t forget to
 change the <code>dec</code> option accordingly.</p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co">#English version</span></span>
-<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(<span class="at">x =</span> counts,</span>
-<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">file =</span> <span class="st">&quot;counts_well_formatted.csv&quot;</span>,</span>
-<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">quote =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>,</span>
-<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">na =</span> <span class="st">&quot;NA&quot;</span>,</span>
-<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">dec =</span> <span class="st">&quot;.&quot;</span>,</span>
-<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">row.names =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.names =</span> <span class="cn">NA</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">write.table</span>(<span class="at">x =</span> counts,</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">file =</span> <span class="st">&quot;counts_well_formatted.csv&quot;</span>,</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">quote =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>,</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">na =</span> <span class="st">&quot;NA&quot;</span>,</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dec =</span> <span class="st">&quot;.&quot;</span>,</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">row.names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col.names =</span> <span class="cn">NA</span>)</span>
 <span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a><span class="co">#French version</span></span>
-<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(<span class="at">x =</span> counts,</span>
-<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">file =</span> <span class="st">&quot;counts_well_formatted.csv&quot;</span>,</span>
-<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">quote =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">sep =</span> <span class="st">&quot;;&quot;</span>,</span>
-<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">na =</span> <span class="st">&quot;NA&quot;</span>,</span>
-<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">dec =</span> <span class="st">&quot;,&quot;</span>,</span>
-<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">row.names =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">col.names =</span> <span class="cn">NA</span>)</span></code></pre></div>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">write.table</span>(<span class="at">x =</span> counts,</span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">file =</span> <span class="st">&quot;counts_well_formatted.csv&quot;</span>,</span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>                   <span class="at">quote =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sep =</span> <span class="st">&quot;;&quot;</span>,</span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>                   <span class="at">na =</span> <span class="st">&quot;NA&quot;</span>,</span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>                   <span class="at">dec =</span> <span class="st">&quot;,&quot;</span>,</span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>                   <span class="at">row.names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col.names =</span> <span class="cn">NA</span>)</span></code></pre></div>
 </details>
 <p><br /></p>
 <p>Exercise 4: Save the table into csv format with a column name for row
@@ -3428,11 +3428,11 @@ file.<br />
 This (compressed) format is called <a href="https://www.r-bloggers.com/2016/12/remember-to-use-the-rds-format/">RDS</a>
 for R Data Serialization. This is done using the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/readRDS"><code>saveRDS()</code></a>
 function :</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(<span class="at">object =</span> counts, <span class="at">file =</span> <span class="st">&quot;counts.RDS&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">saveRDS</span>(<span class="at">object =</span> counts, <span class="at">file =</span> <span class="st">&quot;counts.RDS&quot;</span>)</span></code></pre></div>
 <p>Of course, you can load a RDS content into a variable ! This is done
 with the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/readRDS"><code>readRDS()</code></a>
 function :</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="st">&quot;counts.RDS&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">readRDS</span>(<span class="at">file =</span> <span class="st">&quot;counts.RDS&quot;</span>)</span></code></pre></div>
 <p>In a RDS file, type, row names and column names stay! No need to
 format again, so easy!</p>
 </div>
@@ -3443,7 +3443,7 @@ format again, so easy!</p>
 You can print loaded packages thanks to the <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/sessionInfo"><code>sessionInfo()</code></a>
 function and save the result into an on-disk file thanks to the <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/capture.output"><code>capture.output()</code></a>
 function.</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>() <span class="co">#displays name and version of loaded packages in the console</span></span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">sessionInfo</span>() <span class="co">#displays name and version of loaded packages in the console</span></span></code></pre></div>
 <pre><code>R version 4.4.0 (2024-04-24)
 Platform: x86_64-pc-linux-gnu
 Running under: Ubuntu 22.04.4 LTS
@@ -3473,7 +3473,7 @@ loaded via a namespace (and not attached):
 [25] R6_2.5.1             utf8_1.2.4           pillar_1.9.0        
 [28] magrittr_2.0.3       bslib_0.7.0          tools_4.4.0         
 [31] cachem_1.1.0        </code></pre>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">capture.output</span>(<span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">&quot;sessionInfo.txt&quot;</span>) <span class="co">#save them in a file</span></span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">capture.output</span>(utils<span class="sc">::</span><span class="fu">sessionInfo</span>(), <span class="at">file =</span> <span class="st">&quot;sessionInfo.txt&quot;</span>) <span class="co">#save them in a file</span></span></code></pre></div>
 </div>
 </div>
 

@@ -22,7 +22,7 @@ output:
 # options(width = 60);
 knitr::opts_chunk$set(
   echo = TRUE,        # Print the code
-  eval = TRUE,       # Do not run command lines
+  eval = TRUE,        # Do not run command lines
   message = FALSE,    # Print messages
   prompt = FALSE,     # Do not display prompt
   comment = NA,       # No comments on this section
@@ -72,14 +72,14 @@ During this session, we will use rnaseq count tables displaying
 gene expression during Epithelial-Mesenchymal transition.
 
 # Different table formats
-We can often get an indication on table's format thanks to the extentionof the file:
+We can often get an indication on table's format thanks to the extention of the file:
 
 * .tsv: tabulation separated values (columns are separated by tabulations).
 * .csv: comma separated values (columns are separated by comma in English, or by semicolon in French).
 * .xlsx or .xls: excel format.
 * .zip: compressed table in zip format (example file.tsv.zip).
 
-Be carreful this is not an absolute rule, and a .txt file could be a table too!
+Be careful this is not an absolute rule, and a .txt file could be a table too!
 
 # Loading a well-formatted table
 
@@ -90,7 +90,7 @@ Remember, while specifying the package name is facultative, it remains very impo
 
 
 ```{r}
-counts <- utils::read.table(file="EMT_counts_data.txt")
+counts <- utils::read.table(file = "EMT_counts_data.txt")
 ```
 
 Let's see the content of the table, using the function [`head`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head)
@@ -102,7 +102,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   caption = "First lines of the wrongly parsed table"
 )
 ```
@@ -129,10 +129,10 @@ To find a solution to that, don't forget to use the help ([`help()`](https://www
 
 ```{r}
 counts <- utils::read.table(
-    file="EMT_counts_data.txt",
-    header=TRUE,                # set the first line as column names
-    sep=",",                    # set the character to separate columns
-    row.names=1                 # set the first column as row names
+    file = "EMT_counts_data.txt",
+    header = TRUE,                # set the first line as column names
+    sep = ",",                    # set the character to separate columns
+    row.names = 1                 # set the first column as row names
 )
 ```
 
@@ -145,7 +145,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   caption = "First lines of the correctly parsed table"
 )
 ```
@@ -174,7 +174,7 @@ To apply the function [`class`](https://www.rdocumentation.org/packages/base/ver
 ```{r}
 # X correspond to our counts table
 # FUN correspond to the function to apply
-base::sapply(X=counts, FUN=base::class)
+base::sapply(X = counts, FUN = base::class)
 ```
 
 We only have numbers, it seems that we can start to work further with this table.
@@ -192,10 +192,10 @@ about compression formats.
 
 ```{r}
 counts <- utils::read.table(
-    file=utils::unzip(zipfile="EMT_counts_data.txt.zip"),
-    header=TRUE,
-    sep=",",
-    row.names=1
+    file = utils::unzip(zipfile="EMT_counts_data.txt.zip"),
+    header = TRUE,
+    sep = ",",
+    row.names = 1
 )
 ```
 
@@ -207,8 +207,8 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
-  col.names = base::gsub(pattern="_", replacement=" ", base::colnames(counts)),
+  x = utils::head(x = counts),
+  col.names = base::gsub(pattern = "_", replacement = " ", base::colnames(counts)),
   caption = "First lines of the parsed table"
 )
 ```
@@ -229,8 +229,8 @@ The file `EMT_counts_data_manip2_odds.tsv` is a good starting example. Let's try
 
 ```{r, eval=FALSE}
 counts <- utils::read.table(
-    file="EMT_counts_data_manip2_odds.tsv",
-    sep="\t"
+    file = "EMT_counts_data_manip2_odds.tsv",
+    sep = "\t"
 )
 ```
 
@@ -244,9 +244,9 @@ how many missing fields are in this file. However, we can try
 
 ```{r}
 counts <- utils::read.table(
-    file="EMT_counts_data_manip2_odds.tsv",
-    sep="\t",
-    fill=TRUE
+    file = "EMT_counts_data_manip2_odds.tsv",
+    sep = "\t",
+    fill = TRUE
 )
 ```
 
@@ -279,10 +279,10 @@ a header with the argument in the function [`read.table`](https://www.rdocumenta
 
 ```{r}
 counts <- utils::read.table(
-    file="EMT_counts_data_manip2_odds.tsv",
-    sep="\t",
-    fill=TRUE,
-    header=TRUE
+    file = "EMT_counts_data_manip2_odds.tsv",
+    sep = "\t",
+    fill = TRUE,
+    header = TRUE
 )
 ```
 
@@ -294,7 +294,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   col.names = base::colnames(counts),
   caption = "First lines of the parsed table with headers"
 )
@@ -310,7 +310,7 @@ Why does this section say it would be hard?
 Let's check the column types:
 
 ```{r}
-base::sapply(X=counts, FUN=base::class)
+base::sapply(X = counts, FUN = base::class)
 ```
 
 We can try to cast the characters into numbers.
@@ -325,7 +325,7 @@ package.
 Thanks to the help of [`as.numeric`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/numeric), we can see that this function works on values or on vectors, so we can apply it on each column where a column corresponds to a vector.
 
 ```{r}
-counts <- base::sapply(X=counts, FUN=base::as.numeric)
+counts <- base::sapply(X = counts, FUN = base::as.numeric)
 ```
 
 There are a lot of warning messages. What changed?
@@ -338,7 +338,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   col.names = base::colnames(counts),
   caption = "First lines of the wrongly casted table"
 )
@@ -349,10 +349,10 @@ Okay, it does not work here (it replaces all values by [`NA`](https://www.rdocum
 Let's try to cast only a cell:
 ```{r, eval=TRUE}
 counts <- utils::read.table(
-    file="EMT_counts_data_manip2_odds.tsv",
-    sep="\t",
-    fill=TRUE,
-    header=TRUE
+    file = "EMT_counts_data_manip2_odds.tsv",
+    sep = "\t",
+    fill = TRUE,
+    header = TRUE
 )
 print(counts[1,2])
 base::as.numeric(counts[1,2])
@@ -385,7 +385,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   col.names = base::colnames(counts),
   caption = "First lines of the parsed table with floating **points**"
 )
@@ -394,7 +394,7 @@ It looks good again!
 How about the type of the columns:
 
 ```{r}
-base::sapply(X=counts, FUN=base::class)
+base::sapply(X = counts, FUN = base::class)
 ```
 
 Commas have been identified as decimal separator,
@@ -407,12 +407,12 @@ on a cell. Fortunately, we can remove these spaces with the option `strip.white`
 
 ```{r}
 counts <- utils::read.table(
-    file="EMT_counts_data_manip2_odds.tsv",
-    sep="\t",
+    file = "EMT_counts_data_manip2_odds.tsv",
+    sep = "\t",
     fill = TRUE,
-    header=TRUE,
-    dec=",",
-    strip.white=TRUE
+    header = TRUE,
+    dec = ",",
+    strip.white = TRUE
 )
 ```
 
@@ -428,13 +428,13 @@ We can set the row names with the option `row.name`.
 # row.name=1 means the first column has to be considered as row names
 # row.name="Gene_Symbol" means the column named "Gene_Symbol" has to be considered as row names
 counts <- utils::read.table(
-    file="EMT_counts_data_manip2_odds.tsv",
-    sep="\t",
-    header=TRUE,
-    dec=",",
-    fill=TRUE,
-    strip.white=TRUE,
-    row.name="Gene_Symbol"
+    file = "EMT_counts_data_manip2_odds.tsv",
+    sep = "\t",
+    header = TRUE,
+    dec = ",",
+    fill = TRUE,
+    strip.white = TRUE,
+    row.name = "Gene_Symbol"
 )
 ```
 
@@ -446,7 +446,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   col.names = base::colnames(counts),
   caption = "First lines of the parsed table with correct row names"
 )
@@ -461,14 +461,14 @@ We can provide a list of values (like empty values, "NA", "na", etc) to convert 
 
 ```{r}
 counts <- utils::read.table(
-    file="EMT_counts_data_manip2_odds.tsv",
-    sep="\t",
-    fill=TRUE,
-    header=TRUE,
-    dec=",",
-    strip.white=TRUE,
-    row.name="Gene_Symbol",
-    na.strings=c("", "NA") # convert empty and "NA" (word) values into NA values
+    file = "EMT_counts_data_manip2_odds.tsv",
+    sep = "\t",
+    fill = TRUE,
+    header = TRUE,
+    dec = ",",
+    strip.white = TRUE,
+    row.name = "Gene_Symbol",
+    na.strings = c("", "NA") # convert empty and "NA" (word) values into NA values
 )
 ```
 
@@ -480,7 +480,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   col.names = base::colnames(counts),
   caption = "First lines of the parsed table with empty cells identified"
 )
@@ -495,7 +495,7 @@ and its dedicated function [`read_excel`](https://www.rdocumentation.org/package
 
 ```{r}
 counts <- readxl::read_xlsx(
-    path="EMT_counts_data_manip2.xlsx"
+    path = "EMT_counts_data_manip2.xlsx"
 )
 ```
 Ohoh, we have several warnings that are saying we have the word "Important!" in some cells, instead of logical values (TRUE or FALSE) expected by R.
@@ -508,7 +508,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   col.names = base::colnames(counts),
   caption = "First lines of the parsed Excel table"
 )
@@ -534,9 +534,9 @@ And if not, correct that.
 
 ```{r, warning=FALSE, message=FALSE}
 counts <- readxl::read_xlsx(
-    path="EMT_counts_data_manip2.xlsx",
-    col_names=TRUE, # set first line as column names
-    trim_ws=TRUE) # remove whitespace
+    path = "EMT_counts_data_manip2.xlsx",
+    col_names = TRUE, # set first line as column names
+    trim_ws = TRUE) # remove whitespace
 ```
 
 ```{r, eval=FALSE}
@@ -545,7 +545,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   col.names = base::colnames(counts),
   caption = "First lines of the parsed table with correct types"
 )
@@ -564,9 +564,9 @@ For that, we have to convert our table into a data frame thanks to the function 
 ```{r, warning=FALSE, message=FALSE}
 #read table
 counts <- readxl::read_xlsx(
-    path="EMT_counts_data_manip2.xlsx",
-    col_names=TRUE, # set first line as column names
-    trim_ws=TRUE) # remove whitespace
+    path = "EMT_counts_data_manip2.xlsx",
+    col_names = TRUE, # set first line as column names
+    trim_ws = TRUE) # remove whitespace
 #convert tibble into data frame
 counts <- base::as.data.frame(counts)
 #set row names
@@ -581,7 +581,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   col.names = base::colnames(counts),
   caption = "First lines of the parsed table with correct column names, row names and without whitespaces"
 )
@@ -594,16 +594,16 @@ knitr::kable(
 <summary> Solution for the Exercise 2 </summary>
 
 ```{r}
-base::sapply(X=counts, FUN=base::class)
+base::sapply(X = counts, FUN = base::class)
 ```
 Some columns are "character" and "logical", we have to correct that with the option `col_types`.
 
 ```{r, warning=FALSE}
 counts <- readxl::read_xlsx(
-    path="EMT_counts_data_manip2.xlsx",
-    col_names=TRUE,
-    trim_ws=TRUE,
-    col_types=c("text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "text") # set the type of each column
+    path = "EMT_counts_data_manip2.xlsx",
+    col_names = TRUE,
+    trim_ws = TRUE,
+    col_types = c("text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "text") # set the type of each column
 )
 ```
 If you have a warning like "*Warning: Coercing text to numeric in D2 / R2C4: '12.689757042464343'*", is not really important. It's just saying that it's casting the character value '12.689757042464343' into numeric. Just like we want!
@@ -621,7 +621,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   col.names = base::colnames(counts),
   caption = "First lines of the parsed table with correct types"
 )
@@ -629,7 +629,7 @@ knitr::kable(
 
 ```{r}
 #check type
-base::sapply(X=counts, FUN=base::class)
+base::sapply(X = counts, FUN = base::class)
 ```
 Perfect!
 </details>
@@ -687,24 +687,24 @@ Change the value of `sep` option.
 And don't forget to change the `dec` option accordingly.
 ```{r}
 #English version
-write.table(x = counts,
-            file = "counts_well_formatted.csv",
-            quote = FALSE,
-            sep = ",",
-            na = "NA",
-            dec = ".",
-            row.names = TRUE,
-            col.names = NA)
+utils::write.table(x = counts,
+                   file = "counts_well_formatted.csv",
+                   quote = FALSE,
+                   sep = ",",
+                   na = "NA",
+                   dec = ".",
+                   row.names = TRUE,
+                   col.names = NA)
 
 #French version
-write.table(x = counts,
-            file = "counts_well_formatted.csv",
-            quote = FALSE,
-            sep = ";",
-            na = "NA",
-            dec = ",",
-            row.names = TRUE,
-            col.names = NA)
+utils::write.table(x = counts,
+                   file = "counts_well_formatted.csv",
+                   quote = FALSE,
+                   sep = ";",
+                   na = "NA",
+                   dec = ",",
+                   row.names = TRUE,
+                   col.names = NA)
 ```
 </details>
 <br />
@@ -729,7 +729,7 @@ utils::head(x = counts)
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(
-  x = utils::head(x=counts),
+  x = utils::head(x = counts),
   col.names = base::colnames(counts),
   caption = "First lines of the parsed table"
 )
@@ -756,12 +756,12 @@ You can save the content of a given variable in a specific R format file.
 This (compressed) format is called  [RDS](https://www.r-bloggers.com/2016/12/remember-to-use-the-rds-format/) for R Data Serialization. This is done using the [`saveRDS()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/readRDS) function :
 
 ```{r save_rds_use, eval=FALSE}
-saveRDS(object = counts, file = "counts.RDS")
+base::saveRDS(object = counts, file = "counts.RDS")
 ```
 
 Of course, you can load a RDS content into a variable ! This is done with the [`readRDS()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/readRDS) function :
 ```{r load_rds, eval=FALSE}
-counts <- readRDS(file = "counts.RDS")
+counts <- base::readRDS(file = "counts.RDS")
 ```
 In a RDS file, type, row names and column names stay! No need to format again, so easy!
 
@@ -770,9 +770,9 @@ In a RDS file, type, row names and column names stay! No need to format again, s
 Save the versions of the loaded packages at the end of your analysis. You can print loaded packages thanks to the [`sessionInfo()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/sessionInfo) function and save the result into an on-disk file thanks to the [`capture.output()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/capture.output) function.
  
 ```{r sessionInfo, eval=TRUE}
-sessionInfo() #displays name and version of loaded packages in the console
+utils::sessionInfo() #displays name and version of loaded packages in the console
 ```
 
 ```{r sessionInfo_capture, eval=FALSE}
-utils::capture.output(sessionInfo(), file = "sessionInfo.txt") #save them in a file
+utils::capture.output(utils::sessionInfo(), file = "sessionInfo.txt") #save them in a file
 ```

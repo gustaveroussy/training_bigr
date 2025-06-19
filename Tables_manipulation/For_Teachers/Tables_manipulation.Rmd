@@ -80,30 +80,25 @@ A dataframe can be created using the [`data.frame()`](https://www.rdocumentation
 vector1 <- c(1:10)
 vector2 <- c(2:11)
 
-#first way
-my_df <- data.frame(my_col1 = vector1, my_col2 = vector2)
-my_df
-
-#second way
-my_df <- data.frame(vector1, vector2, col.names = c("my_col1", "my_col2"))
+my_df <- base::data.frame(my_col1 = vector1, my_col2 = vector2)
 my_df
 ```
-It's up to you to see which syntax you prefer, but personally, I prefer to use the first method, which has the advantage of explicitly matching the name of each column to the associated data vector.
 
 
-*Question 1* :
+*Question 1* : What happens if we forget to give column names?
 
-What happens if we forget to give column names?
-
-
-```{r}
-my_df <- data.frame(vector1, vector2)
-my_df
+```{r, eval = FALSE}
+my_df <- base::data.frame(vector1, vector2)
 ```
 
 <details>
 
 <summary>Answer</summary>
+
+```{r}
+my_df <- base::data.frame(vector1, vector2)
+my_df
+```
 
 The created data frame will have as column names the names of the vectors used for each column.
 
@@ -111,18 +106,18 @@ The created data frame will have as column names the names of the vectors used f
 <br>
 
 
-*Question 2* :
+*Question 2* : What if we don't name the vectors either?
 
-What if we don't name the vectors either?
-
-```{r}
-my_df <- data.frame(c(1:10), c(2:11))
-my_df
+```{r, eval = FALSE}
+my_df <- base::data.frame(c(1:10), c(2:11))
 ```
 <details>
 
 <summary>Answer</summary>
-
+```{r}
+my_df <- base::data.frame(c(1:10), c(2:11))
+my_df
+```
 R will automatically generate a column name for you.
 However, we recommend always giving your columns a name and never letting R do it alone. Indeed, this can sometimes produce very particular long or strange names.
 
@@ -132,17 +127,15 @@ However, we recommend always giving your columns a name and never letting R do i
 
 To check the names of our columns, we can display them with the [`colnames()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row%2Bcolnames) function.
 ```{r}
-colnames(my_df)
+base::colnames(my_df)
 ```
 
-*Question 3* : 
-
-How can we rename all columns of a data.frame?
+*Question* : How can we rename all columns of a data.frame?
 
 <details>
 <summary>Answer</summary>
 ```{r}
-colnames(my_df) <- c("new_col1", "newcol_2")
+base::colnames(my_df) <- c("new_col1", "newcol_2")
 my_df
 ```
 </details>
@@ -150,10 +143,10 @@ my_df
 
 In some cases we may need an empty dataframe that we will fill later:
 ```{r}
-my_empty_df <- data.frame(Genes_name = character(),
-                            Expression = integer(),
-                            Normalized_Expression = double(),
-                            Over_expressed_Gene = logical())
+my_empty_df <- base::data.frame(Genes_name = character(),
+                                Expression = integer(),
+                                Normalized_Expression = double(),
+                                Over_expressed_Gene = logical())
 my_empty_df
 ```
 In the previous example, a name and a type are assigned to each column.
@@ -173,41 +166,41 @@ The [`head()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topi
 
 ```{r}
 # display of first lines (6 by default)
-head(clinical_data)
+utils::head(clinical_data)
 # display of 10 first lines
-head(clinical_data, n = 10)
+utils::head(clinical_data, n = 10)
 ```
 
 Likewise, we can display the last rows of the table using the [`tail()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head) function.
 ```{r}
 # display last lines
-tail(clinical_data)
+utils::tail(clinical_data)
 # display 10 last lines
-tail(clinical_data, n = 10)
+utils::tail(clinical_data, n = 10)
 ```
 
 You can also display the number of rows in the table with the [`nrow()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/nrow) function, the number of columns with the [`ncol()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/nrow) function, or both at the same time with the [`dim()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/dim) function.
 ```{r}
 # number of lines
-nrow(clinical_data)
+base::nrow(clinical_data)
 # number of columns
-ncol(clinical_data)
+base::ncol(clinical_data)
 # table dimensions
-dim(clinical_data)
+base::dim(clinical_data)
 ```
 
 We can check the class of our table with the [`class()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/class) function as well as its structure with the [`str()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/str) function.
 
 ```{r}
-class(clinical_data)
-str(clinical_data)
+base::class(clinical_data)
+utils::str(clinical_data)
 ```
 
 As seen previously, we can display column names with the [`colnames()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row%2Bcolnames) function, but we can also display row names with the [`rownames()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row%2Bcolnames) function.
 
 ```{r}
-colnames(clinical_data)
-rownames(clinical_data)
+base::colnames(clinical_data)
+base::rownames(clinical_data)
 ```
 These functions also allow you to rename columns and rows.
 However, it is quite rare that we name the rows of a data table. Indeed, the names must be unique, so all the information of interest is stored directly in the table.
@@ -215,13 +208,13 @@ However, it is quite rare that we name the rows of a data table. Indeed, the nam
 Also if your table is not the "right" way you can transpose the table (i.e. reverse the rows and columns) using the [`t()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/t) function.
 
 ```{r}
-t(clinical_data)
+base::t(clinical_data)
 ```
 
 We can obtain a simple statistical summary of the data with the [`summary()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary) function:
 
 ```{r}
-summary(clinical_data)
+base::summary(clinical_data)
 ```
 
 
@@ -261,17 +254,16 @@ clinical_data[["Subject_number"]]
 clinical_data[[1]]
 ```
 
+So to sum up, there are 3 ways to select a column: `clinical_data[,"Subject_number"]`, `clinical_data$Subject_number`, `clinical_data[["Subject_number"]]`.
 
-*Question* : 
-
-If we select part of a dataframe, what is the type of this selection?
+*Question* : If we select part of a dataframe, what is the type of a selection?
 
 <details>
 <summary>Answer</summary>
 
-If multiple columns -> data frame
-If only one column -> the type of the column elements.
-if only one element -> the type of the element (which correspond to the type of its column).
+If multiple columns -> data frame.  
+If only one column -> the type of the column elements.  
+if only one element -> the type of the element (which correspond to the type of its column).  
 
 </details>
 <br>
@@ -280,45 +272,44 @@ if only one element -> the type of the element (which correspond to the type of 
 We can only display the first values of a column with the [`head()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head) function, but we give it the values of the column as arguments:
 ```{r}
 # display the 10 first values of the Age column
-head(clinical_data$Age,10)
+utils::head(clinical_data$Age,10)
 ```
 
 Likewise, you can display simple statistics on a numeric column with the functions [`min()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/Extremes), [`max()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/Extremes), [`mean()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/mean), [`median()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/median), etc.
 ```{r}
-min(clinical_data$Age)
-max(clinical_data$Age)
-mean(clinical_data$Age)
-median(clinical_data$Age)
-length(clinical_data$Age)
+base::min(clinical_data$Age)
+base::max(clinical_data$Age)
+base::mean(clinical_data$Age)
+stats::median(clinical_data$Age)
+base::length(clinical_data$Age)
 ```
 
 The [`table()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/table) function allows to get the occurrence of each value of a vector (here a column of a dataframe):
 ```{r}
-table(clinical_data$NSCLC_type)
+base::table(clinical_data$NSCLC_type)
 ```
 Here we have 5 (lines of the dataframe) patients with an adenocarcinoma, 2 (lines of the dataframe) patients with a large cell carcinoma, and 4 (lines of the dataframe) patients with a squamous cell carcinoma.
 
 We can also use the [`subset()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset) function, which allows you to make column selections from column names:
 
 ```{r}
-subset(clinical_data, select = Age)
-subset(clinical_data, select = c(Subject_number, Age))
+base::subset(clinical_data, select = Age)
+base::subset(clinical_data, select = c(Subject_number, Age))
 ```
 Be careful, you don't write quotes around column names with subset().
 
 
-*Question* : 
-If we select part of a dataframe, what is the type of this selection?
+*Question* : If we select part of a dataframe, what is the type of this selection?
 
 <details>
 <summary>Answer</summary>
 
-If multiple columns -> data frame
-If only one column -> data frame too!
-if only one element -> impossible to select only one element with [`subset()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset).
+If multiple columns -> data frame.  
+If only one column -> data frame too!  
+If only one element -> impossible to select only one element easily with [`subset()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset).
 
 </details>
-<br
+<br>
 
 ### Negative selection of elements
 
@@ -366,8 +357,8 @@ No it doesn't work like that. We will see later how can we do that (we need logi
 
 We can also use the [`subset()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset) function:
 ```{r}
-subset(clinical_data, select = -Age)
-subset(clinical_data, select = -c(Subject_number, Age))
+base::subset(clinical_data, select = -Age)
+base::subset(clinical_data, select = -c(Subject_number, Age))
 
 ```
 Still no quotes around column names with [`subset()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset).
@@ -421,7 +412,7 @@ c(TRUE, FALSE, TRUE) && c(TRUE, FALSE, FALSE) # Error: 'length = 3' in coercion 
 TRUE && FALSE                                 # FALSE
 ```
 
-!A is the negation of the expression A and is TRUE when A is FALSE and vice versa.
+`!A` is the negation of the expression A and is TRUE when A is FALSE and vice versa.
 
 ```{r, eval = FALSE}
 5 < 1    # FALSE
@@ -479,6 +470,7 @@ What is the result of this expression?
 ```{r}
 ((-2:2) >= 0) & ((-2:2) <= 0)
 ```
+```
 Explanation:
 ```{r, eval =  FALSE}
 (c(-2, -1, 0, 1, 2) >= 0)       & (c(-2,-1,0,1,2) <= 0)
@@ -521,10 +513,10 @@ The key idea is that we use some criteria (conditions) to extract a subset of ro
 What is the link with logical operators?
 Here we will use conditions to select interesting rows. For example, selecting row where there is the value "A" in the first column. So R will test each line of the first column to know if the value is "A" (return `TRUE`) or not (return `FALSE`), then only keep line with `TRUE`.
 
-There are three ways to subset data in R:
-- Use R’s built in data manipulation tools. These are easily identified by their square bracket [] syntax.
-- Use R’s built in data manipulation functions: [`subset()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset).
-- Use the [`dplyr`](https://dplyr.tidyverse.org/) R package
+There are three ways to subset data in R:  
+- Use R’s built in data manipulation tools. These are easily identified by their square bracket `[]` syntax.  
+- Use R’s built in data manipulation functions: [`subset()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset).  
+- Use the [`dplyr`](https://dplyr.tidyverse.org/) R package.  
 
 ## R base
 
@@ -550,10 +542,10 @@ clinical_data[clinical_data$NSCLC_type == 'adenocarcinoma', ]
 
 Best practice: ALWAYS try to check your subset!
 ```{r}
-dim(adeno_clinical_data)
-table(adeno_clinical_data$NSCLC_type)
+base::dim(adeno_clinical_data)
+base::table(adeno_clinical_data$NSCLC_type)
 ```
-We have 5 lines and 8 columns, we have 5 "adenocarcinoma" values in NSCLC_type columns and only "adenocarcinoma" values. And compared to previously observation of our data we had 5 adenocarcinoma too. So the subset is good!
+We have 5 lines and 6 columns, we have 5 "adenocarcinoma" values in NSCLC_type columns and only "adenocarcinoma" values. And compared to previously observation of our data we had 5 adenocarcinoma too. So the subset is good!
 
 #### Filter for Rows Based on several values
 
@@ -589,48 +581,48 @@ The following code shows how to filter for only the rows where the value in the 
 clinical_data[clinical_data$Age > 60 & clinical_data$NSCLC_type %in% c('adenocarcinoma', 'squamous cell carcinoma'), ]
 ```
 
-Come back to the problem to subset dataframe columns by their name, with R base.
+Come back to the problem to subset dataframe columns by their name, with R base.  
 Remainder:
 ```{r, eval = FALSE}
 clinical_data[,-"Subject_number"]
 clinical_data[,-c("Subject_number","Age")]
 ```
-That doesn't work.
+That doesn't work.  
 It is because we have to use logicals to do that.
 ```{r}
 clinical_data[,colnames(clinical_data) != "Subject_number"]
 ```
-That is working!
+That is working!  
 Explanation:
 ```{r}
 # get the name of all columns of the dataframe
-colnames(clinical_data)
+base::colnames(clinical_data)
 # check if the columns names is not "Subject_number"
-colnames(clinical_data) != "Subject_number"
+base::colnames(clinical_data) != "Subject_number"
 # then subset the dataframe on columns (be careful to the coma place, here we want to subset columns, not lines)
-clinical_data[,colnames(clinical_data) != "Subject_number"]
+clinical_data[,base::colnames(clinical_data) != "Subject_number"]
 ```
 
 Also, we could use the opposite of the positive selection:
 ```{r}
 # subset the dataframe on columns
-clinical_data[,!(colnames(clinical_data) == "Subject_number")]
+clinical_data[,!(base::colnames(clinical_data) == "Subject_number")]
 ```
 Explanation:
 ```{r}
 # get the name of all columns of the dataframe
-colnames(clinical_data)
+base::colnames(clinical_data)
 # check if the columns names is "Subject_number"
-colnames(clinical_data) == "Subject_number"
+base::colnames(clinical_data) == "Subject_number"
 # take the opposite
-!(colnames(clinical_data) == "Subject_number")
+!(base::colnames(clinical_data) == "Subject_number")
 # subset the dataframe on columns
-clinical_data[,!(colnames(clinical_data) == "Subject_number")]
+clinical_data[,!(base::colnames(clinical_data) == "Subject_number")]
 ```
 
 Similarly, to exclude several columns:
 ```{r}
-clinical_data[,!(colnames(clinical_data) %in% c("Subject_number","Age"))]
+clinical_data[,!(base::colnames(clinical_data) %in% c("Subject_number","Age"))]
 ```
 
 >Note: `%!in%`, `!%in%` or `%notin%`, don't exist.
@@ -639,47 +631,47 @@ clinical_data[,!(colnames(clinical_data) %in% c("Subject_number","Age"))]
 
 You can also use the [`subset()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset) function:
 ```{r}
-subset(clinical_data, NSCLC_type == 'adenocarcinoma')
-subset(clinical_data, NSCLC_type %in% c('adenocarcinoma', 'squamous cell carcinoma'))
-subset(clinical_data, Age > 60 & Age < 65)
-subset(clinical_data, Age > 60 & NSCLC_type %in% c('adenocarcinoma', 'squamous cell carcinoma'))
+base::subset(clinical_data, NSCLC_type == 'adenocarcinoma')
+base::subset(clinical_data, NSCLC_type %in% c('adenocarcinoma', 'squamous cell carcinoma'))
+base::subset(clinical_data, Age > 60 & Age < 65)
+base::subset(clinical_data, Age > 60 & NSCLC_type %in% c('adenocarcinoma', 'squamous cell carcinoma'))
 ```
 
 We can combine the subset of rows and columns.
 For example, to retrieve the IDs of patients who have 'adenocarcinoma':
 ```{r}
-subset(clinical_data, NSCLC_type == 'adenocarcinoma', select = "Subject_number")
+base::subset(clinical_data, NSCLC_type == 'adenocarcinoma', select = "Subject_number")
 ```
 
 ## filter() from dplyr
 
-[`dplyr`](https://dplyr.tidyverse.org/) deserves a course on its own because this package allows you to do so many things on tables. It allows us to use the `%in%` operator but also provides many functions.
+[`dplyr`](https://dplyr.tidyverse.org/) deserves a course on its own because this package allows you to do so many things on tables. It allows us to use the `%in%` operator but also provides many functions.  
 
->Note: dplyr works on a specific type of table, called `tibble`. When given a dataframe as an argument, it will automatically convert it to a tibble, and the function output can be a tibble.
->There is no big difference between dataframes and tibbles:
->- Unlike data frames, tibbles don’t show the entire dataset when you print it.
->- When you access only one column of a tibble, it will keep the tibble structure. But when you access one column of a data frame, it will become a vector.
->- Subsetting including [[ ]] and $, work the same for tibbles and data frames.
->- When assigning a new column to a tibble, the input will not be recycled, which means you have to provide an input of the same length of the other columns. But a data frame will recycle the input.
->- Tibbles don’t support support arithmetic operations on all columns well, the result will be converted into a data frame without any notice.
->More information here: https://jtr13.github.io/cc21fall1/tibble-vs.-dataframe.html
+>Note: dplyr works on a specific type of table, called `tibble`. When given a dataframe as an argument, it will automatically convert it to a tibble, and the function output can be a tibble.  
+>There is no big difference between dataframes and tibbles:  
+>- Unlike data frames, tibbles don’t show the entire dataset when you print it.  
+>- When you access only one column of a tibble, it will keep the tibble structure. But when you access one column of a data frame, it will become a vector.  
+>- Subsetting including [[ ]] and $, work the same for tibbles and data frames.  
+>- When assigning a new column to a tibble, the input will not be recycled, which means you have to provide an input of the same length of the other columns. But a data frame will recycle the input.  
+>- Tibbles don’t support support arithmetic operations on all columns well, the result will be converted into a data frame without any notice.  
+>More information here: https://jtr13.github.io/cc21fall1/tibble-vs.-dataframe.html  
 
 The easiest way to filter is to call dplyr’s [`filter()`](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/filter) function:
 ```{r}
 library(dplyr)
-filter(clinical_data, NSCLC_type == 'adenocarcinoma')
+dplyr::filter(clinical_data, NSCLC_type == 'adenocarcinoma')
 ```
 It is very similar to the [`subset()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset) function.
 
 To filter using a vector for several values:
 ```{r}
-filter(clinical_data, NSCLC_type %in% c('adenocarcinoma', 'squamous cell carcinoma'))
+dplyr::filter(clinical_data, NSCLC_type %in% c('adenocarcinoma', 'squamous cell carcinoma'))
 ```
 
 
 ## Exercise
 
-Calculate the average age of people with an adenocarcinoma:
+Calculate the average age of people with an adenocarcinoma.
 
 <details>
 <summary>Answer</summary>
@@ -693,17 +685,17 @@ clinical_data[clinical_data$NSCLC_type == "adenocarcinoma",]
 #get the age column
 clinical_data[clinical_data$NSCLC_type == "adenocarcinoma", "Age"]
 #compute the mean
-mean(clinical_data[clinical_data$NSCLC_type == "adenocarcinoma", "Age"])
+base::mean(clinical_data[clinical_data$NSCLC_type == "adenocarcinoma", "Age"])
 
 ## other possible answer with R base
-mean(clinical_data[clinical_data$NSCLC_type == "adenocarcinoma",]$Age)
-mean(clinical_data$Age[clinical_data$NSCLC_type == "adenocarcinoma"])
+base::mean(clinical_data[clinical_data$NSCLC_type == "adenocarcinoma",]$Age)
+base::mean(clinical_data$Age[clinical_data$NSCLC_type == "adenocarcinoma"])
 
 ## with subset()
-mean(subset(clinical_data, NSCLC_type == 'adenocarcinoma', select = "Age")$Age)
+base::mean(base::subset(clinical_data, NSCLC_type == 'adenocarcinoma', select = "Age")$Age)
 
 ## with filter()
-mean(filter(clinical_data, NSCLC_type == 'adenocarcinoma')$Age)
+base::mean(dplyr::filter(clinical_data, NSCLC_type == 'adenocarcinoma')$Age)
 
 ```
 >Note: [`mean()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/mean) takes a vector, not a dataframe. [`subset()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset) and [`filter()`](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/filter) output a dataframe, so we have to extract the values of the column for [`mean()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/mean).
@@ -718,45 +710,45 @@ In R (and in programming in general), it is possible to obtain results in differ
 
 ### How to know the number of NA value in a column (here named "my_column")
 ```{r, eval = FALSE}
-table(is.na(my_df$my_column))
+base::table(is.na(my_df$my_column))
 ```
 
 ### How to remove rows with any zeros
 ```{r, eval = FALSE}
 # Using Base R
-my_df_new <- my_df[apply(my_df!=0, 1, all),]
+my_df_new <- my_df[base::apply(my_df!=0, 1, all),]
 
 # Using dplyr
 library(dplyr)
-my_df_new <- filter_if(my_df, is.numeric, all_vars((.) != 0))
+my_df_new <- dplyr::filter_if(my_df, is.numeric, all_vars((.) != 0))
 ```
 
 ### How to remove rows with NA in all Columns
 ```{r, eval = FALSE}
-my_df_new <- my_df[rowSums(is.na(my_df)) != ncol(my_df), ]
+my_df_new <- my_df[base::rowSums(base::is.na(my_df)) != base::ncol(my_df), ]
 ```
 
 ### How to remove rows with NA in at least One Column
 ```{r, eval = FALSE}
-my_df_new <- my_df[complete.cases(my_df), ]
+my_df_new <- my_df[stats::complete.cases(my_df), ]
 ```
 
 ### How to remove duplicated rows
 ```{r, eval = FALSE}
 # Using Base R
-my_df_new <- my_df[!duplicated(my_df)]
+my_df_new <- my_df[!base::duplicated(my_df)]
 # Using dplyr
 library(dplyr)
-my_df_new <- my_df %>% distinct()
+my_df_new <- my_df %>% dplyr::distinct()
 ```
 
 ### How to remove duplicated rows based on specific column(s)
 ```{r, eval = FALSE}
 library(dplyr)
 # On one column named "my_column", with dplyr
-my_df_new <- my_df %>% distinct(my_column, .keep_all = TRUE)
+my_df_new <- my_df %>% dplyr::distinct(my_column, .keep_all = TRUE)
 # On 2 column named "my_column" and "my_awsome_column", with dplyr
-my_df_new <- my_df %>% distinct(my_column, my_awsome_column, .keep_all = TRUE)
+my_df_new <- my_df %>% dplyr::distinct(my_column, my_awsome_column, .keep_all = TRUE)
 ```
 > Note: The option .kep_all is used to keep all variables in the data.
 
@@ -764,29 +756,31 @@ my_df_new <- my_df %>% distinct(my_column, my_awsome_column, .keep_all = TRUE)
 
 # Merging tables
 
-## Add lines to a table:
+## Add lines to a table
 
 To add a new patient from a vector, we can assign the information of the vector to a new line of our dataframe:
 ```{r}
 # new patient information
-new_patient <- c("P0012", 68.7, "adenocarcinoma", "20/01/2018", "yes", "alive", "new patient")
+new_patient <- c("P0012", 68.7, "adenocarcinoma", "20/01/2018", "yes", "alive")
 # get the number of line of our dataframe
-nrow(clinical_data)
+base::nrow(clinical_data)
 # add patient at the end of the dataframe
-clinical_data[nrow(clinical_data)+1,] <- new_patient
+clinical_data[base::nrow(clinical_data)+1,] <- new_patient
 # check the new number of line of our dataframe
-nrow(clinical_data)
+base::nrow(clinical_data)
 # print the end of the dataframe to check the addition
-tail(clinical_data, 3)
+utils::tail(clinical_data, 3)
+# print the structure of the dataframe to check the classes
+utils::str(clinical_data)
 # Age is changed to character! convert it to numeric
-clinical_data$Age <- as.numeric(clinical_data$Age)
+clinical_data$Age <- base::as.numeric(clinical_data$Age)
 ```
 
 But if you have several patients to add, it is easier to add them with the [`rbind()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cbind) function:
 
 ```{r}
 # new patients to add
-new_patients <- data.frame(
+new_patients <- base::data.frame(
                     Subject_number = c("P0013", "P0014"),
                     Age = c(58.3, 70),
                     NSCLC_type = c("adenocarcinoma","squamous cell carcinoma"),
@@ -797,13 +791,13 @@ new_patients <- data.frame(
 new_patients
 
 # add patients in the dataframe
-clinical_data <- rbind(clinical_data, new_patients)
+clinical_data <- base::rbind(clinical_data, new_patients)
 
 # check the new number of line of our dataframe
-nrow(clinical_data)
+base::nrow(clinical_data)
 
 # print the end of the dataframe to check the addition
-tail(clinical_data, 3)
+utils::tail(clinical_data, 3)
 ```
 Or if you have one patient as a vector:
 ```{r}
@@ -811,16 +805,16 @@ Or if you have one patient as a vector:
 new_patient <- c("P0015", 58.5, "adenocarcinoma", "10/12/2020", "no", "alive")
 
 # add patient at the end of the dataframe
-clinical_data <- rbind(clinical_data, new_patient)
+clinical_data <- base::rbind(clinical_data, new_patient)
 
 # check the new number of line of our dataframe
-nrow(clinical_data)
+base::nrow(clinical_data)
 
 # print the end of the dataframe to check the addition
-tail(clinical_data, 3)
+utils::tail(clinical_data, 3)
 
 # Age is changed to character! convert it to numeric
-clinical_data$Age <- as.numeric(clinical_data$Age)
+clinical_data$Age <- base::as.numeric(clinical_data$Age)
 ```
 
 ## Add columns to a table
@@ -840,25 +834,25 @@ Be careful, if you add a column with a new index, the column will not get a name
 ```{r}
 # add new column
 Previous_radiotherapy_vector <- c("yes","yes","yes","yes","yes","yes","yes","no","yes","no","yes","no","no","yes","yes")
-clinical_data[,ncol(clinical_data)+1] <- Previous_radiotherapy_vector
-head(clinical_data) # the new column is name V10
+clinical_data[,base::ncol(clinical_data)+1] <- Previous_radiotherapy_vector
+utils::head(clinical_data) # the new column is name V8
 # print column names
-colnames(clinical_data)
+base::colnames(clinical_data)
 # rename the last column
-colnames(clinical_data)[ncol(clinical_data)] <- "Previous_radiotherapy"
+base::colnames(clinical_data)[base::ncol(clinical_data)] <- "Previous_radiotherapy"
 # print column names
-colnames(clinical_data)
+base::colnames(clinical_data)
 ```
 To change a column name you can use the index as above, but it could easily lead to human error. Change column names with logical indexing is a best practice.
 ```{r}
-colnames(clinical_data)[colnames(clinical_data) == "V8"] <- "Previous_radiotherapy"
+base::colnames(clinical_data)[base::colnames(clinical_data) == "V8"] <- "Previous_radiotherapy"
 ```
 Here’s how to read this: “Change the names of clinical_data, but only where the original name was "V8", to "Previous_radiotherapy".
 
 Similar to combine row with [`rbind()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cbind), we can combine column with [`cbind()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cbind):
 ```{r}
 Previous_immunotherapy_vector <- c("no","yes","no","no","no","yes","yes","yes","no","no","yes","yes","no","no","yes")
-cbind(clinical_data, Previous_immunotherapy = Previous_immunotherapy_vector) # the new column is named "Previous_immunotherapy"
+base::cbind(clinical_data, Previous_immunotherapy = Previous_immunotherapy_vector) # the new column is named "Previous_immunotherapy"
 
 ```
 
@@ -879,28 +873,28 @@ clinical_data_complement <- utils::read.table("Clinical_Cohort_Complement.csv", 
 As usual, look at the new table:
 ```{r}
 # print first lines
-head(clinical_data_complement)
+utils::head(clinical_data_complement)
 # dimensions
-dim(clinical_data_complement)
+base::dim(clinical_data_complement)
 # structure
-str(clinical_data_complement)
+utils::str(clinical_data_complement)
 ```
 
 Then, merge dataframes based on specific column:
 ```{r}
-total_clinical_data <- merge(x = clinical_data, y = clinical_data_complement, by = "Subject_number")
-head(total_clinical_data)
-dim(total_clinical_data)
+total_clinical_data <- base::merge(x = clinical_data, y = clinical_data_complement, by = "Subject_number")
+utils::head(total_clinical_data)
+base::dim(total_clinical_data)
 
 ```
 
->Notes:
-- the lines order doesn't matter, merge() combines data based on the values of the designed column.
-- if we want to merge on a column that does not have the same name in the two dataframes, we specify the column names with the arguments `by.x` and `by.y` instead of `by`.
-- if we have columns that have the same name in the 2 dataframes but we do not merge on them, R will add the suffixes ".x" and ".y" to the names of the columns coming from the dataframe at x and y respectively .
-- if lines from one of the 2 dataframes have no equivalent in the other, R does not keep these lines by default. To keep them, you must define the arguments `all.x = TRUE` and `all.y = TRUE`, and `NA` will be printed in columns of these rows with no match.
-- if `by` is not specified, R will take all the column names in common between the 2 dataframes.
-- to merge dataframes on several columns: merge(x, y, by = c("col1","col2"))
+>Notes:  
+- the lines order doesn't matter, merge() combines data based on the values of the designed column.  
+- if we want to merge on a column that does not have the same name in the two dataframes, we specify the column names with the arguments `by.x` and `by.y` instead of `by`.  
+- if we have columns that have the same name in the 2 dataframes but we do not merge on them, R will add the suffixes ".x" and ".y" to the names of the columns coming from the dataframe at x and y respectively .  
+- if lines from one of the 2 dataframes have no equivalent in the other, R does not keep these lines by default. To keep them, you must define the arguments `all.x = TRUE` and `all.y = TRUE`, and `NA` will be printed in columns of these rows with no match.  
+- if `by` is not specified, R will take all the column names in common between the 2 dataframes.  
+- to merge dataframes on several columns: merge(x, y, by = c("col1","col2")).  
 
 
 # Operation on tables
@@ -926,11 +920,11 @@ A pipe takes the result of the interior function then pass it along to the exter
 
 To illustrate, start with the total_clinical_data THEN filter it:
 ```{r}
-total_clinical_data %>% filter(NSCLC_type == 'adenocarcinoma')
+total_clinical_data %>% dplyr::filter(NSCLC_type == 'adenocarcinoma')
 ```
 To assign the result to a variable (a new dataframe):
 ```{r}
-filtered_clinical_data <- total_clinical_data %>% filter(NSCLC_type == 'adenocarcinoma')
+filtered_clinical_data <- total_clinical_data %>% dplyr::filter(NSCLC_type == 'adenocarcinoma')
 ```
 
 Of course you can put as much `%>%` as you need in one line.
@@ -953,7 +947,7 @@ We can also use [`tidyr`](https://tidyr.tidyverse.org/), with its [`separate()`]
 
 ```{r}
 library(tidyr)
-total_clinical_data <- total_clinical_data %>% separate(Mutation, c('Mutation_Gene', 'Mutation_Type'))
+total_clinical_data <- total_clinical_data %>% tidyr::separate(Mutation, c('Mutation_Gene', 'Mutation_Type'))
 head(total_clinical_data)
 ```
 
@@ -965,7 +959,7 @@ To merge 2 columns into one, you can use the [`paste()`](https://www.rdocumentat
 
 For example to retrive the "Mutation" column (previously erased by the [`separate()`](https://www.rdocumentation.org/packages/tidyr/versions/1.3.1/topics/separate) function):
 ```{r}
-total_clinical_data$Mutation <- paste(total_clinical_data$Mutation_Gene, total_clinical_data$Mutation_Type, sep = "_")
+total_clinical_data$Mutation <- base::paste(total_clinical_data$Mutation_Gene, total_clinical_data$Mutation_Type, sep = "_")
 
 ```
 
@@ -977,22 +971,22 @@ total_clinical_data$Mutation <- paste(total_clinical_data$Mutation_Gene, total_c
 To sort a dataframe based on a specific column, you can use the [`order()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/order) function.
 
 ```{r}
-# sort the Age column in decreasing order
-order(total_clinical_data$Age)
+# sort the Age column in increasing order
+base::order(total_clinical_data$Age)
 
-# sort total_clinical_data in decreasing order based on Age
-total_clinical_data[order(total_clinical_data$Age), ]
+# sort total_clinical_data in increasing order based on Age
+total_clinical_data[base::order(total_clinical_data$Age), ]
 ```
 
 By default, the [`order()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/order) function will sort values in ascending (increasing) order. If you want to order the values in descending (decreasing) order, just add the argument `decreasing = TRUE` to the [`order()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/order) function:
 
 ```{r}
-total_clinical_data[order(total_clinical_data$Age, decreasing = TRUE), ] #decreasing order
+total_clinical_data[base::order(total_clinical_data$Age, decreasing = TRUE), ] #decreasing order
 ```
 
 To order by several columns:
 ```{r}
-total_clinical_data[order(total_clinical_data$Sex, total_clinical_data$Age, decreasing = TRUE), ] #decreasing order
+total_clinical_data[base::order(total_clinical_data$Sex, total_clinical_data$Age, decreasing = TRUE), ] #decreasing order
 ```
 Here data are first order by Sex then if some values are equal they are sorted by Age.
 
@@ -1003,12 +997,12 @@ Here data are first order by Sex then if some values are equal they are sorted b
 To sort a dataframe based on a specific column, you can use the [`arrange()`](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/arrange) function from [`dplyr`](https://dplyr.tidyverse.org/) R package.
 
 ```{r}
-arrange(total_clinical_data, Age)
+dplyr::arrange(total_clinical_data, Age)
 ```
 Note that [`arrange()`](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/arrange) always sort the dataframe in increasing order.
 To sort in decreasing order, ou have to add the [`desc()`](https://www.rdocumentation.org/packages/plyr/versions/1.8.9/topics/desc) function around the column name:
 ```{r}
-arrange(total_clinical_data, desc(Age))
+dplyr::arrange(total_clinical_data, desc(Age))
 ```
 
 
@@ -1023,16 +1017,16 @@ For example, "What is the mean Age for each Sex?"
 
 If we wanted to answer this question using basic R functions, we’d have to write a separate command for each sex like this:
 ```{r}
-mean(total_clinical_data[total_clinical_data$Sex == "M", "Age"])
-mean(total_clinical_data[total_clinical_data$Sex == "F", "Age"])
+base::mean(total_clinical_data[total_clinical_data$Sex == "F", "Age"])
+base::mean(total_clinical_data[total_clinical_data$Sex == "M", "Age"])
 ```
 
 Here there are only 2 values for Sex, so we can do that like that. But it is very limited if we have a lot of values. For these cases, we can use the [`aggregate()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aggregate) function.
 
 ```{r}
-aggr_res <- aggregate(x = Age ~ Sex,              # Age is the value, Sex is the group 
-                      FUN = mean,                 # The function you want to apply (here mean)
-                      data = total_clinical_data) # The dataframe
+aggr_res <- stats::aggregate(x = Age ~ Sex,              # Age is the value, Sex is the group 
+                             FUN = mean,                 # The function you want to apply (here mean)
+                             data = total_clinical_data) # The dataframe
 aggr_res
 ```
 
@@ -1042,10 +1036,10 @@ You can also include a subset argument within an [`aggregate()`](https://www.rdo
 For example, if I wanted to calculate the mean patient Age for each Sex, but only when the patient has an adenocarcinoma, I would do the following:
 
 ```{r}
-aggr_res <- aggregate(x = Age ~ Sex,                           # Age is the value, Sex is the group 
-                      FUN = mean,                              # the function you want to apply (here mean)
-                      subset = NSCLC_type == "adenocarcinoma", # only when patient has an adenocarcinoma
-                      data = total_clinical_data)              # the dataframe
+aggr_res <- stats::aggregate(x = Age ~ Sex,                           # Age is the value, Sex is the group 
+                             FUN = mean,                              # the function you want to apply (here mean)
+                             subset = NSCLC_type == "adenocarcinoma", # only when patient has an adenocarcinoma
+                             data = total_clinical_data)              # the dataframe
 aggr_res
 
 ```
@@ -1053,10 +1047,10 @@ aggr_res
 You can also include multiple independent variables in the formula argument to [`aggregate()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aggregate). For example, let’s use [`aggregate()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aggregate) to now get the mean Age of the patients for all combinations of both Sex and NSCLC_type, but now only for progressing cancer:
 
 ```{r}
-aggr_res <- aggregate(x = Age ~ Sex + NSCLC_type,     # Age is the value, Sex and NSCLC_type are the groups
-                      FUN = mean,                     # the function you want to apply (here mean)
-                      subset = Progression == "yes", # only where cancer is progressing
-                      data = total_clinical_data)     # the dataframe
+aggr_res <- stats::aggregate(x = Age ~ Sex + NSCLC_type,     # Age is the value, Sex and NSCLC_type are the groups
+                             FUN = mean,                     # the function you want to apply (here mean)
+                             subset = Progression == "yes", # only where cancer is progressing
+                             data = total_clinical_data)     # the dataframe
 aggr_res
 
 ```
@@ -1075,8 +1069,8 @@ For our example, "What is the mean Age for each Sex?"
 ```{r}
 library(dplyr)
 grpby_res <- total_clinical_data %>% # the dataframe
-  group_by(Sex) %>%                  # Sex is the group 
-  summarise(mean(Age))               # calculate mean on column Age in total_clinical_data
+  dplyr::group_by(Sex) %>%                  # Sex is the group 
+  dplyr::summarise(mean(Age))               # calculate mean on column Age in total_clinical_data
 grpby_res
 ```
 
@@ -1085,9 +1079,9 @@ For example, if I wanted to calculate the mean patient Age for each Sex, but onl
 
 ```{r}
 grpby_res <- total_clinical_data %>%          # the dataframe
-  filter(NSCLC_type == "adenocarcinoma") %>%  # only when patient has an adenocarcinoma
-  group_by(Sex) %>%                           # Sex is the group 
-  summarise(mean(Age))                        # calculate mean on column Age in total_clinical_data
+  dplyr::filter(NSCLC_type == "adenocarcinoma") %>%  # only when patient has an adenocarcinoma
+  dplyr::group_by(Sex) %>%                           # Sex is the group 
+  dplyr::summarise(mean(Age))                        # calculate mean on column Age in total_clinical_data
 grpby_res
 ```
 
@@ -1095,9 +1089,9 @@ And if we want to group by several columns?
 
 ```{r}
 grpby_res <- total_clinical_data %>%  # the dataframe
-  filter(Progression == "yes") %>%    # only where cancer is progressing
-  group_by(Sex, NSCLC_type) %>%       # Sex and NSCLC_type are the groups
-  summarise(mean(Age))                # calculate mean on column Age in total_clinical_data
+  dplyr::filter(Progression == "yes") %>%    # only where cancer is progressing
+  dplyr::group_by(Sex, NSCLC_type) %>%       # Sex and NSCLC_type are the groups
+  dplyr::summarise(mean(Age))                # calculate mean on column Age in total_clinical_data
 grpby_res
 ```
 
@@ -1105,15 +1099,15 @@ But dplyr allows us to go even further!!
 We can use several functions easily! 
 
 ```{r}
-grpby_res <- total_clinical_data %>%       # the dataframe
-  filter(Progression == "yes") %>%         # only where cancer is progressing
-  group_by(Sex, NSCLC_type) %>%            # Sex and NSCLC_type are the groups
-  summarise(
-    my_mean_value = mean(Age),             # calculate mean on column Age in total_clinical_data
-    my_max = max(Age),                     # calculate maximum on column Age in total_clinical_data
-    my_min = min(Age),                     # calculate minimum on column Age in total_clinical_data
-    my_frequency = n(),                    # calculate the number of patients in each group
-    my_mean_value_sup65 = mean(Age > 65))  # calculate the mean on column Age only if Age > 65 (do a specific subset before computation)
+grpby_res <- total_clinical_data %>%         # the dataframe
+  dplyr::filter(Progression == "yes") %>%    # only where cancer is progressing
+  dplyr::group_by(Sex, NSCLC_type) %>%       # Sex and NSCLC_type are the groups
+  dplyr::summarise(
+      my_mean_value = mean(Age),             # calculate mean on column Age in total_clinical_data
+      my_max = max(Age),                     # calculate maximum on column Age in total_clinical_data
+      my_min = min(Age),                     # calculate minimum on column Age in total_clinical_data
+      my_frequency = n(),                    # calculate the number of patients in each group
+      my_mean_value_sup65 = mean(Age > 65))  # calculate the mean on column Age only if Age > 65 (do a specific subset before computation)
     
 grpby_res
 
@@ -1153,18 +1147,18 @@ vcf1 <- utils::read.table(
     sep = "\t"
 )
 # print first lines
-head(vcf1)
+utils::head(vcf1)
 # dimensions
-dim(vcf1)
+base::dim(vcf1)
 # structure
-str(vcf1)
+utils::str(vcf1)
 # add column names
-colnames(vcf1) <- c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO","FORMAT","SAMPLE_INFO")
-head(vcf1)
+base::colnames(vcf1) <- c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO","FORMAT","SAMPLE_INFO")
+utils::head(vcf1)
 
 ```
 
-> Note: by default read.table() ignore lines which begins by `#`. So it doesn't load the header.
+> Note: by default read.table() ignore lines which begins by `#`. So it doesn't load the comments.
 
 </details>
 <br>
@@ -1181,21 +1175,21 @@ vcf2 <- utils::read.table(
     sep = "\t"
 )
 # print first lines
-head(vcf2)
+utils::head(vcf2)
 # dimensions
-dim(vcf2)
+base::dim(vcf2)
 # structure
-str(vcf2)
+utils::str(vcf2)
 # add column names
-colnames(vcf2) <- c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO","FORMAT","SAMPLE_INFO")
-head(vcf2)
+base::colnames(vcf2) <- c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO","FORMAT","SAMPLE_INFO")
+utils::head(vcf2)
 
 # add SAMPLE_NAME column to keep this information (here I use the recycling feature of R to duplicated the name of the sample as long as the number of mutations)
 vcf1$SAMPLE_NAME <- c("Sample1")
 vcf2$SAMPLE_NAME <- c("Sample2")
 
 # merge vcf
-vcf <- rbind(vcf1,vcf2)
+vcf <- base::rbind(vcf1,vcf2)
 
 ```
 </details>
@@ -1207,11 +1201,11 @@ vcf <- rbind(vcf1,vcf2)
 <summary>Answer</summary>
 ```{r}
 # number of unique variants before filtering
-nb_before_filtering <- vcf[,c("CHROM","POS","REF","ALT")] %>% distinct() %>% nrow()
+nb_before_filtering <- vcf[,c("CHROM","POS","REF","ALT")] %>% dplyr::distinct() %>% base::nrow()
 # filtering
-PASS_vcf <- subset(vcf, FILTER == "PASS")
+PASS_vcf <- base::subset(vcf, FILTER == "PASS")
 # number of unique variants after filtering
-nb_after_filtering <- PASS_vcf[,c("CHROM","POS","REF","ALT")] %>% distinct() %>% nrow()
+nb_after_filtering <- PASS_vcf[,c("CHROM","POS","REF","ALT")] %>% dplyr::distinct() %>% base::nrow()
 # get number of unique variants lost with this filter
 nb_lost <- nb_before_filtering - nb_after_filtering
 nb_lost
@@ -1225,9 +1219,9 @@ nb_lost
 <summary>Answer</summary>
 ```{r}
 #get variants from the chromosome X in the patient Sample2
-X_Sample2_vcf <- subset(PASS_vcf, CHROM == "X" & SAMPLE_NAME == "Sample2")
+X_Sample2_vcf <- base::subset(PASS_vcf, CHROM == "X" & SAMPLE_NAME == "Sample2")
 # get the number of variants
-nrow(X_Sample2_vcf)
+base::nrow(X_Sample2_vcf)
 
 ```
 </details>
@@ -1240,27 +1234,27 @@ nrow(X_Sample2_vcf)
 <summary>Answer</summary>
 ```{r}
 #paste variants information like ID
-vector_PASS_variant <- paste(PASS_vcf$CHROM,PASS_vcf$POS,PASS_vcf$REF,PASS_vcf$ALT, sep = "_")
+vector_PASS_variant <- base::paste(PASS_vcf$CHROM,PASS_vcf$POS,PASS_vcf$REF,PASS_vcf$ALT, sep = "_")
 #get occurrences
-occurrence_PASS_variant <- table(vector_PASS_variant)
+occurrence_PASS_variant <- base::table(vector_PASS_variant)
 #get variants where occurrence is 2
-occurrenceis2_PASS_variant <- names(occurrence_PASS_variant)[occurrence_PASS_variant == 2]
+occurrenceis2_PASS_variant <- base::names(occurrence_PASS_variant)[occurrence_PASS_variant == 2]
 # get number of variants where occurrence is 2
-length(occurrenceis2_PASS_variant)
+base::length(occurrenceis2_PASS_variant)
 
 ```
 Another way to do it with dplyr:
 ```{r}
 # filtering, make variants thanks to their characteristics, and get occurrences
 occurrence_PASS_variant <- PASS_vcf %>%
-                           group_by(CHROM, POS, REF, ALT) %>%
-                           summarise(frequency = n())
+                           dplyr::group_by(CHROM, POS, REF, ALT) %>%
+                           dplyr::summarise(frequency = n())
 
 #get variants where occurrence is 2
 occurrenceis2_PASS_variant <- occurrence_PASS_variant[occurrence_PASS_variant$frequency == 2,]
 
 # get number of variants where occurrence is 2
-nrow(occurrenceis2_PASS_variant)
+base::nrow(occurrenceis2_PASS_variant)
 
 ```
 

@@ -6,7 +6,7 @@
     <meta name="generator" content="pandoc" />
 
     
-        <meta name="date" content="2024-09-25" />
+        <meta name="date" content="2025-06-19" />
     
     <title>Dataframe manipulation with R</title>
 
@@ -1641,7 +1641,7 @@ margin-left: 0 !important;
       <li><a href="#merging-tables" id="toc-merging-tables">Merging
       tables</a>
       <ul>
-      <li><a href="#add-lines-to-a-table" id="toc-add-lines-to-a-table">Add lines to a table:</a></li>
+      <li><a href="#add-lines-to-a-table" id="toc-add-lines-to-a-table">Add lines to a table</a></li>
       <li><a href="#add-columns-to-a-table" id="toc-add-columns-to-a-table">Add columns to a table</a></li>
       <li><a href="#add-lines-and-columns-to-a-table" id="toc-add-lines-and-columns-to-a-table">Add lines and columns to
       a table</a></li>
@@ -1665,7 +1665,7 @@ margin-left: 0 !important;
                   <p class="author"><span class="glyphicon glyphicon-user"></span> BiGR:
 Bioinformatics core facility of Gustave Roussy
 		      </p>
-                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2024-09-25</p>
+                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2025-06-19</p>
           </div>
    </div>
    
@@ -1726,9 +1726,8 @@ function, from 2 previously defined vectors:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>vector1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>vector2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#first way</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>my_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">my_col1 =</span> vector1, <span class="at">my_col2 =</span> vector2)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>my_df</span></code></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>my_df <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">data.frame</span>(<span class="at">my_col1 =</span> vector1, <span class="at">my_col2 =</span> vector2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>my_df</span></code></pre></div>
 <pre><code>##    my_col1 my_col2
 ## 1        1       2
 ## 2        2       3
@@ -1740,27 +1739,15 @@ function, from 2 previously defined vectors:</p>
 ## 8        8       9
 ## 9        9      10
 ## 10      10      11</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#second way</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>my_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(vector1, vector2, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;my_col1&quot;</span>, <span class="st">&quot;my_col2&quot;</span>))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>my_df</span></code></pre></div>
-<pre><code>##    vector1 vector2 col.names
-## 1        1       2   my_col1
-## 2        2       3   my_col2
-## 3        3       4   my_col1
-## 4        4       5   my_col2
-## 5        5       6   my_col1
-## 6        6       7   my_col2
-## 7        7       8   my_col1
-## 8        8       9   my_col2
-## 9        9      10   my_col1
-## 10      10      11   my_col2</code></pre>
-<p>It’s up to you to see which syntax you prefer, but personally, I
-prefer to use the first method, which has the advantage of explicitly
-matching the name of each column to the associated data vector.</p>
-<p><em>Question 1</em> :</p>
-<p>What happens if we forget to give column names?</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(vector1, vector2)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>my_df</span></code></pre></div>
+<p><em>Question 1</em> : What happens if we forget to give column
+names?</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_df <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">data.frame</span>(vector1, vector2)</span></code></pre></div>
+<details>
+<summary>
+Answer
+</summary>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_df <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">data.frame</span>(vector1, vector2)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>my_df</span></code></pre></div>
 <pre><code>##    vector1 vector2
 ## 1        1       2
 ## 2        2       3
@@ -1772,17 +1759,17 @@ matching the name of each column to the associated data vector.</p>
 ## 8        8       9
 ## 9        9      10
 ## 10      10      11</code></pre>
-<details>
-<summary>
-Answer
-</summary>
 <p>The created data frame will have as column names the names of the
 vectors used for each column.</p>
 </details>
 <p><br></p>
-<p><em>Question 2</em> :</p>
-<p>What if we don’t name the vectors either?</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>my_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>))</span>
+<p><em>Question 2</em> : What if we don’t name the vectors either?</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_df <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">data.frame</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>))</span></code></pre></div>
+<details>
+<summary>
+Answer
+</summary>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>my_df <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">data.frame</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>my_df</span></code></pre></div>
 <pre><code>##    c.1.10. c.2.11.
 ## 1        1       2
@@ -1795,10 +1782,6 @@ vectors used for each column.</p>
 ## 8        8       9
 ## 9        9      10
 ## 10      10      11</code></pre>
-<details>
-<summary>
-Answer
-</summary>
 <p>R will automatically generate a column name for you. However, we
 recommend always giving your columns a name and never letting R do it
 alone. Indeed, this can sometimes produce very particular long or
@@ -1807,15 +1790,15 @@ strange names.</p>
 <p><br></p>
 <p>To check the names of our columns, we can display them with the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row%2Bcolnames"><code>colnames()</code></a>
 function.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(my_df)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(my_df)</span></code></pre></div>
 <pre><code>## [1] &quot;c.1.10.&quot; &quot;c.2.11.&quot;</code></pre>
-<p><em>Question 3</em> :</p>
-<p>How can we rename all columns of a data.frame?</p>
+<p><em>Question</em> : How can we rename all columns of a
+data.frame?</p>
 <details>
 <summary>
 Answer
 </summary>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(my_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;new_col1&quot;</span>, <span class="st">&quot;newcol_2&quot;</span>)</span>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(my_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;new_col1&quot;</span>, <span class="st">&quot;newcol_2&quot;</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>my_df</span></code></pre></div>
 <pre><code>##    new_col1 newcol_2
 ## 1         1        2
@@ -1832,10 +1815,10 @@ Answer
 <p><br></p>
 <p>In some cases we may need an empty dataframe that we will fill
 later:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>my_empty_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Genes_name =</span> <span class="fu">character</span>(),</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Expression =</span> <span class="fu">integer</span>(),</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Normalized_Expression =</span> <span class="fu">double</span>(),</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Over_expressed_Gene =</span> <span class="fu">logical</span>())</span>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>my_empty_df <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">data.frame</span>(<span class="at">Genes_name =</span> <span class="fu">character</span>(),</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Expression =</span> <span class="fu">integer</span>(),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Normalized_Expression =</span> <span class="fu">double</span>(),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Over_expressed_Gene =</span> <span class="fu">logical</span>())</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>my_empty_df</span></code></pre></div>
 <pre><code>## [1] Genes_name            Expression            Normalized_Expression
 ## [4] Over_expressed_Gene  
@@ -1855,7 +1838,7 @@ useful functions.</p>
 function displays the first rows of the table. We can specify the number
 of lines to display with the <code>n</code> argument.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display of first lines (6 by default)</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(clinical_data)</span></code></pre></div>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(clinical_data)</span></code></pre></div>
 <pre><code>##   Subject_number    Sex   Age              NSCLC_type Date_of_Diagnosis
 ## 1          P0001 female 69.70          adenocarcinoma        19/01/2019
 ## 2          P0002      M 61.45 squamous cell carcinoma        01/07/2015
@@ -1871,7 +1854,7 @@ of lines to display with the <code>n</code> argument.</p>
 ## 5         yes           dead         
 ## 6         yes           dead</code></pre>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display of 10 first lines</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(clinical_data, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(clinical_data, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>##    Subject_number    Sex   Age              NSCLC_type Date_of_Diagnosis
 ## 1           P0001 female 69.70          adenocarcinoma        19/01/2019
 ## 2           P0002      M 61.45 squamous cell carcinoma        01/07/2015
@@ -1897,7 +1880,7 @@ of lines to display with the <code>n</code> argument.</p>
 <p>Likewise, we can display the last rows of the table using the <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>tail()</code></a>
 function.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display last lines</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(clinical_data)</span></code></pre></div>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">tail</span>(clinical_data)</span></code></pre></div>
 <pre><code>##    Subject_number    Sex   Age            NSCLC_type Date_of_Diagnosis
 ## 6           P0006 Female 49.98 large cell carcinoma         08/03/2019
 ## 7           P0007      M 58.58 large cell carcinoma         14/09/2012
@@ -1913,7 +1896,7 @@ function.</p>
 ## 10          no          alive                  
 ## 11         yes           dead</code></pre>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display 10 last lines</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(clinical_data, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">tail</span>(clinical_data, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>##    Subject_number    Sex   Age              NSCLC_type Date_of_Diagnosis
 ## 2           P0002      M 61.45 squamous cell carcinoma        01/07/2015
 ## 3           P0003      M 71.22 squamous cell carcinoma        20/03/2013
@@ -1941,20 +1924,20 @@ function, the number of columns with the <a href="https://www.rdocumentation.org
 function, or both at the same time with the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/dim"><code>dim()</code></a>
 function.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of lines</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(clinical_data)</span></code></pre></div>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">nrow</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] 11</code></pre>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of columns</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(clinical_data)</span></code></pre></div>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">ncol</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] 8</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># table dimensions</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(clinical_data)</span></code></pre></div>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">dim</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] 11  8</code></pre>
 <p>We can check the class of our table with the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/class"><code>class()</code></a>
 function as well as its structure with the <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/str"><code>str()</code></a>
 function.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(clinical_data)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">class</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(clinical_data)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">str</span>(clinical_data)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    11 obs. of  8 variables:
 ##  $ Subject_number   : chr  &quot;P0001&quot; &quot;P0002&quot; &quot;P0003&quot; &quot;P0004&quot; ...
 ##  $ Sex              : chr  &quot;female&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; ...
@@ -1967,11 +1950,11 @@ function.</p>
 <p>As seen previously, we can display column names with the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row%2Bcolnames"><code>colnames()</code></a>
 function, but we can also display row names with the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/row%2Bcolnames"><code>rownames()</code></a>
 function.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(clinical_data)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] &quot;Subject_number&quot;    &quot;Sex&quot;               &quot;Age&quot;              
 ## [4] &quot;NSCLC_type&quot;        &quot;Date_of_Diagnosis&quot; &quot;Progression&quot;      
 ## [7] &quot;Death_or_alive&quot;    &quot;Comments&quot;</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(clinical_data)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">rownames</span>(clinical_data)</span></code></pre></div>
 <pre><code>##  [1] &quot;1&quot;  &quot;2&quot;  &quot;3&quot;  &quot;4&quot;  &quot;5&quot;  &quot;6&quot;  &quot;7&quot;  &quot;8&quot;  &quot;9&quot;  &quot;10&quot; &quot;11&quot;</code></pre>
 <p>These functions also allow you to rename columns and rows. However,
 it is quite rare that we name the rows of a data table. Indeed, the
@@ -1980,7 +1963,7 @@ directly in the table.</p>
 <p>Also if your table is not the “right” way you can transpose the table
 (i.e. reverse the rows and columns) using the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/t"><code>t()</code></a>
 function.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(clinical_data)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">t</span>(clinical_data)</span></code></pre></div>
 <pre><code>##                   [,1]             [,2]                     
 ## Subject_number    &quot;P0001&quot;          &quot;P0002&quot;                  
 ## Sex               &quot;female&quot;         &quot;M&quot;                      
@@ -2028,7 +2011,7 @@ function.</p>
 ## Comments          &quot;&quot;               &quot;&quot;</code></pre>
 <p>We can obtain a simple statistical summary of the data with the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary"><code>summary()</code></a>
 function:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(clinical_data)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">summary</span>(clinical_data)</span></code></pre></div>
 <pre><code>##  Subject_number         Sex                 Age         NSCLC_type       
 ##  Length:11          Length:11          Min.   :49.98   Length:11         
 ##  Class :character   Class :character   1st Qu.:60.01   Class :character  
@@ -2113,22 +2096,26 @@ by the name of the column to select:</p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>clinical_data[[<span class="dv">1</span>]]</span></code></pre></div>
 <pre><code>##  [1] &quot;P0001&quot; &quot;P0002&quot; &quot;P0003&quot; &quot;P0004&quot; &quot;P0005&quot; &quot;P0006&quot; &quot;P0007&quot; &quot;P0008&quot; &quot;P0009&quot;
 ## [10] &quot;P0010&quot; &quot;P0011&quot;</code></pre>
-<p><em>Question</em> :</p>
-<p>If we select part of a dataframe, what is the type of this
-selection?</p>
+<p>So to sum up, there are 3 ways to select a column:
+<code>clinical_data[,&quot;Subject_number&quot;]</code>,
+<code>clinical_data$Subject_number</code>,
+<code>clinical_data[[&quot;Subject_number&quot;]]</code>.</p>
+<p><em>Question</em> : If we select part of a dataframe, what is the
+type of a selection?</p>
 <details>
 <summary>
 Answer
 </summary>
-<p>If multiple columns -&gt; data frame If only one column -&gt; the
-type of the column elements. if only one element -&gt; the type of the
-element (which correspond to the type of its column).</p>
+<p>If multiple columns -&gt; data frame.<br />
+If only one column -&gt; the type of the column elements.<br />
+if only one element -&gt; the type of the element (which correspond to
+the type of its column).</p>
 </details>
 <p><br></p>
 <p>We can only display the first values of a column with the <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head"><code>head()</code></a>
 function, but we give it the values of the column as arguments:</p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display the 10 first values of the Age column</span></span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(clinical_data<span class="sc">$</span>Age,<span class="dv">10</span>)</span></code></pre></div>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(clinical_data<span class="sc">$</span>Age,<span class="dv">10</span>)</span></code></pre></div>
 <pre><code>##  [1] 69.70 61.45 71.22 76.82 58.37 49.98 58.58 61.43 71.20 69.02</code></pre>
 <p>Likewise, you can display simple statistics on a numeric column with
 the functions <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/Extremes"><code>min()</code></a>,
@@ -2136,20 +2123,20 @@ the functions <a href="https://www.rdocumentation.org/packages/base/versions/3.6
 <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/mean"><code>mean()</code></a>,
 <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/median"><code>median()</code></a>,
 etc.</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">min</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
 <pre><code>## [1] 49.98</code></pre>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">max</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
 <pre><code>## [1] 76.82</code></pre>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">mean</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
 <pre><code>## [1] 65.74364</code></pre>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>stats<span class="sc">::</span><span class="fu">median</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
 <pre><code>## [1] 69.02</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">length</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
 <pre><code>## [1] 11</code></pre>
 <p>The <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/table"><code>table()</code></a>
 function allows to get the occurrence of each value of a vector (here a
 column of a dataframe):</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(clinical_data<span class="sc">$</span>NSCLC_type)</span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">table</span>(clinical_data<span class="sc">$</span>NSCLC_type)</span></code></pre></div>
 <pre><code>## 
 ##          adenocarcinoma   large cell carcinoma  squamous cell carcinoma 
 ##                       5                       2                       4</code></pre>
@@ -2160,7 +2147,7 @@ carcinoma.</p>
 <p>We can also use the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset"><code>subset()</code></a>
 function, which allows you to make column selections from column
 names:</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(clinical_data, <span class="at">select =</span> Age)</span></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">subset</span>(clinical_data, <span class="at">select =</span> Age)</span></code></pre></div>
 <pre><code>##      Age
 ## 1  69.70
 ## 2  61.45
@@ -2173,7 +2160,7 @@ names:</p>
 ## 9  71.20
 ## 10 69.02
 ## 11 75.41</code></pre>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(clinical_data, <span class="at">select =</span> <span class="fu">c</span>(Subject_number, Age))</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">subset</span>(clinical_data, <span class="at">select =</span> <span class="fu">c</span>(Subject_number, Age))</span></code></pre></div>
 <pre><code>##    Subject_number   Age
 ## 1           P0001 69.70
 ## 2           P0002 61.45
@@ -2194,11 +2181,12 @@ type of this selection?</p>
 <summary>
 Answer
 </summary>
-<p>If multiple columns -&gt; data frame If only one column -&gt; data
-frame too! if only one element -&gt; impossible to select only one
-element with <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset"><code>subset()</code></a>.</p>
+<p>If multiple columns -&gt; data frame.<br />
+If only one column -&gt; data frame too!<br />
+If only one element -&gt; impossible to select only one element easily
+with <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset"><code>subset()</code></a>.</p>
 </details>
-<p>&lt;br</p>
+<p><br></p>
 </div>
 <div id="negative-selection-of-elements" class="section level3">
 <h3>Negative selection of elements</h3>
@@ -2342,7 +2330,7 @@ Answer
 <p><br></p>
 <p>We can also use the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset"><code>subset()</code></a>
 function:</p>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(clinical_data, <span class="at">select =</span> <span class="sc">-</span>Age)</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">subset</span>(clinical_data, <span class="at">select =</span> <span class="sc">-</span>Age)</span></code></pre></div>
 <pre><code>##    Subject_number              NSCLC_type Date_of_Diagnosis Progression
 ## 1           P0001          adenocarcinoma        19/01/2019         yes
 ## 2           P0002 squamous cell carcinoma        01/07/2015         yes
@@ -2367,7 +2355,7 @@ function:</p>
 ## 9            dead
 ## 10          alive
 ## 11           dead</code></pre>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(clinical_data, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(Subject_number, Age))</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">subset</span>(clinical_data, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(Subject_number, Age))</span></code></pre></div>
 <pre><code>##                 NSCLC_type Date_of_Diagnosis Progression Death_or_alive
 ## 1           adenocarcinoma        19/01/2019         yes           dead
 ## 2  squamous cell carcinoma        01/07/2015         yes           dead
@@ -2442,8 +2430,8 @@ element. Same thing for the <code>&amp;</code> and the
 <span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>) <span class="sc">&amp;</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>)  <span class="co"># TRUE FALSE FALSE</span></span>
 <span id="cb104-5"><a href="#cb104-5" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>) <span class="sc">&amp;&amp;</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>) <span class="co"># Error: &#39;length = 3&#39; in coercion to &#39;logical(1)&#39;</span></span>
 <span id="cb104-6"><a href="#cb104-6" aria-hidden="true" tabindex="-1"></a><span class="cn">TRUE</span> <span class="sc">&amp;&amp;</span> <span class="cn">FALSE</span>                                 <span class="co"># FALSE</span></span></code></pre></div>
-<p>!A is the negation of the expression A and is TRUE when A is FALSE
-and vice versa.</p>
+<p><code>!A</code> is the negation of the expression A and is TRUE when
+A is FALSE and vice versa.</p>
 <div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="sc">&lt;</span> <span class="dv">1</span>    <span class="co"># FALSE</span></span>
 <span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="sc">!</span>(<span class="dv">5</span> <span class="sc">&lt;</span> <span class="dv">1</span>) <span class="co"># !FALSE =&gt; TRUE</span></span></code></pre></div>
 <p>Lastely, just like arithmetic, logical expressions can be grouped by
@@ -2482,10 +2470,12 @@ Answer
 </summary>
 <div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>((<span class="sc">-</span><span class="dv">2</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">&gt;=</span> <span class="dv">0</span>) <span class="sc">&amp;</span> ((<span class="sc">-</span><span class="dv">2</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">&lt;=</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## [1] FALSE FALSE  TRUE FALSE FALSE</code></pre>
-<p>Explanation:</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">&gt;=</span> <span class="dv">0</span>)       <span class="sc">&amp;</span> (<span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>) <span class="sc">&lt;=</span> <span class="dv">0</span>)</span>
-<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>(<span class="fu">c</span>(<span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">TRUE</span>)) <span class="sc">&amp;</span> (<span class="fu">c</span>(<span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">TRUE</span>,<span class="cn">FALSE</span>,<span class="cn">FALSE</span>))</span>
-<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; FALSE FALSE TRUE FALSE FALSE</span></span></code></pre></div>
+<pre><code>Explanation:
+
+``` r
+(c(-2, -1, 0, 1, 2) &gt;= 0)       &amp; (c(-2,-1,0,1,2) &lt;= 0)
+(c(FALSE,FALSE,TRUE,TRUE,TRUE)) &amp; (c(TRUE,TRUE,TRUE,FALSE,FALSE))
+# =&gt; FALSE FALSE TRUE FALSE FALSE</code></pre>
 </details>
 <p><br></p>
 <p><em>Funny Bonus Question</em> :</p>
@@ -2529,11 +2519,12 @@ the value “A” in the first column. So R will test each line of the first
 column to know if the value is “A” (return <code>TRUE</code>) or not
 (return <code>FALSE</code>), then only keep line with
 <code>TRUE</code>.</p>
-<p>There are three ways to subset data in R: - Use R’s built in data
-manipulation tools. These are easily identified by their square bracket
-[] syntax. - Use R’s built in data manipulation functions: <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset"><code>subset()</code></a>.
+<p>There are three ways to subset data in R:<br />
+- Use R’s built in data manipulation tools. These are easily identified
+by their square bracket <code>[]</code> syntax.<br />
+- Use R’s built in data manipulation functions: <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset"><code>subset()</code></a>.<br />
 - Use the <a href="https://dplyr.tidyverse.org/"><code>dplyr</code></a>
-R package</p>
+R package.</p>
 <div id="r-base" class="section level2">
 <h2>R base</h2>
 <div id="filter-for-rows-based-on-one-condition" class="section level3">
@@ -2583,13 +2574,13 @@ value in the NSCLC_type column is equal to ‘adenocarcinoma’:</p>
 ## 10          alive
 ## 11           dead</code></pre>
 <p>Best practice: ALWAYS try to check your subset!</p>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(adeno_clinical_data)</span></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">dim</span>(adeno_clinical_data)</span></code></pre></div>
 <pre><code>## [1] 5 6</code></pre>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(adeno_clinical_data<span class="sc">$</span>NSCLC_type)</span></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">table</span>(adeno_clinical_data<span class="sc">$</span>NSCLC_type)</span></code></pre></div>
 <pre><code>## 
 ## adenocarcinoma 
 ##              5</code></pre>
-<p>We have 5 lines and 8 columns, we have 5 “adenocarcinoma” values in
+<p>We have 5 lines and 6 columns, we have 5 “adenocarcinoma” values in
 NSCLC_type columns and only “adenocarcinoma” values. And compared to
 previously observation of our data we had 5 adenocarcinoma too. So the
 subset is good!</p>
@@ -2711,11 +2702,12 @@ value in the Age column is more than 60, and their NSCLC_type is
 ## 10          alive
 ## 11           dead</code></pre>
 <p>Come back to the problem to subset dataframe columns by their name,
-with R base. Remainder:</p>
+with R base.<br />
+Remainder:</p>
 <div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="sc">-</span><span class="st">&quot;Subject_number&quot;</span>]</span>
 <span id="cb141-2"><a href="#cb141-2" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Subject_number&quot;</span>,<span class="st">&quot;Age&quot;</span>)]</span></code></pre></div>
-<p>That doesn’t work. It is because we have to use logicals to do
-that.</p>
+<p>That doesn’t work.<br />
+It is because we have to use logicals to do that.</p>
 <div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="fu">colnames</span>(clinical_data) <span class="sc">!=</span> <span class="st">&quot;Subject_number&quot;</span>]</span></code></pre></div>
 <pre><code>##      Age              NSCLC_type Date_of_Diagnosis Progression Death_or_alive
 ## 1  69.70          adenocarcinoma        19/01/2019         yes           dead
@@ -2729,16 +2721,17 @@ that.</p>
 ## 9  71.20          adenocarcinoma        10/10/2017         yes           dead
 ## 10 69.02          adenocarcinoma        03/07/2019          no          alive
 ## 11 75.41          adenocarcinoma        11/06/2014         yes           dead</code></pre>
-<p>That is working! Explanation:</p>
+<p>That is working!<br />
+Explanation:</p>
 <div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the name of all columns of the dataframe</span></span>
-<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(clinical_data)</span></code></pre></div>
+<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] &quot;Subject_number&quot;    &quot;Age&quot;               &quot;NSCLC_type&quot;       
 ## [4] &quot;Date_of_Diagnosis&quot; &quot;Progression&quot;       &quot;Death_or_alive&quot;</code></pre>
 <div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if the columns names is not &quot;Subject_number&quot;</span></span>
-<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(clinical_data) <span class="sc">!=</span> <span class="st">&quot;Subject_number&quot;</span></span></code></pre></div>
+<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data) <span class="sc">!=</span> <span class="st">&quot;Subject_number&quot;</span></span></code></pre></div>
 <pre><code>## [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
 <div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># then subset the dataframe on columns (be careful to the coma place, here we want to subset columns, not lines)</span></span>
-<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="fu">colnames</span>(clinical_data) <span class="sc">!=</span> <span class="st">&quot;Subject_number&quot;</span>]</span></code></pre></div>
+<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a>clinical_data[,base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data) <span class="sc">!=</span> <span class="st">&quot;Subject_number&quot;</span>]</span></code></pre></div>
 <pre><code>##      Age              NSCLC_type Date_of_Diagnosis Progression Death_or_alive
 ## 1  69.70          adenocarcinoma        19/01/2019         yes           dead
 ## 2  61.45 squamous cell carcinoma        01/07/2015         yes           dead
@@ -2753,7 +2746,7 @@ that.</p>
 ## 11 75.41          adenocarcinoma        11/06/2014         yes           dead</code></pre>
 <p>Also, we could use the opposite of the positive selection:</p>
 <div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subset the dataframe on columns</span></span>
-<span id="cb150-2"><a href="#cb150-2" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="sc">!</span>(<span class="fu">colnames</span>(clinical_data) <span class="sc">==</span> <span class="st">&quot;Subject_number&quot;</span>)]</span></code></pre></div>
+<span id="cb150-2"><a href="#cb150-2" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="sc">!</span>(base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data) <span class="sc">==</span> <span class="st">&quot;Subject_number&quot;</span>)]</span></code></pre></div>
 <pre><code>##      Age              NSCLC_type Date_of_Diagnosis Progression Death_or_alive
 ## 1  69.70          adenocarcinoma        19/01/2019         yes           dead
 ## 2  61.45 squamous cell carcinoma        01/07/2015         yes           dead
@@ -2768,17 +2761,17 @@ that.</p>
 ## 11 75.41          adenocarcinoma        11/06/2014         yes           dead</code></pre>
 <p>Explanation:</p>
 <div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the name of all columns of the dataframe</span></span>
-<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(clinical_data)</span></code></pre></div>
+<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] &quot;Subject_number&quot;    &quot;Age&quot;               &quot;NSCLC_type&quot;       
 ## [4] &quot;Date_of_Diagnosis&quot; &quot;Progression&quot;       &quot;Death_or_alive&quot;</code></pre>
 <div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if the columns names is &quot;Subject_number&quot;</span></span>
-<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(clinical_data) <span class="sc">==</span> <span class="st">&quot;Subject_number&quot;</span></span></code></pre></div>
+<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data) <span class="sc">==</span> <span class="st">&quot;Subject_number&quot;</span></span></code></pre></div>
 <pre><code>## [1]  TRUE FALSE FALSE FALSE FALSE FALSE</code></pre>
 <div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="co"># take the opposite</span></span>
-<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a><span class="sc">!</span>(<span class="fu">colnames</span>(clinical_data) <span class="sc">==</span> <span class="st">&quot;Subject_number&quot;</span>)</span></code></pre></div>
+<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a><span class="sc">!</span>(base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data) <span class="sc">==</span> <span class="st">&quot;Subject_number&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
 <div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subset the dataframe on columns</span></span>
-<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="sc">!</span>(<span class="fu">colnames</span>(clinical_data) <span class="sc">==</span> <span class="st">&quot;Subject_number&quot;</span>)]</span></code></pre></div>
+<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="sc">!</span>(base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data) <span class="sc">==</span> <span class="st">&quot;Subject_number&quot;</span>)]</span></code></pre></div>
 <pre><code>##      Age              NSCLC_type Date_of_Diagnosis Progression Death_or_alive
 ## 1  69.70          adenocarcinoma        19/01/2019         yes           dead
 ## 2  61.45 squamous cell carcinoma        01/07/2015         yes           dead
@@ -2792,7 +2785,7 @@ that.</p>
 ## 10 69.02          adenocarcinoma        03/07/2019          no          alive
 ## 11 75.41          adenocarcinoma        11/06/2014         yes           dead</code></pre>
 <p>Similarly, to exclude several columns:</p>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="sc">!</span>(<span class="fu">colnames</span>(clinical_data) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Subject_number&quot;</span>,<span class="st">&quot;Age&quot;</span>))]</span></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="sc">!</span>(base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Subject_number&quot;</span>,<span class="st">&quot;Age&quot;</span>))]</span></code></pre></div>
 <pre><code>##                 NSCLC_type Date_of_Diagnosis Progression Death_or_alive
 ## 1           adenocarcinoma        19/01/2019         yes           dead
 ## 2  squamous cell carcinoma        01/07/2015         yes           dead
@@ -2816,7 +2809,7 @@ don’t exist.</p>
 <h2>subset()</h2>
 <p>You can also use the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset"><code>subset()</code></a>
 function:</p>
-<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(clinical_data, NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">subset</span>(clinical_data, NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>)</span></code></pre></div>
 <pre><code>##    Subject_number   Age     NSCLC_type Date_of_Diagnosis Progression
 ## 1           P0001 69.70 adenocarcinoma        19/01/2019         yes
 ## 8           P0008 61.43 adenocarcinoma        29/04/2019          no
@@ -2829,7 +2822,7 @@ function:</p>
 ## 9            dead
 ## 10          alive
 ## 11           dead</code></pre>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(clinical_data, NSCLC_type <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;adenocarcinoma&#39;</span>, <span class="st">&#39;squamous cell carcinoma&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">subset</span>(clinical_data, NSCLC_type <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;adenocarcinoma&#39;</span>, <span class="st">&#39;squamous cell carcinoma&#39;</span>))</span></code></pre></div>
 <pre><code>##    Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 1           P0001 69.70          adenocarcinoma        19/01/2019         yes
 ## 2           P0002 61.45 squamous cell carcinoma        01/07/2015         yes
@@ -2850,14 +2843,14 @@ function:</p>
 ## 9            dead
 ## 10          alive
 ## 11           dead</code></pre>
-<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(clinical_data, Age <span class="sc">&gt;</span> <span class="dv">60</span> <span class="sc">&amp;</span> Age <span class="sc">&lt;</span> <span class="dv">65</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">subset</span>(clinical_data, Age <span class="sc">&gt;</span> <span class="dv">60</span> <span class="sc">&amp;</span> Age <span class="sc">&lt;</span> <span class="dv">65</span>)</span></code></pre></div>
 <pre><code>##   Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 2          P0002 61.45 squamous cell carcinoma        01/07/2015         yes
 ## 8          P0008 61.43          adenocarcinoma        29/04/2019          no
 ##   Death_or_alive
 ## 2           dead
 ## 8          alive</code></pre>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(clinical_data, Age <span class="sc">&gt;</span> <span class="dv">60</span> <span class="sc">&amp;</span> NSCLC_type <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;adenocarcinoma&#39;</span>, <span class="st">&#39;squamous cell carcinoma&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">subset</span>(clinical_data, Age <span class="sc">&gt;</span> <span class="dv">60</span> <span class="sc">&amp;</span> NSCLC_type <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;adenocarcinoma&#39;</span>, <span class="st">&#39;squamous cell carcinoma&#39;</span>))</span></code></pre></div>
 <pre><code>##    Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 1           P0001 69.70          adenocarcinoma        19/01/2019         yes
 ## 2           P0002 61.45 squamous cell carcinoma        01/07/2015         yes
@@ -2878,7 +2871,7 @@ function:</p>
 ## 11           dead</code></pre>
 <p>We can combine the subset of rows and columns. For example, to
 retrieve the IDs of patients who have ‘adenocarcinoma’:</p>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(clinical_data, NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>, <span class="at">select =</span> <span class="st">&quot;Subject_number&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">subset</span>(clinical_data, NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>, <span class="at">select =</span> <span class="st">&quot;Subject_number&quot;</span>)</span></code></pre></div>
 <pre><code>##    Subject_number
 ## 1           P0001
 ## 8           P0008
@@ -2896,17 +2889,22 @@ operator but also provides many functions.</p>
 <p>Note: dplyr works on a specific type of table, called
 <code>tibble</code>. When given a dataframe as an argument, it will
 automatically convert it to a tibble, and the function output can be a
-tibble. There is no big difference between dataframes and tibbles: -
-Unlike data frames, tibbles don’t show the entire dataset when you print
-it. - When you access only one column of a tibble, it will keep the
-tibble structure. But when you access one column of a data frame, it
-will become a vector. - Subsetting including [[ ]] and $, work the same
-for tibbles and data frames. - When assigning a new column to a tibble,
-the input will not be recycled, which means you have to provide an input
-of the same length of the other columns. But a data frame will recycle
-the input. - Tibbles don’t support support arithmetic operations on all
-columns well, the result will be converted into a data frame without any
-notice. More information here: <a href="https://jtr13.github.io/cc21fall1/tibble-vs.-dataframe.html" class="uri">https://jtr13.github.io/cc21fall1/tibble-vs.-dataframe.html</a></p>
+tibble.<br />
+There is no big difference between dataframes and tibbles:<br />
+- Unlike data frames, tibbles don’t show the entire dataset when you
+print it.<br />
+- When you access only one column of a tibble, it will keep the tibble
+structure. But when you access one column of a data frame, it will
+become a vector.<br />
+- Subsetting including [[ ]] and $, work the same for tibbles and data
+frames.<br />
+- When assigning a new column to a tibble, the input will not be
+recycled, which means you have to provide an input of the same length of
+the other columns. But a data frame will recycle the input.<br />
+- Tibbles don’t support support arithmetic operations on all columns
+well, the result will be converted into a data frame without any
+notice.<br />
+More information here: <a href="https://jtr13.github.io/cc21fall1/tibble-vs.-dataframe.html" class="uri">https://jtr13.github.io/cc21fall1/tibble-vs.-dataframe.html</a></p>
 </blockquote>
 <p>The easiest way to filter is to call dplyr’s <a href="https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/filter"><code>filter()</code></a>
 function:</p>
@@ -2919,7 +2917,7 @@ function:</p>
 <pre><code>## The following objects are masked from &#39;package:base&#39;:
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(clinical_data, NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(clinical_data, NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>)</span></code></pre></div>
 <pre><code>##   Subject_number   Age     NSCLC_type Date_of_Diagnosis Progression
 ## 1          P0001 69.70 adenocarcinoma        19/01/2019         yes
 ## 2          P0008 61.43 adenocarcinoma        29/04/2019          no
@@ -2935,7 +2933,7 @@ function:</p>
 <p>It is very similar to the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/subset"><code>subset()</code></a>
 function.</p>
 <p>To filter using a vector for several values:</p>
-<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(clinical_data, NSCLC_type <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;adenocarcinoma&#39;</span>, <span class="st">&#39;squamous cell carcinoma&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(clinical_data, NSCLC_type <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;adenocarcinoma&#39;</span>, <span class="st">&#39;squamous cell carcinoma&#39;</span>))</span></code></pre></div>
 <pre><code>##   Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 1          P0001 69.70          adenocarcinoma        19/01/2019         yes
 ## 2          P0002 61.45 squamous cell carcinoma        01/07/2015         yes
@@ -2959,7 +2957,7 @@ function.</p>
 </div>
 <div id="exercise" class="section level2">
 <h2>Exercise</h2>
-<p>Calculate the average age of people with an adenocarcinoma:</p>
+<p>Calculate the average age of people with an adenocarcinoma.</p>
 <details>
 <summary>
 Answer
@@ -2986,18 +2984,18 @@ Answer
 <span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a>clinical_data[clinical_data<span class="sc">$</span>NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>, <span class="st">&quot;Age&quot;</span>]</span></code></pre></div>
 <pre><code>## [1] 69.70 61.43 71.20 69.02 75.41</code></pre>
 <div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="co">#compute the mean</span></span>
-<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(clinical_data[clinical_data<span class="sc">$</span>NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>, <span class="st">&quot;Age&quot;</span>])</span></code></pre></div>
+<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">mean</span>(clinical_data[clinical_data<span class="sc">$</span>NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>, <span class="st">&quot;Age&quot;</span>])</span></code></pre></div>
 <pre><code>## [1] 69.352</code></pre>
 <div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="do">## other possible answer with R base</span></span>
-<span id="cb188-2"><a href="#cb188-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(clinical_data[clinical_data<span class="sc">$</span>NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>,]<span class="sc">$</span>Age)</span></code></pre></div>
+<span id="cb188-2"><a href="#cb188-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">mean</span>(clinical_data[clinical_data<span class="sc">$</span>NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>,]<span class="sc">$</span>Age)</span></code></pre></div>
 <pre><code>## [1] 69.352</code></pre>
-<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(clinical_data<span class="sc">$</span>Age[clinical_data<span class="sc">$</span>NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">mean</span>(clinical_data<span class="sc">$</span>Age[clinical_data<span class="sc">$</span>NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>])</span></code></pre></div>
 <pre><code>## [1] 69.352</code></pre>
 <div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="do">## with subset()</span></span>
-<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">subset</span>(clinical_data, NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>, <span class="at">select =</span> <span class="st">&quot;Age&quot;</span>)<span class="sc">$</span>Age)</span></code></pre></div>
+<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">mean</span>(base<span class="sc">::</span><span class="fu">subset</span>(clinical_data, NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>, <span class="at">select =</span> <span class="st">&quot;Age&quot;</span>)<span class="sc">$</span>Age)</span></code></pre></div>
 <pre><code>## [1] 69.352</code></pre>
 <div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="do">## with filter()</span></span>
-<span id="cb194-2"><a href="#cb194-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">filter</span>(clinical_data, NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>)<span class="sc">$</span>Age)</span></code></pre></div>
+<span id="cb194-2"><a href="#cb194-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">mean</span>(dplyr<span class="sc">::</span><span class="fu">filter</span>(clinical_data, NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>)<span class="sc">$</span>Age)</span></code></pre></div>
 <pre><code>## [1] 69.352</code></pre>
 <blockquote>
 <p>Note: <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/mean"><code>mean()</code></a>
@@ -3016,40 +3014,40 @@ results in different ways.</p>
 <div id="how-to-know-the-number-of-na-value-in-a-column-here-named-my_column" class="section level3">
 <h3>How to know the number of NA value in a column (here named
 “my_column”)</h3>
-<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">is.na</span>(my_df<span class="sc">$</span>my_column))</span></code></pre></div>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">table</span>(<span class="fu">is.na</span>(my_df<span class="sc">$</span>my_column))</span></code></pre></div>
 </div>
 <div id="how-to-remove-rows-with-any-zeros" class="section level3">
 <h3>How to remove rows with any zeros</h3>
 <div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using Base R</span></span>
-<span id="cb197-2"><a href="#cb197-2" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df[<span class="fu">apply</span>(my_df<span class="sc">!=</span><span class="dv">0</span>, <span class="dv">1</span>, all),]</span>
+<span id="cb197-2"><a href="#cb197-2" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df[base<span class="sc">::</span><span class="fu">apply</span>(my_df<span class="sc">!=</span><span class="dv">0</span>, <span class="dv">1</span>, all),]</span>
 <span id="cb197-3"><a href="#cb197-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb197-4"><a href="#cb197-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Using dplyr</span></span>
 <span id="cb197-5"><a href="#cb197-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb197-6"><a href="#cb197-6" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> <span class="fu">filter_if</span>(my_df, is.numeric, <span class="fu">all_vars</span>((.) <span class="sc">!=</span> <span class="dv">0</span>))</span></code></pre></div>
+<span id="cb197-6"><a href="#cb197-6" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter_if</span>(my_df, is.numeric, <span class="fu">all_vars</span>((.) <span class="sc">!=</span> <span class="dv">0</span>))</span></code></pre></div>
 </div>
 <div id="how-to-remove-rows-with-na-in-all-columns" class="section level3">
 <h3>How to remove rows with NA in all Columns</h3>
-<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df[<span class="fu">rowSums</span>(<span class="fu">is.na</span>(my_df)) <span class="sc">!=</span> <span class="fu">ncol</span>(my_df), ]</span></code></pre></div>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df[base<span class="sc">::</span><span class="fu">rowSums</span>(base<span class="sc">::</span><span class="fu">is.na</span>(my_df)) <span class="sc">!=</span> base<span class="sc">::</span><span class="fu">ncol</span>(my_df), ]</span></code></pre></div>
 </div>
 <div id="how-to-remove-rows-with-na-in-at-least-one-column" class="section level3">
 <h3>How to remove rows with NA in at least One Column</h3>
-<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="#cb199-1" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df[<span class="fu">complete.cases</span>(my_df), ]</span></code></pre></div>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="#cb199-1" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df[stats<span class="sc">::</span><span class="fu">complete.cases</span>(my_df), ]</span></code></pre></div>
 </div>
 <div id="how-to-remove-duplicated-rows" class="section level3">
 <h3>How to remove duplicated rows</h3>
 <div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using Base R</span></span>
-<span id="cb200-2"><a href="#cb200-2" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df[<span class="sc">!</span><span class="fu">duplicated</span>(my_df)]</span>
+<span id="cb200-2"><a href="#cb200-2" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df[<span class="sc">!</span>base<span class="sc">::</span><span class="fu">duplicated</span>(my_df)]</span>
 <span id="cb200-3"><a href="#cb200-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Using dplyr</span></span>
 <span id="cb200-4"><a href="#cb200-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb200-5"><a href="#cb200-5" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span></code></pre></div>
+<span id="cb200-5"><a href="#cb200-5" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">distinct</span>()</span></code></pre></div>
 </div>
 <div id="how-to-remove-duplicated-rows-based-on-specific-columns" class="section level3">
 <h3>How to remove duplicated rows based on specific column(s)</h3>
 <div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb201-2"><a href="#cb201-2" aria-hidden="true" tabindex="-1"></a><span class="co"># On one column named &quot;my_column&quot;, with dplyr</span></span>
-<span id="cb201-3"><a href="#cb201-3" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(my_column, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb201-3"><a href="#cb201-3" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">distinct</span>(my_column, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb201-4"><a href="#cb201-4" aria-hidden="true" tabindex="-1"></a><span class="co"># On 2 column named &quot;my_column&quot; and &quot;my_awsome_column&quot;, with dplyr</span></span>
-<span id="cb201-5"><a href="#cb201-5" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(my_column, my_awsome_column, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<span id="cb201-5"><a href="#cb201-5" aria-hidden="true" tabindex="-1"></a>my_df_new <span class="ot">&lt;-</span> my_df <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">distinct</span>(my_column, my_awsome_column, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <blockquote>
 <p>Note: The option .kep_all is used to keep all variables in the
 data.</p>
@@ -3060,23 +3058,21 @@ data.</p>
 <div id="merging-tables" class="section level1">
 <h1>Merging tables</h1>
 <div id="add-lines-to-a-table" class="section level2">
-<h2>Add lines to a table:</h2>
+<h2>Add lines to a table</h2>
 <p>To add a new patient from a vector, we can assign the information of
 the vector to a new line of our dataframe:</p>
 <div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="co"># new patient information</span></span>
-<span id="cb202-2"><a href="#cb202-2" aria-hidden="true" tabindex="-1"></a>new_patient <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;P0012&quot;</span>, <span class="fl">68.7</span>, <span class="st">&quot;adenocarcinoma&quot;</span>, <span class="st">&quot;20/01/2018&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;alive&quot;</span>, <span class="st">&quot;new patient&quot;</span>)</span>
+<span id="cb202-2"><a href="#cb202-2" aria-hidden="true" tabindex="-1"></a>new_patient <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;P0012&quot;</span>, <span class="fl">68.7</span>, <span class="st">&quot;adenocarcinoma&quot;</span>, <span class="st">&quot;20/01/2018&quot;</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;alive&quot;</span>)</span>
 <span id="cb202-3"><a href="#cb202-3" aria-hidden="true" tabindex="-1"></a><span class="co"># get the number of line of our dataframe</span></span>
-<span id="cb202-4"><a href="#cb202-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(clinical_data)</span></code></pre></div>
+<span id="cb202-4"><a href="#cb202-4" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">nrow</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] 11</code></pre>
 <div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add patient at the end of the dataframe</span></span>
-<span id="cb204-2"><a href="#cb204-2" aria-hidden="true" tabindex="-1"></a>clinical_data[<span class="fu">nrow</span>(clinical_data)<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> new_patient</span></code></pre></div>
-<pre><code>## Warning in matrix(value, n, p): data length [7] is not a sub-multiple or
-## multiple of the number of columns [6]</code></pre>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check the new number of line of our dataframe</span></span>
-<span id="cb206-2"><a href="#cb206-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(clinical_data)</span></code></pre></div>
+<span id="cb204-2"><a href="#cb204-2" aria-hidden="true" tabindex="-1"></a>clinical_data[base<span class="sc">::</span><span class="fu">nrow</span>(clinical_data)<span class="sc">+</span><span class="dv">1</span>,] <span class="ot">&lt;-</span> new_patient</span>
+<span id="cb204-3"><a href="#cb204-3" aria-hidden="true" tabindex="-1"></a><span class="co"># check the new number of line of our dataframe</span></span>
+<span id="cb204-4"><a href="#cb204-4" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">nrow</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] 12</code></pre>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print the end of the dataframe to check the addition</span></span>
-<span id="cb208-2"><a href="#cb208-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(clinical_data, <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print the end of the dataframe to check the addition</span></span>
+<span id="cb206-2"><a href="#cb206-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">tail</span>(clinical_data, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>##    Subject_number   Age     NSCLC_type Date_of_Diagnosis Progression
 ## 10          P0010 69.02 adenocarcinoma        03/07/2019          no
 ## 11          P0011 75.41 adenocarcinoma        11/06/2014         yes
@@ -3085,13 +3081,22 @@ the vector to a new line of our dataframe:</p>
 ## 10          alive
 ## 11           dead
 ## 12          alive</code></pre>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print the structure of the dataframe to check the classes</span></span>
+<span id="cb208-2"><a href="#cb208-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">str</span>(clinical_data)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    12 obs. of  6 variables:
+##  $ Subject_number   : chr  &quot;P0001&quot; &quot;P0002&quot; &quot;P0003&quot; &quot;P0004&quot; ...
+##  $ Age              : chr  &quot;69.7&quot; &quot;61.45&quot; &quot;71.22&quot; &quot;76.82&quot; ...
+##  $ NSCLC_type       : chr  &quot;adenocarcinoma&quot; &quot;squamous cell carcinoma&quot; &quot;squamous cell carcinoma&quot; &quot;squamous cell carcinoma&quot; ...
+##  $ Date_of_Diagnosis: chr  &quot;19/01/2019&quot; &quot;01/07/2015&quot; &quot;20/03/2013&quot; &quot;15/12/2018&quot; ...
+##  $ Progression      : chr  &quot;yes&quot; &quot;yes&quot; &quot;yes&quot; &quot;yes&quot; ...
+##  $ Death_or_alive   : chr  &quot;dead&quot; &quot;dead&quot; &quot;dead&quot; &quot;dead&quot; ...</code></pre>
 <div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Age is changed to character! convert it to numeric</span></span>
-<span id="cb210-2"><a href="#cb210-2" aria-hidden="true" tabindex="-1"></a>clinical_data<span class="sc">$</span>Age <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
+<span id="cb210-2"><a href="#cb210-2" aria-hidden="true" tabindex="-1"></a>clinical_data<span class="sc">$</span>Age <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">as.numeric</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
 <p>But if you have several patients to add, it is easier to add them
 with the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cbind"><code>rbind()</code></a>
 function:</p>
 <div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="co"># new patients to add</span></span>
-<span id="cb211-2"><a href="#cb211-2" aria-hidden="true" tabindex="-1"></a>new_patients <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb211-2"><a href="#cb211-2" aria-hidden="true" tabindex="-1"></a>new_patients <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">data.frame</span>(</span>
 <span id="cb211-3"><a href="#cb211-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">Subject_number =</span> <span class="fu">c</span>(<span class="st">&quot;P0013&quot;</span>, <span class="st">&quot;P0014&quot;</span>),</span>
 <span id="cb211-4"><a href="#cb211-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">Age =</span> <span class="fu">c</span>(<span class="fl">58.3</span>, <span class="dv">70</span>),</span>
 <span id="cb211-5"><a href="#cb211-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">NSCLC_type =</span> <span class="fu">c</span>(<span class="st">&quot;adenocarcinoma&quot;</span>,<span class="st">&quot;squamous cell carcinoma&quot;</span>),</span>
@@ -3107,13 +3112,13 @@ function:</p>
 ## 1          alive
 ## 2           dead</code></pre>
 <div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add patients in the dataframe</span></span>
-<span id="cb213-2"><a href="#cb213-2" aria-hidden="true" tabindex="-1"></a>clinical_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(clinical_data, new_patients)</span>
+<span id="cb213-2"><a href="#cb213-2" aria-hidden="true" tabindex="-1"></a>clinical_data <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">rbind</span>(clinical_data, new_patients)</span>
 <span id="cb213-3"><a href="#cb213-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb213-4"><a href="#cb213-4" aria-hidden="true" tabindex="-1"></a><span class="co"># check the new number of line of our dataframe</span></span>
-<span id="cb213-5"><a href="#cb213-5" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(clinical_data)</span></code></pre></div>
+<span id="cb213-5"><a href="#cb213-5" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">nrow</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] 14</code></pre>
 <div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="#cb215-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print the end of the dataframe to check the addition</span></span>
-<span id="cb215-2"><a href="#cb215-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(clinical_data, <span class="dv">3</span>)</span></code></pre></div>
+<span id="cb215-2"><a href="#cb215-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">tail</span>(clinical_data, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>##    Subject_number  Age              NSCLC_type Date_of_Diagnosis Progression
 ## 12          P0012 68.7          adenocarcinoma        20/01/2018         yes
 ## 13          P0013 58.3          adenocarcinoma        23/06/2014          no
@@ -3127,13 +3132,13 @@ function:</p>
 <span id="cb217-2"><a href="#cb217-2" aria-hidden="true" tabindex="-1"></a>new_patient <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;P0015&quot;</span>, <span class="fl">58.5</span>, <span class="st">&quot;adenocarcinoma&quot;</span>, <span class="st">&quot;10/12/2020&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;alive&quot;</span>)</span>
 <span id="cb217-3"><a href="#cb217-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb217-4"><a href="#cb217-4" aria-hidden="true" tabindex="-1"></a><span class="co"># add patient at the end of the dataframe</span></span>
-<span id="cb217-5"><a href="#cb217-5" aria-hidden="true" tabindex="-1"></a>clinical_data <span class="ot">&lt;-</span> <span class="fu">rbind</span>(clinical_data, new_patient)</span>
+<span id="cb217-5"><a href="#cb217-5" aria-hidden="true" tabindex="-1"></a>clinical_data <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">rbind</span>(clinical_data, new_patient)</span>
 <span id="cb217-6"><a href="#cb217-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb217-7"><a href="#cb217-7" aria-hidden="true" tabindex="-1"></a><span class="co"># check the new number of line of our dataframe</span></span>
-<span id="cb217-8"><a href="#cb217-8" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(clinical_data)</span></code></pre></div>
+<span id="cb217-8"><a href="#cb217-8" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">nrow</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] 15</code></pre>
 <div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print the end of the dataframe to check the addition</span></span>
-<span id="cb219-2"><a href="#cb219-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(clinical_data, <span class="dv">3</span>)</span></code></pre></div>
+<span id="cb219-2"><a href="#cb219-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">tail</span>(clinical_data, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>##    Subject_number  Age              NSCLC_type Date_of_Diagnosis Progression
 ## 13          P0013 58.3          adenocarcinoma        23/06/2014          no
 ## 14          P0014   70 squamous cell carcinoma        02/08/2016         yes
@@ -3143,7 +3148,7 @@ function:</p>
 ## 14           dead
 ## 15          alive</code></pre>
 <div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Age is changed to character! convert it to numeric</span></span>
-<span id="cb221-2"><a href="#cb221-2" aria-hidden="true" tabindex="-1"></a>clinical_data<span class="sc">$</span>Age <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
+<span id="cb221-2"><a href="#cb221-2" aria-hidden="true" tabindex="-1"></a>clinical_data<span class="sc">$</span>Age <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">as.numeric</span>(clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
 </div>
 <div id="add-columns-to-a-table" class="section level2">
 <h2>Add columns to a table</h2>
@@ -3173,8 +3178,8 @@ get a name. R will add a name by itself, so you have to rename the
 column.</p>
 <div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add new column</span></span>
 <span id="cb224-2"><a href="#cb224-2" aria-hidden="true" tabindex="-1"></a>Previous_radiotherapy_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;yes&quot;</span>)</span>
-<span id="cb224-3"><a href="#cb224-3" aria-hidden="true" tabindex="-1"></a>clinical_data[,<span class="fu">ncol</span>(clinical_data)<span class="sc">+</span><span class="dv">1</span>] <span class="ot">&lt;-</span> Previous_radiotherapy_vector</span>
-<span id="cb224-4"><a href="#cb224-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(clinical_data) <span class="co"># the new column is name V10</span></span></code></pre></div>
+<span id="cb224-3"><a href="#cb224-3" aria-hidden="true" tabindex="-1"></a>clinical_data[,base<span class="sc">::</span><span class="fu">ncol</span>(clinical_data)<span class="sc">+</span><span class="dv">1</span>] <span class="ot">&lt;-</span> Previous_radiotherapy_vector</span>
+<span id="cb224-4"><a href="#cb224-4" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(clinical_data) <span class="co"># the new column is name V8</span></span></code></pre></div>
 <pre><code>##   Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 1          P0001 69.70          adenocarcinoma        19/01/2019         yes
 ## 2          P0002 61.45 squamous cell carcinoma        01/07/2015         yes
@@ -3190,27 +3195,27 @@ column.</p>
 ## 5           dead                    yes yes
 ## 6           dead                    yes yes</code></pre>
 <div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="#cb226-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print column names</span></span>
-<span id="cb226-2"><a href="#cb226-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(clinical_data)</span></code></pre></div>
+<span id="cb226-2"><a href="#cb226-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] &quot;Subject_number&quot;         &quot;Age&quot;                    &quot;NSCLC_type&quot;            
 ## [4] &quot;Date_of_Diagnosis&quot;      &quot;Progression&quot;            &quot;Death_or_alive&quot;        
 ## [7] &quot;Previous_chemiotherapy&quot; &quot;V8&quot;</code></pre>
 <div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rename the last column</span></span>
-<span id="cb228-2"><a href="#cb228-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(clinical_data)[<span class="fu">ncol</span>(clinical_data)] <span class="ot">&lt;-</span> <span class="st">&quot;Previous_radiotherapy&quot;</span></span>
+<span id="cb228-2"><a href="#cb228-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data)[base<span class="sc">::</span><span class="fu">ncol</span>(clinical_data)] <span class="ot">&lt;-</span> <span class="st">&quot;Previous_radiotherapy&quot;</span></span>
 <span id="cb228-3"><a href="#cb228-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print column names</span></span>
-<span id="cb228-4"><a href="#cb228-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(clinical_data)</span></code></pre></div>
+<span id="cb228-4"><a href="#cb228-4" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data)</span></code></pre></div>
 <pre><code>## [1] &quot;Subject_number&quot;         &quot;Age&quot;                    &quot;NSCLC_type&quot;            
 ## [4] &quot;Date_of_Diagnosis&quot;      &quot;Progression&quot;            &quot;Death_or_alive&quot;        
 ## [7] &quot;Previous_chemiotherapy&quot; &quot;Previous_radiotherapy&quot;</code></pre>
 <p>To change a column name you can use the index as above, but it could
 easily lead to human error. Change column names with logical indexing is
 a best practice.</p>
-<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(clinical_data)[<span class="fu">colnames</span>(clinical_data) <span class="sc">==</span> <span class="st">&quot;V8&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Previous_radiotherapy&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="#cb230-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data)[base<span class="sc">::</span><span class="fu">colnames</span>(clinical_data) <span class="sc">==</span> <span class="st">&quot;V8&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Previous_radiotherapy&quot;</span></span></code></pre></div>
 <p>Here’s how to read this: “Change the names of clinical_data, but only
 where the original name was”V8”, to “Previous_radiotherapy”.</p>
 <p>Similar to combine row with <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cbind"><code>rbind()</code></a>,
 we can combine column with <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cbind"><code>cbind()</code></a>:</p>
 <div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="#cb231-1" aria-hidden="true" tabindex="-1"></a>Previous_immunotherapy_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;no&quot;</span>,<span class="st">&quot;yes&quot;</span>)</span>
-<span id="cb231-2"><a href="#cb231-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(clinical_data, <span class="at">Previous_immunotherapy =</span> Previous_immunotherapy_vector) <span class="co"># the new column is named &quot;Previous_immunotherapy&quot;</span></span></code></pre></div>
+<span id="cb231-2"><a href="#cb231-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">cbind</span>(clinical_data, <span class="at">Previous_immunotherapy =</span> Previous_immunotherapy_vector) <span class="co"># the new column is named &quot;Previous_immunotherapy&quot;</span></span></code></pre></div>
 <pre><code>##    Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 1           P0001 69.70          adenocarcinoma        19/01/2019         yes
 ## 2           P0002 61.45 squamous cell carcinoma        01/07/2015         yes
@@ -3273,7 +3278,7 @@ function is preferable.</p>
 <span id="cb233-2"><a href="#cb233-2" aria-hidden="true" tabindex="-1"></a>clinical_data_complement <span class="ot">&lt;-</span> utils<span class="sc">::</span><span class="fu">read.table</span>(<span class="st">&quot;Clinical_Cohort_Complement.csv&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>As usual, look at the new table:</p>
 <div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="#cb234-1" aria-hidden="true" tabindex="-1"></a><span class="co"># print first lines</span></span>
-<span id="cb234-2"><a href="#cb234-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(clinical_data_complement)</span></code></pre></div>
+<span id="cb234-2"><a href="#cb234-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(clinical_data_complement)</span></code></pre></div>
 <pre><code>##   Subject_number    Sex Immunotherapy_name        Mutation
 ## 1          P0003      M          NIVOLUMAB   TP53_missense
 ## 2          P0011      M      PEMBROLIZUMAB   KRAS_missense
@@ -3282,18 +3287,18 @@ function is preferable.</p>
 ## 5          P0006 Female      PEMBROLIZUMAB KRAS_frameshift
 ## 6          P0009      M      PEMBROLIZUMAB   KRAS_missense</code></pre>
 <div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dimensions</span></span>
-<span id="cb236-2"><a href="#cb236-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(clinical_data_complement)</span></code></pre></div>
+<span id="cb236-2"><a href="#cb236-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">dim</span>(clinical_data_complement)</span></code></pre></div>
 <pre><code>## [1] 15  4</code></pre>
 <div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="#cb238-1" aria-hidden="true" tabindex="-1"></a><span class="co"># structure</span></span>
-<span id="cb238-2"><a href="#cb238-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(clinical_data_complement)</span></code></pre></div>
+<span id="cb238-2"><a href="#cb238-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">str</span>(clinical_data_complement)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    15 obs. of  4 variables:
 ##  $ Subject_number    : chr  &quot;P0003&quot; &quot;P0011&quot; &quot;P0004&quot; &quot;P0005&quot; ...
 ##  $ Sex               : chr  &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; ...
 ##  $ Immunotherapy_name: chr  &quot;NIVOLUMAB&quot; &quot;PEMBROLIZUMAB&quot; &quot;PEMBROLIZUMAB&quot; &quot;PEMBROLIZUMAB&quot; ...
 ##  $ Mutation          : chr  &quot;TP53_missense&quot; &quot;KRAS_missense&quot; &quot;KRAS_nonsense&quot; &quot;KRAS_frameshift&quot; ...</code></pre>
 <p>Then, merge dataframes based on specific column:</p>
-<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="#cb240-1" aria-hidden="true" tabindex="-1"></a>total_clinical_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(<span class="at">x =</span> clinical_data, <span class="at">y =</span> clinical_data_complement, <span class="at">by =</span> <span class="st">&quot;Subject_number&quot;</span>)</span>
-<span id="cb240-2"><a href="#cb240-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(total_clinical_data)</span></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="#cb240-1" aria-hidden="true" tabindex="-1"></a>total_clinical_data <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">merge</span>(<span class="at">x =</span> clinical_data, <span class="at">y =</span> clinical_data_complement, <span class="at">by =</span> <span class="st">&quot;Subject_number&quot;</span>)</span>
+<span id="cb240-2"><a href="#cb240-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(total_clinical_data)</span></code></pre></div>
 <pre><code>##   Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 1          P0001 69.70          adenocarcinoma        19/01/2019         yes
 ## 2          P0002 61.45 squamous cell carcinoma        01/07/2015         yes
@@ -3315,24 +3320,28 @@ function is preferable.</p>
 ## 4      PEMBROLIZUMAB   KRAS_nonsense
 ## 5      PEMBROLIZUMAB KRAS_frameshift
 ## 6      PEMBROLIZUMAB KRAS_frameshift</code></pre>
-<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="#cb242-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(total_clinical_data)</span></code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="#cb242-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">dim</span>(total_clinical_data)</span></code></pre></div>
 <pre><code>## [1] 15 11</code></pre>
 <blockquote>
-<p>Notes: - the lines order doesn’t matter, merge() combines data based
-on the values of the designed column. - if we want to merge on a column
-that does not have the same name in the two dataframes, we specify the
-column names with the arguments <code>by.x</code> and <code>by.y</code>
-instead of <code>by</code>. - if we have columns that have the same name
-in the 2 dataframes but we do not merge on them, R will add the suffixes
-“.x” and “.y” to the names of the columns coming from the dataframe at x
-and y respectively . - if lines from one of the 2 dataframes have no
-equivalent in the other, R does not keep these lines by default. To keep
-them, you must define the arguments <code>all.x = TRUE</code> and
-<code>all.y = TRUE</code>, and <code>NA</code> will be printed in
-columns of these rows with no match. - if <code>by</code> is not
-specified, R will take all the column names in common between the 2
-dataframes. - to merge dataframes on several columns: merge(x, y, by =
-c(“col1”,“col2”))</p>
+<p>Notes:<br />
+- the lines order doesn’t matter, merge() combines data based on the
+values of the designed column.<br />
+- if we want to merge on a column that does not have the same name in
+the two dataframes, we specify the column names with the arguments
+<code>by.x</code> and <code>by.y</code> instead of
+<code>by</code>.<br />
+- if we have columns that have the same name in the 2 dataframes but we
+do not merge on them, R will add the suffixes “.x” and “.y” to the names
+of the columns coming from the dataframe at x and y respectively .<br />
+- if lines from one of the 2 dataframes have no equivalent in the other,
+R does not keep these lines by default. To keep them, you must define
+the arguments <code>all.x = TRUE</code> and <code>all.y = TRUE</code>,
+and <code>NA</code> will be printed in columns of these rows with no
+match.<br />
+- if <code>by</code> is not specified, R will take all the column names
+in common between the 2 dataframes.<br />
+- to merge dataframes on several columns: merge(x, y, by =
+c(“col1”,“col2”)).</p>
 </blockquote>
 </div>
 </div>
@@ -3364,7 +3373,7 @@ exterior function. So f(g(x)) can be rewritten using a pipe: g(x) %&gt;%
 f. This can be helpful for very long, multi-line statements in R. Just
 read the pipe operator <code>%&gt;%</code> as “THEN”.</p>
 <p>To illustrate, start with the total_clinical_data THEN filter it:</p>
-<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="#cb245-1" aria-hidden="true" tabindex="-1"></a>total_clinical_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="#cb245-1" aria-hidden="true" tabindex="-1"></a>total_clinical_data <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>)</span></code></pre></div>
 <pre><code>##   Subject_number   Age     NSCLC_type Date_of_Diagnosis Progression
 ## 1          P0001 69.70 adenocarcinoma        19/01/2019         yes
 ## 2          P0008 61.43 adenocarcinoma        29/04/2019          no
@@ -3393,7 +3402,7 @@ read the pipe operator <code>%&gt;%</code> as “THEN”.</p>
 ## 7      PEMBROLIZUMAB   KRAS_nonsense
 ## 8         DURVALUMAB   TP53_nonsense</code></pre>
 <p>To assign the result to a variable (a new dataframe):</p>
-<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="#cb247-1" aria-hidden="true" tabindex="-1"></a>filtered_clinical_data <span class="ot">&lt;-</span> total_clinical_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="#cb247-1" aria-hidden="true" tabindex="-1"></a>filtered_clinical_data <span class="ot">&lt;-</span> total_clinical_data <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(NSCLC_type <span class="sc">==</span> <span class="st">&#39;adenocarcinoma&#39;</span>)</span></code></pre></div>
 <p>Of course you can put as much <code>%&gt;%</code> as you need in one
 line.</p>
 </div>
@@ -3438,7 +3447,7 @@ it by <code>total_clinical_data$Mutation &lt;- NULL</code>.</p>
 <p>We can also use <a href="https://tidyr.tidyverse.org/"><code>tidyr</code></a>, with its <a href="https://www.rdocumentation.org/packages/tidyr/versions/1.3.1/topics/separate"><code>separate()</code></a>
 function.</p>
 <div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="#cb250-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb250-2"><a href="#cb250-2" aria-hidden="true" tabindex="-1"></a>total_clinical_data <span class="ot">&lt;-</span> total_clinical_data <span class="sc">%&gt;%</span> <span class="fu">separate</span>(Mutation, <span class="fu">c</span>(<span class="st">&#39;Mutation_Gene&#39;</span>, <span class="st">&#39;Mutation_Type&#39;</span>))</span>
+<span id="cb250-2"><a href="#cb250-2" aria-hidden="true" tabindex="-1"></a>total_clinical_data <span class="ot">&lt;-</span> total_clinical_data <span class="sc">%&gt;%</span> tidyr<span class="sc">::</span><span class="fu">separate</span>(Mutation, <span class="fu">c</span>(<span class="st">&#39;Mutation_Gene&#39;</span>, <span class="st">&#39;Mutation_Type&#39;</span>))</span>
 <span id="cb250-3"><a href="#cb250-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(total_clinical_data)</span></code></pre></div>
 <pre><code>##   Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 1          P0001 69.70          adenocarcinoma        19/01/2019         yes
@@ -3472,7 +3481,7 @@ function automaticcaly remove the original column.</p>
 <p>For example to retrive the “Mutation” column (previously erased by
 the <a href="https://www.rdocumentation.org/packages/tidyr/versions/1.3.1/topics/separate"><code>separate()</code></a>
 function):</p>
-<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="#cb252-1" aria-hidden="true" tabindex="-1"></a>total_clinical_data<span class="sc">$</span>Mutation <span class="ot">&lt;-</span> <span class="fu">paste</span>(total_clinical_data<span class="sc">$</span>Mutation_Gene, total_clinical_data<span class="sc">$</span>Mutation_Type, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="#cb252-1" aria-hidden="true" tabindex="-1"></a>total_clinical_data<span class="sc">$</span>Mutation <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">paste</span>(total_clinical_data<span class="sc">$</span>Mutation_Gene, total_clinical_data<span class="sc">$</span>Mutation_Type, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="sort-a-dataframe" class="section level2">
@@ -3481,11 +3490,11 @@ function):</p>
 <h3>order()</h3>
 <p>To sort a dataframe based on a specific column, you can use the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/order"><code>order()</code></a>
 function.</p>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="#cb253-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sort the Age column in decreasing order</span></span>
-<span id="cb253-2"><a href="#cb253-2" aria-hidden="true" tabindex="-1"></a><span class="fu">order</span>(total_clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="#cb253-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sort the Age column in increasing order</span></span>
+<span id="cb253-2"><a href="#cb253-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">order</span>(total_clinical_data<span class="sc">$</span>Age)</span></code></pre></div>
 <pre><code>##  [1]  6 13  5 15  7  8  2 12 10  1 14  9  3 11  4</code></pre>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="#cb255-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sort total_clinical_data in decreasing order based on Age</span></span>
-<span id="cb255-2"><a href="#cb255-2" aria-hidden="true" tabindex="-1"></a>total_clinical_data[<span class="fu">order</span>(total_clinical_data<span class="sc">$</span>Age), ]</span></code></pre></div>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="#cb255-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sort total_clinical_data in increasing order based on Age</span></span>
+<span id="cb255-2"><a href="#cb255-2" aria-hidden="true" tabindex="-1"></a>total_clinical_data[base<span class="sc">::</span><span class="fu">order</span>(total_clinical_data<span class="sc">$</span>Age), ]</span></code></pre></div>
 <pre><code>##    Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 6           P0006 49.98   large cell carcinoma         08/03/2019         yes
 ## 13          P0013 58.30          adenocarcinoma        23/06/2014          no
@@ -3539,7 +3548,7 @@ function will sort values in ascending (increasing) order. If you want
 to order the values in descending (decreasing) order, just add the
 argument <code>decreasing = TRUE</code> to the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/order"><code>order()</code></a>
 function:</p>
-<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="#cb257-1" aria-hidden="true" tabindex="-1"></a>total_clinical_data[<span class="fu">order</span>(total_clinical_data<span class="sc">$</span>Age, <span class="at">decreasing =</span> <span class="cn">TRUE</span>), ] <span class="co">#decreasing order</span></span></code></pre></div>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="#cb257-1" aria-hidden="true" tabindex="-1"></a>total_clinical_data[base<span class="sc">::</span><span class="fu">order</span>(total_clinical_data<span class="sc">$</span>Age, <span class="at">decreasing =</span> <span class="cn">TRUE</span>), ] <span class="co">#decreasing order</span></span></code></pre></div>
 <pre><code>##    Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 4           P0004 76.82 squamous cell carcinoma        15/12/2018         yes
 ## 11          P0011 75.41          adenocarcinoma        11/06/2014         yes
@@ -3589,7 +3598,7 @@ function:</p>
 ## 13      PEMBROLIZUMAB          KRAS      nonsense   KRAS_nonsense
 ## 6       PEMBROLIZUMAB          KRAS    frameshift KRAS_frameshift</code></pre>
 <p>To order by several columns:</p>
-<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="#cb259-1" aria-hidden="true" tabindex="-1"></a>total_clinical_data[<span class="fu">order</span>(total_clinical_data<span class="sc">$</span>Sex, total_clinical_data<span class="sc">$</span>Age, <span class="at">decreasing =</span> <span class="cn">TRUE</span>), ] <span class="co">#decreasing order</span></span></code></pre></div>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="#cb259-1" aria-hidden="true" tabindex="-1"></a>total_clinical_data[base<span class="sc">::</span><span class="fu">order</span>(total_clinical_data<span class="sc">$</span>Sex, total_clinical_data<span class="sc">$</span>Age, <span class="at">decreasing =</span> <span class="cn">TRUE</span>), ] <span class="co">#decreasing order</span></span></code></pre></div>
 <pre><code>##    Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 4           P0004 76.82 squamous cell carcinoma        15/12/2018         yes
 ## 11          P0011 75.41          adenocarcinoma        11/06/2014         yes
@@ -3650,7 +3659,7 @@ order.</p>
 <p>To sort a dataframe based on a specific column, you can use the <a href="https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/arrange"><code>arrange()</code></a>
 function from <a href="https://dplyr.tidyverse.org/"><code>dplyr</code></a> R
 package.</p>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="#cb261-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(total_clinical_data, Age)</span></code></pre></div>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="#cb261-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">arrange</span>(total_clinical_data, Age)</span></code></pre></div>
 <pre><code>##    Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 1           P0006 49.98   large cell carcinoma         08/03/2019         yes
 ## 2           P0013 58.30          adenocarcinoma        23/06/2014          no
@@ -3703,7 +3712,7 @@ package.</p>
 always sort the dataframe in increasing order. To sort in decreasing
 order, ou have to add the <a href="https://www.rdocumentation.org/packages/plyr/versions/1.8.9/topics/desc"><code>desc()</code></a>
 function around the column name:</p>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="#cb263-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(total_clinical_data, <span class="fu">desc</span>(Age))</span></code></pre></div>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="#cb263-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">arrange</span>(total_clinical_data, <span class="fu">desc</span>(Age))</span></code></pre></div>
 <pre><code>##    Subject_number   Age              NSCLC_type Date_of_Diagnosis Progression
 ## 1           P0004 76.82 squamous cell carcinoma        15/12/2018         yes
 ## 2           P0011 75.41          adenocarcinoma        11/06/2014         yes
@@ -3767,17 +3776,17 @@ more) other column(s) ?” For example, “What is the mean Age for each
 Sex?”</p>
 <p>If we wanted to answer this question using basic R functions, we’d
 have to write a separate command for each sex like this:</p>
-<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="#cb265-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(total_clinical_data[total_clinical_data<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;M&quot;</span>, <span class="st">&quot;Age&quot;</span>])</span></code></pre></div>
-<pre><code>## [1] 66.907</code></pre>
-<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(total_clinical_data[total_clinical_data<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;F&quot;</span>, <span class="st">&quot;Age&quot;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="#cb265-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">mean</span>(total_clinical_data[total_clinical_data<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;F&quot;</span>, <span class="st">&quot;Age&quot;</span>])</span></code></pre></div>
 <pre><code>## [1] 61.922</code></pre>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="#cb267-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">mean</span>(total_clinical_data[total_clinical_data<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">&quot;M&quot;</span>, <span class="st">&quot;Age&quot;</span>])</span></code></pre></div>
+<pre><code>## [1] 66.907</code></pre>
 <p>Here there are only 2 values for Sex, so we can do that like that.
 But it is very limited if we have a lot of values. For these cases, we
 can use the <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aggregate"><code>aggregate()</code></a>
 function.</p>
-<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="#cb269-1" aria-hidden="true" tabindex="-1"></a>aggr_res <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="at">x =</span> Age <span class="sc">~</span> Sex,              <span class="co"># Age is the value, Sex is the group </span></span>
-<span id="cb269-2"><a href="#cb269-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">FUN =</span> mean,                 <span class="co"># The function you want to apply (here mean)</span></span>
-<span id="cb269-3"><a href="#cb269-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> total_clinical_data) <span class="co"># The dataframe</span></span>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="#cb269-1" aria-hidden="true" tabindex="-1"></a>aggr_res <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">aggregate</span>(<span class="at">x =</span> Age <span class="sc">~</span> Sex,              <span class="co"># Age is the value, Sex is the group </span></span>
+<span id="cb269-2"><a href="#cb269-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">FUN =</span> mean,                 <span class="co"># The function you want to apply (here mean)</span></span>
+<span id="cb269-3"><a href="#cb269-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> total_clinical_data) <span class="co"># The dataframe</span></span>
 <span id="cb269-4"><a href="#cb269-4" aria-hidden="true" tabindex="-1"></a>aggr_res</span></code></pre></div>
 <pre><code>##   Sex    Age
 ## 1   F 61.922
@@ -3793,10 +3802,10 @@ function to apply the function to subsets of the original data. For
 example, if I wanted to calculate the mean patient Age for each Sex, but
 only when the patient has an adenocarcinoma, I would do the
 following:</p>
-<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="#cb271-1" aria-hidden="true" tabindex="-1"></a>aggr_res <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="at">x =</span> Age <span class="sc">~</span> Sex,                           <span class="co"># Age is the value, Sex is the group </span></span>
-<span id="cb271-2"><a href="#cb271-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">FUN =</span> mean,                              <span class="co"># the function you want to apply (here mean)</span></span>
-<span id="cb271-3"><a href="#cb271-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">subset =</span> NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>, <span class="co"># only when patient has an adenocarcinoma</span></span>
-<span id="cb271-4"><a href="#cb271-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> total_clinical_data)              <span class="co"># the dataframe</span></span>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="#cb271-1" aria-hidden="true" tabindex="-1"></a>aggr_res <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">aggregate</span>(<span class="at">x =</span> Age <span class="sc">~</span> Sex,                           <span class="co"># Age is the value, Sex is the group </span></span>
+<span id="cb271-2"><a href="#cb271-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">FUN =</span> mean,                              <span class="co"># the function you want to apply (here mean)</span></span>
+<span id="cb271-3"><a href="#cb271-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">subset =</span> NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>, <span class="co"># only when patient has an adenocarcinoma</span></span>
+<span id="cb271-4"><a href="#cb271-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> total_clinical_data)              <span class="co"># the dataframe</span></span>
 <span id="cb271-5"><a href="#cb271-5" aria-hidden="true" tabindex="-1"></a>aggr_res</span></code></pre></div>
 <pre><code>##   Sex    Age
 ## 1   F 63.210
@@ -3806,10 +3815,10 @@ argument to <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.
 For example, let’s use <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aggregate"><code>aggregate()</code></a>
 to now get the mean Age of the patients for all combinations of both Sex
 and NSCLC_type, but now only for progressing cancer:</p>
-<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="#cb273-1" aria-hidden="true" tabindex="-1"></a>aggr_res <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="at">x =</span> Age <span class="sc">~</span> Sex <span class="sc">+</span> NSCLC_type,     <span class="co"># Age is the value, Sex and NSCLC_type are the groups</span></span>
-<span id="cb273-2"><a href="#cb273-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">FUN =</span> mean,                     <span class="co"># the function you want to apply (here mean)</span></span>
-<span id="cb273-3"><a href="#cb273-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">subset =</span> Progression <span class="sc">==</span> <span class="st">&quot;yes&quot;</span>, <span class="co"># only where cancer is progressing</span></span>
-<span id="cb273-4"><a href="#cb273-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> total_clinical_data)     <span class="co"># the dataframe</span></span>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="#cb273-1" aria-hidden="true" tabindex="-1"></a>aggr_res <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">aggregate</span>(<span class="at">x =</span> Age <span class="sc">~</span> Sex <span class="sc">+</span> NSCLC_type,     <span class="co"># Age is the value, Sex and NSCLC_type are the groups</span></span>
+<span id="cb273-2"><a href="#cb273-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">FUN =</span> mean,                     <span class="co"># the function you want to apply (here mean)</span></span>
+<span id="cb273-3"><a href="#cb273-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">subset =</span> Progression <span class="sc">==</span> <span class="st">&quot;yes&quot;</span>, <span class="co"># only where cancer is progressing</span></span>
+<span id="cb273-4"><a href="#cb273-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data =</span> total_clinical_data)     <span class="co"># the dataframe</span></span>
 <span id="cb273-5"><a href="#cb273-5" aria-hidden="true" tabindex="-1"></a>aggr_res</span></code></pre></div>
 <pre><code>##   Sex              NSCLC_type    Age
 ## 1   F          adenocarcinoma 69.700
@@ -3838,8 +3847,8 @@ function.</p>
 <p>For our example, “What is the mean Age for each Sex?”</p>
 <div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="#cb277-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb277-2"><a href="#cb277-2" aria-hidden="true" tabindex="-1"></a>grpby_res <span class="ot">&lt;-</span> total_clinical_data <span class="sc">%&gt;%</span> <span class="co"># the dataframe</span></span>
-<span id="cb277-3"><a href="#cb277-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Sex) <span class="sc">%&gt;%</span>                  <span class="co"># Sex is the group </span></span>
-<span id="cb277-4"><a href="#cb277-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">mean</span>(Age))               <span class="co"># calculate mean on column Age in total_clinical_data</span></span>
+<span id="cb277-3"><a href="#cb277-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(Sex) <span class="sc">%&gt;%</span>                  <span class="co"># Sex is the group </span></span>
+<span id="cb277-4"><a href="#cb277-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">mean</span>(Age))               <span class="co"># calculate mean on column Age in total_clinical_data</span></span>
 <span id="cb277-5"><a href="#cb277-5" aria-hidden="true" tabindex="-1"></a>grpby_res</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   Sex   `mean(Age)`
@@ -3852,9 +3861,9 @@ function that we saw previously. For example, if I wanted to calculate
 the mean patient Age for each Sex, but only when the patient has an
 adenocarcinoma, I would do the following:</p>
 <div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="#cb279-1" aria-hidden="true" tabindex="-1"></a>grpby_res <span class="ot">&lt;-</span> total_clinical_data <span class="sc">%&gt;%</span>          <span class="co"># the dataframe</span></span>
-<span id="cb279-2"><a href="#cb279-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>) <span class="sc">%&gt;%</span>  <span class="co"># only when patient has an adenocarcinoma</span></span>
-<span id="cb279-3"><a href="#cb279-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Sex) <span class="sc">%&gt;%</span>                           <span class="co"># Sex is the group </span></span>
-<span id="cb279-4"><a href="#cb279-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">mean</span>(Age))                        <span class="co"># calculate mean on column Age in total_clinical_data</span></span>
+<span id="cb279-2"><a href="#cb279-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(NSCLC_type <span class="sc">==</span> <span class="st">&quot;adenocarcinoma&quot;</span>) <span class="sc">%&gt;%</span>  <span class="co"># only when patient has an adenocarcinoma</span></span>
+<span id="cb279-3"><a href="#cb279-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(Sex) <span class="sc">%&gt;%</span>                           <span class="co"># Sex is the group </span></span>
+<span id="cb279-4"><a href="#cb279-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">mean</span>(Age))                        <span class="co"># calculate mean on column Age in total_clinical_data</span></span>
 <span id="cb279-5"><a href="#cb279-5" aria-hidden="true" tabindex="-1"></a>grpby_res</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   Sex   `mean(Age)`
@@ -3863,9 +3872,9 @@ adenocarcinoma, I would do the following:</p>
 ## 2 M            68.5</code></pre>
 <p>And if we want to group by several columns?</p>
 <div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="#cb281-1" aria-hidden="true" tabindex="-1"></a>grpby_res <span class="ot">&lt;-</span> total_clinical_data <span class="sc">%&gt;%</span>  <span class="co"># the dataframe</span></span>
-<span id="cb281-2"><a href="#cb281-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Progression <span class="sc">==</span> <span class="st">&quot;yes&quot;</span>) <span class="sc">%&gt;%</span>    <span class="co"># only where cancer is progressing</span></span>
-<span id="cb281-3"><a href="#cb281-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Sex, NSCLC_type) <span class="sc">%&gt;%</span>       <span class="co"># Sex and NSCLC_type are the groups</span></span>
-<span id="cb281-4"><a href="#cb281-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">mean</span>(Age))                <span class="co"># calculate mean on column Age in total_clinical_data</span></span></code></pre></div>
+<span id="cb281-2"><a href="#cb281-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(Progression <span class="sc">==</span> <span class="st">&quot;yes&quot;</span>) <span class="sc">%&gt;%</span>    <span class="co"># only where cancer is progressing</span></span>
+<span id="cb281-3"><a href="#cb281-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(Sex, NSCLC_type) <span class="sc">%&gt;%</span>       <span class="co"># Sex and NSCLC_type are the groups</span></span>
+<span id="cb281-4"><a href="#cb281-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">mean</span>(Age))                <span class="co"># calculate mean on column Age in total_clinical_data</span></span></code></pre></div>
 <pre><code>## `summarise()` has grouped output by &#39;Sex&#39;. You can override using the `.groups`
 ## argument.</code></pre>
 <div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="#cb283-1" aria-hidden="true" tabindex="-1"></a>grpby_res</span></code></pre></div>
@@ -3881,15 +3890,15 @@ adenocarcinoma, I would do the following:</p>
 ## 6 M     &quot;squamous cell carcinoma&quot;        67.0</code></pre>
 <p>But dplyr allows us to go even further!! We can use several functions
 easily!</p>
-<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="#cb285-1" aria-hidden="true" tabindex="-1"></a>grpby_res <span class="ot">&lt;-</span> total_clinical_data <span class="sc">%&gt;%</span>       <span class="co"># the dataframe</span></span>
-<span id="cb285-2"><a href="#cb285-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Progression <span class="sc">==</span> <span class="st">&quot;yes&quot;</span>) <span class="sc">%&gt;%</span>         <span class="co"># only where cancer is progressing</span></span>
-<span id="cb285-3"><a href="#cb285-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Sex, NSCLC_type) <span class="sc">%&gt;%</span>            <span class="co"># Sex and NSCLC_type are the groups</span></span>
-<span id="cb285-4"><a href="#cb285-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb285-5"><a href="#cb285-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">my_mean_value =</span> <span class="fu">mean</span>(Age),             <span class="co"># calculate mean on column Age in total_clinical_data</span></span>
-<span id="cb285-6"><a href="#cb285-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">my_max =</span> <span class="fu">max</span>(Age),                     <span class="co"># calculate maximum on column Age in total_clinical_data</span></span>
-<span id="cb285-7"><a href="#cb285-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">my_min =</span> <span class="fu">min</span>(Age),                     <span class="co"># calculate minimum on column Age in total_clinical_data</span></span>
-<span id="cb285-8"><a href="#cb285-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">my_frequency =</span> <span class="fu">n</span>(),                    <span class="co"># calculate the number of patients in each group</span></span>
-<span id="cb285-9"><a href="#cb285-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">my_mean_value_sup65 =</span> <span class="fu">mean</span>(Age <span class="sc">&gt;</span> <span class="dv">65</span>))  <span class="co"># calculate the mean on column Age only if Age &gt; 65 (do a specific subset before computation)</span></span></code></pre></div>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="#cb285-1" aria-hidden="true" tabindex="-1"></a>grpby_res <span class="ot">&lt;-</span> total_clinical_data <span class="sc">%&gt;%</span>         <span class="co"># the dataframe</span></span>
+<span id="cb285-2"><a href="#cb285-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(Progression <span class="sc">==</span> <span class="st">&quot;yes&quot;</span>) <span class="sc">%&gt;%</span>    <span class="co"># only where cancer is progressing</span></span>
+<span id="cb285-3"><a href="#cb285-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(Sex, NSCLC_type) <span class="sc">%&gt;%</span>       <span class="co"># Sex and NSCLC_type are the groups</span></span>
+<span id="cb285-4"><a href="#cb285-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb285-5"><a href="#cb285-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">my_mean_value =</span> <span class="fu">mean</span>(Age),             <span class="co"># calculate mean on column Age in total_clinical_data</span></span>
+<span id="cb285-6"><a href="#cb285-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">my_max =</span> <span class="fu">max</span>(Age),                     <span class="co"># calculate maximum on column Age in total_clinical_data</span></span>
+<span id="cb285-7"><a href="#cb285-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">my_min =</span> <span class="fu">min</span>(Age),                     <span class="co"># calculate minimum on column Age in total_clinical_data</span></span>
+<span id="cb285-8"><a href="#cb285-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">my_frequency =</span> <span class="fu">n</span>(),                    <span class="co"># calculate the number of patients in each group</span></span>
+<span id="cb285-9"><a href="#cb285-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">my_mean_value_sup65 =</span> <span class="fu">mean</span>(Age <span class="sc">&gt;</span> <span class="dv">65</span>))  <span class="co"># calculate the mean on column Age only if Age &gt; 65 (do a specific subset before computation)</span></span></code></pre></div>
 <pre><code>## `summarise()` has grouped output by &#39;Sex&#39;. You can override using the `.groups`
 ## argument.</code></pre>
 <div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="#cb287-1" aria-hidden="true" tabindex="-1"></a>grpby_res</span></code></pre></div>
@@ -3923,8 +3932,8 @@ sequence of these functions that make it a powerful tool.</p>
 <span id="cb289-2"><a href="#cb289-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
 <span id="cb289-3"><a href="#cb289-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
 <pre><code>##           used (Mb) gc trigger (Mb) max used (Mb)
-## Ncells  886948 47.4    1710910 91.4  1300224 69.5
-## Vcells 1652234 12.7    8388608 64.0  2590037 19.8</code></pre>
+## Ncells  886747 47.4    1710184 91.4  1300527 69.5
+## Vcells 1652089 12.7    8388608 64.0  2670560 20.4</code></pre>
 </div>
 </div>
 </div>
@@ -3956,7 +3965,7 @@ Answer
 <span id="cb291-5"><a href="#cb291-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span></span>
 <span id="cb291-6"><a href="#cb291-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb291-7"><a href="#cb291-7" aria-hidden="true" tabindex="-1"></a><span class="co"># print first lines</span></span>
-<span id="cb291-8"><a href="#cb291-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vcf1)</span></code></pre></div>
+<span id="cb291-8"><a href="#cb291-8" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(vcf1)</span></code></pre></div>
 <pre><code>##   V1     V2 V3 V4 V5 V6   V7
 ## 1  1 770519  .  C  A  . PASS
 ## 2  1 779239  .  G  T  . PASS
@@ -3979,10 +3988,10 @@ Answer
 ## 5 GT:AD:AF:DP:F1R2:F2R1:FAD:SB 0/1:0,1:0.667:1:0,1:0,0:0,1:0,0,0,1
 ## 6 GT:AD:AF:DP:F1R2:F2R1:FAD:SB 0/1:0,2:0.667:2:0,1:0,0:0,1:0,0,1,1</code></pre>
 <div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb293-1"><a href="#cb293-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dimensions</span></span>
-<span id="cb293-2"><a href="#cb293-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(vcf1)</span></code></pre></div>
+<span id="cb293-2"><a href="#cb293-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">dim</span>(vcf1)</span></code></pre></div>
 <pre><code>## [1] 700033     10</code></pre>
 <div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="#cb295-1" aria-hidden="true" tabindex="-1"></a><span class="co"># structure</span></span>
-<span id="cb295-2"><a href="#cb295-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(vcf1)</span></code></pre></div>
+<span id="cb295-2"><a href="#cb295-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">str</span>(vcf1)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    700033 obs. of  10 variables:
 ##  $ V1 : int  1 1 1 1 1 1 1 1 1 1 ...
 ##  $ V2 : int  770519 779239 817341 822260 822354 844484 855378 898676 902142 902173 ...
@@ -3995,8 +4004,8 @@ Answer
 ##  $ V9 : chr  &quot;GT:AD:AF:DP:F1R2:F2R1:FAD:SB&quot; &quot;GT:AD:AF:DP:F1R2:F2R1:FAD:SB&quot; &quot;GT:AD:AF:DP:F1R2:F2R1:FAD:SB&quot; &quot;GT:AD:AF:DP:F1R2:F2R1:FAD:SB&quot; ...
 ##  $ V10: chr  &quot;0/1:0,2:0.667:2:0,0:0,1:0,1:0,0,1,1&quot; &quot;0/1:0,2:0.667:2:0,1:0,0:0,1:0,0,1,1&quot; &quot;0/1:0,2:0.667:2:0,0:0,1:0,1:0,0,1,1&quot; &quot;0/1:0,2:0.667:2:0,1:0,0:0,1:0,0,1,1&quot; ...</code></pre>
 <div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add column names</span></span>
-<span id="cb297-2"><a href="#cb297-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(vcf1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;CHROM&quot;</span>,<span class="st">&quot;POS&quot;</span>,<span class="st">&quot;ID&quot;</span>,<span class="st">&quot;REF&quot;</span>,<span class="st">&quot;ALT&quot;</span>,<span class="st">&quot;QUAL&quot;</span>,<span class="st">&quot;FILTER&quot;</span>,<span class="st">&quot;INFO&quot;</span>,<span class="st">&quot;FORMAT&quot;</span>,<span class="st">&quot;SAMPLE_INFO&quot;</span>)</span>
-<span id="cb297-3"><a href="#cb297-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vcf1)</span></code></pre></div>
+<span id="cb297-2"><a href="#cb297-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(vcf1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;CHROM&quot;</span>,<span class="st">&quot;POS&quot;</span>,<span class="st">&quot;ID&quot;</span>,<span class="st">&quot;REF&quot;</span>,<span class="st">&quot;ALT&quot;</span>,<span class="st">&quot;QUAL&quot;</span>,<span class="st">&quot;FILTER&quot;</span>,<span class="st">&quot;INFO&quot;</span>,<span class="st">&quot;FORMAT&quot;</span>,<span class="st">&quot;SAMPLE_INFO&quot;</span>)</span>
+<span id="cb297-3"><a href="#cb297-3" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(vcf1)</span></code></pre></div>
 <pre><code>##   CHROM    POS ID REF ALT QUAL FILTER
 ## 1     1 770519  .   C   A    .   PASS
 ## 2     1 779239  .   G   T    .   PASS
@@ -4020,7 +4029,7 @@ Answer
 ## 6 GT:AD:AF:DP:F1R2:F2R1:FAD:SB 0/1:0,2:0.667:2:0,1:0,0:0,1:0,0,1,1</code></pre>
 <blockquote>
 <p>Note: by default read.table() ignore lines which begins by
-<code>#</code>. So it doesn’t load the header.</p>
+<code>#</code>. So it doesn’t load the comments.</p>
 </blockquote>
 </details>
 <p><br></p>
@@ -4041,7 +4050,7 @@ Answer
 <span id="cb299-5"><a href="#cb299-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span></span>
 <span id="cb299-6"><a href="#cb299-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb299-7"><a href="#cb299-7" aria-hidden="true" tabindex="-1"></a><span class="co"># print first lines</span></span>
-<span id="cb299-8"><a href="#cb299-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vcf2)</span></code></pre></div>
+<span id="cb299-8"><a href="#cb299-8" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(vcf2)</span></code></pre></div>
 <pre><code>##   V1       V2 V3 V4 V5 V6   V7
 ## 1  1  9601003  .  A  G  . PASS
 ## 2  1 26282917  .  G  T  . PASS
@@ -4064,10 +4073,10 @@ Answer
 ## 5 GT:AD:AF:DP:F1R2:F2R1:FAD:SB 0/1:0,1:0.667:1:0,1:0,0:0,1:0,0,1,0
 ## 6 GT:AD:AF:DP:F1R2:F2R1:FAD:SB 0/1:0,2:0.667:2:0,1:0,0:0,1:0,0,1,1</code></pre>
 <div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="#cb301-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dimensions</span></span>
-<span id="cb301-2"><a href="#cb301-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(vcf2)</span></code></pre></div>
+<span id="cb301-2"><a href="#cb301-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">dim</span>(vcf2)</span></code></pre></div>
 <pre><code>## [1] 300  10</code></pre>
 <div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="#cb303-1" aria-hidden="true" tabindex="-1"></a><span class="co"># structure</span></span>
-<span id="cb303-2"><a href="#cb303-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(vcf2)</span></code></pre></div>
+<span id="cb303-2"><a href="#cb303-2" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">str</span>(vcf2)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    300 obs. of  10 variables:
 ##  $ V1 : chr  &quot;1&quot; &quot;1&quot; &quot;1&quot; &quot;1&quot; ...
 ##  $ V2 : int  9601003 26282917 41628354 48850607 71043652 84219990 90201737 104005141 180437509 188609387 ...
@@ -4080,8 +4089,8 @@ Answer
 ##  $ V9 : chr  &quot;GT:AD:AF:DP:F1R2:F2R1:FAD:SB&quot; &quot;GT:AD:AF:DP:F1R2:F2R1:FAD:SB&quot; &quot;GT:AD:AF:DP:F1R2:F2R1:FAD:SB&quot; &quot;GT:AD:AF:DP:F1R2:F2R1:FAD:SB&quot; ...
 ##  $ V10: chr  &quot;0/1:0,1:0.667:1:0,0:0,1:0,1:0,0,1,0&quot; &quot;0/1:0,2:0.667:2:0,1:0,0:0,1:0,0,1,1&quot; &quot;0/1:0,2:0.667:2:0,1:0,0:0,1:0,0,1,1&quot; &quot;0/1:0,2:0.667:2:0,1:0,0:0,1:0,0,1,1&quot; ...</code></pre>
 <div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add column names</span></span>
-<span id="cb305-2"><a href="#cb305-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(vcf2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;CHROM&quot;</span>,<span class="st">&quot;POS&quot;</span>,<span class="st">&quot;ID&quot;</span>,<span class="st">&quot;REF&quot;</span>,<span class="st">&quot;ALT&quot;</span>,<span class="st">&quot;QUAL&quot;</span>,<span class="st">&quot;FILTER&quot;</span>,<span class="st">&quot;INFO&quot;</span>,<span class="st">&quot;FORMAT&quot;</span>,<span class="st">&quot;SAMPLE_INFO&quot;</span>)</span>
-<span id="cb305-3"><a href="#cb305-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vcf2)</span></code></pre></div>
+<span id="cb305-2"><a href="#cb305-2" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">colnames</span>(vcf2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;CHROM&quot;</span>,<span class="st">&quot;POS&quot;</span>,<span class="st">&quot;ID&quot;</span>,<span class="st">&quot;REF&quot;</span>,<span class="st">&quot;ALT&quot;</span>,<span class="st">&quot;QUAL&quot;</span>,<span class="st">&quot;FILTER&quot;</span>,<span class="st">&quot;INFO&quot;</span>,<span class="st">&quot;FORMAT&quot;</span>,<span class="st">&quot;SAMPLE_INFO&quot;</span>)</span>
+<span id="cb305-3"><a href="#cb305-3" aria-hidden="true" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">head</span>(vcf2)</span></code></pre></div>
 <pre><code>##   CHROM      POS ID REF ALT QUAL FILTER
 ## 1     1  9601003  .   A   G    .   PASS
 ## 2     1 26282917  .   G   T    .   PASS
@@ -4108,7 +4117,7 @@ Answer
 <span id="cb307-3"><a href="#cb307-3" aria-hidden="true" tabindex="-1"></a>vcf2<span class="sc">$</span>SAMPLE_NAME <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Sample2&quot;</span>)</span>
 <span id="cb307-4"><a href="#cb307-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb307-5"><a href="#cb307-5" aria-hidden="true" tabindex="-1"></a><span class="co"># merge vcf</span></span>
-<span id="cb307-6"><a href="#cb307-6" aria-hidden="true" tabindex="-1"></a>vcf <span class="ot">&lt;-</span> <span class="fu">rbind</span>(vcf1,vcf2)</span></code></pre></div>
+<span id="cb307-6"><a href="#cb307-6" aria-hidden="true" tabindex="-1"></a>vcf <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">rbind</span>(vcf1,vcf2)</span></code></pre></div>
 </details>
 <p><br></p>
 <ol start="3" style="list-style-type: decimal">
@@ -4122,11 +4131,11 @@ base modification (“REF” and “ALT”).</li>
 Answer
 </summary>
 <div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="#cb308-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of unique variants before filtering</span></span>
-<span id="cb308-2"><a href="#cb308-2" aria-hidden="true" tabindex="-1"></a>nb_before_filtering <span class="ot">&lt;-</span> vcf[,<span class="fu">c</span>(<span class="st">&quot;CHROM&quot;</span>,<span class="st">&quot;POS&quot;</span>,<span class="st">&quot;REF&quot;</span>,<span class="st">&quot;ALT&quot;</span>)] <span class="sc">%&gt;%</span> <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span>
+<span id="cb308-2"><a href="#cb308-2" aria-hidden="true" tabindex="-1"></a>nb_before_filtering <span class="ot">&lt;-</span> vcf[,<span class="fu">c</span>(<span class="st">&quot;CHROM&quot;</span>,<span class="st">&quot;POS&quot;</span>,<span class="st">&quot;REF&quot;</span>,<span class="st">&quot;ALT&quot;</span>)] <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">distinct</span>() <span class="sc">%&gt;%</span> base<span class="sc">::</span><span class="fu">nrow</span>()</span>
 <span id="cb308-3"><a href="#cb308-3" aria-hidden="true" tabindex="-1"></a><span class="co"># filtering</span></span>
-<span id="cb308-4"><a href="#cb308-4" aria-hidden="true" tabindex="-1"></a>PASS_vcf <span class="ot">&lt;-</span> <span class="fu">subset</span>(vcf, FILTER <span class="sc">==</span> <span class="st">&quot;PASS&quot;</span>)</span>
+<span id="cb308-4"><a href="#cb308-4" aria-hidden="true" tabindex="-1"></a>PASS_vcf <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">subset</span>(vcf, FILTER <span class="sc">==</span> <span class="st">&quot;PASS&quot;</span>)</span>
 <span id="cb308-5"><a href="#cb308-5" aria-hidden="true" tabindex="-1"></a><span class="co"># number of unique variants after filtering</span></span>
-<span id="cb308-6"><a href="#cb308-6" aria-hidden="true" tabindex="-1"></a>nb_after_filtering <span class="ot">&lt;-</span> PASS_vcf[,<span class="fu">c</span>(<span class="st">&quot;CHROM&quot;</span>,<span class="st">&quot;POS&quot;</span>,<span class="st">&quot;REF&quot;</span>,<span class="st">&quot;ALT&quot;</span>)] <span class="sc">%&gt;%</span> <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span>
+<span id="cb308-6"><a href="#cb308-6" aria-hidden="true" tabindex="-1"></a>nb_after_filtering <span class="ot">&lt;-</span> PASS_vcf[,<span class="fu">c</span>(<span class="st">&quot;CHROM&quot;</span>,<span class="st">&quot;POS&quot;</span>,<span class="st">&quot;REF&quot;</span>,<span class="st">&quot;ALT&quot;</span>)] <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">distinct</span>() <span class="sc">%&gt;%</span> base<span class="sc">::</span><span class="fu">nrow</span>()</span>
 <span id="cb308-7"><a href="#cb308-7" aria-hidden="true" tabindex="-1"></a><span class="co"># get number of unique variants lost with this filter</span></span>
 <span id="cb308-8"><a href="#cb308-8" aria-hidden="true" tabindex="-1"></a>nb_lost <span class="ot">&lt;-</span> nb_before_filtering <span class="sc">-</span> nb_after_filtering</span>
 <span id="cb308-9"><a href="#cb308-9" aria-hidden="true" tabindex="-1"></a>nb_lost</span></code></pre></div>
@@ -4142,9 +4151,9 @@ Sample2.</li>
 Answer
 </summary>
 <div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="#cb310-1" aria-hidden="true" tabindex="-1"></a><span class="co">#get variants from the chromosome X in the patient Sample2</span></span>
-<span id="cb310-2"><a href="#cb310-2" aria-hidden="true" tabindex="-1"></a>X_Sample2_vcf <span class="ot">&lt;-</span> <span class="fu">subset</span>(PASS_vcf, CHROM <span class="sc">==</span> <span class="st">&quot;X&quot;</span> <span class="sc">&amp;</span> SAMPLE_NAME <span class="sc">==</span> <span class="st">&quot;Sample2&quot;</span>)</span>
+<span id="cb310-2"><a href="#cb310-2" aria-hidden="true" tabindex="-1"></a>X_Sample2_vcf <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">subset</span>(PASS_vcf, CHROM <span class="sc">==</span> <span class="st">&quot;X&quot;</span> <span class="sc">&amp;</span> SAMPLE_NAME <span class="sc">==</span> <span class="st">&quot;Sample2&quot;</span>)</span>
 <span id="cb310-3"><a href="#cb310-3" aria-hidden="true" tabindex="-1"></a><span class="co"># get the number of variants</span></span>
-<span id="cb310-4"><a href="#cb310-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(X_Sample2_vcf)</span></code></pre></div>
+<span id="cb310-4"><a href="#cb310-4" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">nrow</span>(X_Sample2_vcf)</span></code></pre></div>
 <pre><code>## [1] 10</code></pre>
 </details>
 <p><br></p>
@@ -4158,26 +4167,26 @@ patients? A variant is defined by the total position of the variant
 Answer
 </summary>
 <div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb312-1"><a href="#cb312-1" aria-hidden="true" tabindex="-1"></a><span class="co">#paste variants information like ID</span></span>
-<span id="cb312-2"><a href="#cb312-2" aria-hidden="true" tabindex="-1"></a>vector_PASS_variant <span class="ot">&lt;-</span> <span class="fu">paste</span>(PASS_vcf<span class="sc">$</span>CHROM,PASS_vcf<span class="sc">$</span>POS,PASS_vcf<span class="sc">$</span>REF,PASS_vcf<span class="sc">$</span>ALT, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>)</span>
+<span id="cb312-2"><a href="#cb312-2" aria-hidden="true" tabindex="-1"></a>vector_PASS_variant <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">paste</span>(PASS_vcf<span class="sc">$</span>CHROM,PASS_vcf<span class="sc">$</span>POS,PASS_vcf<span class="sc">$</span>REF,PASS_vcf<span class="sc">$</span>ALT, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>)</span>
 <span id="cb312-3"><a href="#cb312-3" aria-hidden="true" tabindex="-1"></a><span class="co">#get occurrences</span></span>
-<span id="cb312-4"><a href="#cb312-4" aria-hidden="true" tabindex="-1"></a>occurrence_PASS_variant <span class="ot">&lt;-</span> <span class="fu">table</span>(vector_PASS_variant)</span>
+<span id="cb312-4"><a href="#cb312-4" aria-hidden="true" tabindex="-1"></a>occurrence_PASS_variant <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">table</span>(vector_PASS_variant)</span>
 <span id="cb312-5"><a href="#cb312-5" aria-hidden="true" tabindex="-1"></a><span class="co">#get variants where occurrence is 2</span></span>
-<span id="cb312-6"><a href="#cb312-6" aria-hidden="true" tabindex="-1"></a>occurrenceis2_PASS_variant <span class="ot">&lt;-</span> <span class="fu">names</span>(occurrence_PASS_variant)[occurrence_PASS_variant <span class="sc">==</span> <span class="dv">2</span>]</span>
+<span id="cb312-6"><a href="#cb312-6" aria-hidden="true" tabindex="-1"></a>occurrenceis2_PASS_variant <span class="ot">&lt;-</span> base<span class="sc">::</span><span class="fu">names</span>(occurrence_PASS_variant)[occurrence_PASS_variant <span class="sc">==</span> <span class="dv">2</span>]</span>
 <span id="cb312-7"><a href="#cb312-7" aria-hidden="true" tabindex="-1"></a><span class="co"># get number of variants where occurrence is 2</span></span>
-<span id="cb312-8"><a href="#cb312-8" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(occurrenceis2_PASS_variant)</span></code></pre></div>
+<span id="cb312-8"><a href="#cb312-8" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">length</span>(occurrenceis2_PASS_variant)</span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
 <p>Another way to do it with dplyr:</p>
 <div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="#cb314-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtering, make variants thanks to their characteristics, and get occurrences</span></span>
 <span id="cb314-2"><a href="#cb314-2" aria-hidden="true" tabindex="-1"></a>occurrence_PASS_variant <span class="ot">&lt;-</span> PASS_vcf <span class="sc">%&gt;%</span></span>
-<span id="cb314-3"><a href="#cb314-3" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">group_by</span>(CHROM, POS, REF, ALT) <span class="sc">%&gt;%</span></span>
-<span id="cb314-4"><a href="#cb314-4" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">summarise</span>(<span class="at">frequency =</span> <span class="fu">n</span>())</span></code></pre></div>
+<span id="cb314-3"><a href="#cb314-3" aria-hidden="true" tabindex="-1"></a>                           dplyr<span class="sc">::</span><span class="fu">group_by</span>(CHROM, POS, REF, ALT) <span class="sc">%&gt;%</span></span>
+<span id="cb314-4"><a href="#cb314-4" aria-hidden="true" tabindex="-1"></a>                           dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">frequency =</span> <span class="fu">n</span>())</span></code></pre></div>
 <pre><code>## `summarise()` has grouped output by &#39;CHROM&#39;, &#39;POS&#39;, &#39;REF&#39;. You can override
 ## using the `.groups` argument.</code></pre>
 <div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="#cb316-1" aria-hidden="true" tabindex="-1"></a><span class="co">#get variants where occurrence is 2</span></span>
 <span id="cb316-2"><a href="#cb316-2" aria-hidden="true" tabindex="-1"></a>occurrenceis2_PASS_variant <span class="ot">&lt;-</span> occurrence_PASS_variant[occurrence_PASS_variant<span class="sc">$</span>frequency <span class="sc">==</span> <span class="dv">2</span>,]</span>
 <span id="cb316-3"><a href="#cb316-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb316-4"><a href="#cb316-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get number of variants where occurrence is 2</span></span>
-<span id="cb316-5"><a href="#cb316-5" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(occurrenceis2_PASS_variant)</span></code></pre></div>
+<span id="cb316-5"><a href="#cb316-5" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">nrow</span>(occurrenceis2_PASS_variant)</span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
 </details>
 <p><br></p>
