@@ -1,0 +1,1396 @@
+---
+title: "Make graphs under R with ggplot2"
+date: "`r Sys.Date()`"
+author:
+  - name: "BiGR: Bioinformatics core facility of Gustave Roussy"
+  - name: "inspired from Pierre Gestraud course"
+email: "bigr@gustaveroussy.fr"
+output:
+  rmdformatsbigr::readthebigrdoc:  # if you'd like to have a nice theme
+  code_folding: show
+thumbnails: false
+lightbox: true
+highlight: true
+fig_caption: false
+
+# install.packages("remotes")
+# install.packages("git2r")
+# remotes::install_git("https://gitlab.com/bioinfo_gustaveroussy/bigr/rmdformatsbigr.git",
+#                      credentials=git2r::cred_user_pass("your_login", "your_password"))
+---
+
+```{r setup, include=FALSE, eval=FALSE}
+# options(width = 60);
+knitr::opts_chunk$set(
+  echo = TRUE,        # Print the code
+  eval = TRUE,        # Run command lines
+  message = TRUE,     # Print messages
+  prompt = FALSE,     # Do not display prompt
+  comment = NA,       # No comments on this section
+  warning = TRUE      # Display warnings
+)
+
+```
+<style type="text/css">
+summary {
+  display: list-item;
+}
+details:hover {
+  cursor: pointer
+}
+body {
+  text-align: justify
+}
+.column-left{
+  float: left;
+  width: 47%;
+  text-align: left;
+}
+.column-right{
+  float: right;
+  width: 47%;
+  text-align: left;
+}
+</style>
+
+# Purpose
+
+At the end of this session, you will be able to:
+
+1. Create different kinds of graphs
+1. Set titles and legends
+1. Change colors
+1. Combine plots
+1. Save plots
+
+# Data and graphs
+
+## The 80-20 rule: Graphics
+Analysis graphs:  
+Happily, 20% of effort can give 80% of a desired result (default settings for plots often give something reasonable).
+
+Presentation graphs:  
+Sadly, 80% of total effort may be required to give the remaining 20% of your final graph:
+
+* Graph title, axis and value labels
+* Color, shape, size of point symbols, line style, width of lines...
+* Legends to connect the data in the graph to interpretation
+* ...customization is almost infinite
+
+## Data
+
+To draw a graph we need data into a table format.
+A data table, or data.frame, has several rows (also called observations) and columns (also called variables). The columns of a data table can be of different types, and are named. Within a column, all values must be of the same type.
+
+For the rest of the course, we will use the `Clinical_Cohort.csv` table which you can find [there](https://github.com/gustaveroussy/training_bigr/blob/main/Make_graphs_under_R_with_ggplot2/For_Students/Clinical_Cohort_full.csv).  
+
+To load a table, we can use the [`read.table()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table) function from the R package named [`utils`](https://www.rdocumentation.org/packages/utils/versions/3.6.2):
+```{r}
+clinical_data <- utils::read.table("./Clinical_Cohort_full.csv", sep = ",", header = TRUE)
+
+```
+
+As every time you load a table for the first time in R, you have to look at what it looks like.
+For that, R provides a whole set of very useful functions.
+
+```{r}
+# display of first lines (6 by default)
+utils::head(clinical_data)
+
+# dimensions
+base::dim(clinical_data)
+
+# structure
+utils::str(clinical_data)
+
+# statistical summary
+base::summary(clinical_data)
+```
+
+## Graphs definition
+
+A graph is a visual representation of the variation of one variable (such as a series of one or more points, lines, line segments, etc.) relative to the variation of one or more other variables.  
+Represented in 2 dimensions for 2 variables, therefore along 2 axes: a horizontal axis named `x` and a vertical axis named `y`.  
+
+# R Graphics from R base
+
+R has many innate graphics capabilities that come with it. These are called [`base graphics`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2)
+ since they are technically included in the [`base`](https://www.rdocumentation.org/packages/base/versions/3.6.2)
+ package, which comes with R and is automatically loaded when you open it.  
+
+A good example of [`base graphics`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2) is the [`plot()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/plot) function, which -- you guess it -- can make some basic plots.
+For example, you can make a scatterplot of two vectors ("Age" and "OS") with the [`plot()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/plot) function:
+```{r}
+graphics::plot(x = clinical_data$Age, y = clinical_data$OS)
+
+```
+There are tons of options you can give to the [`plot()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/plot)  function, see `?plot` for a non-exhaustive, and yet still exhausting, listing of options that I won't talk about here.  
+But to give a small sampling:
+```{r}
+graphics::plot(x = clinical_data$Age, y = clinical_data$OS, 
+               type = "l", 
+               col = "darkblue", 
+               lty = 5, 
+               lwd = 1.5, 
+               main = "Correspondance between the patients' Age and their Overall Survival", 
+               sub = "A graphical test",   
+               xlab = "Age", 
+               ylab = "Overall Survival")
+
+```
+Other base graphics functions include [`hist()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/hist) to make histograms,[`boxplot()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/boxplot) to make box plots, [`barplot()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/barplot) to make bar plots, [`pie()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/pie) to make pie charts...  
+And [`lines()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/lines) to add a line on the graph, [`legend()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/legend) to add a legend...  
+More information here: http://www.sthda.com/english/wiki/r-base-graphs
+
+# R Graphics from ggplot2 R package
+
+There are packages other than [`base`](https://www.rdocumentation.org/packages/base/versions/3.6.2) that create graphics.  
+The two most popular are [`lattice`](https://www.rdocumentation.org/packages/lattice/versions/0.22-6) and [`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0).  
+To install them you simply use, for example, `install.packages("ggplot2")`.  
+In this course we'll use [`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0) exclusively.  
+There are many reasons why we will prefer [`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0) to [`base graphics`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2), but the most important are the following:
+
+* It's easier to learn, since the names of the plotting functions are more systematic.
+* It's much more popular in use.
+* It has a much better documentation system, see https://ggplot2.tidyverse.org/articles/ggplot2.html.
+
+It is also much more extensible: it's easier to add on your own graphics.
+
+## The ggplot2 syntax
+
+First of all, load the package:
+```{r}
+library(ggplot2)
+```
+
+[`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0) works also with data in [`data.frame`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame) format.
+
+A plot has 3 main components:
+
+* a dataset
+* a set of aesthetics (what we want to represent in the plot: columns of the dataset)
+* a set of layers (mainly geometries: graphical aspects)
+
+As a first plot, we represent the "Age" of patients according to their overall survival (e.g "OS") (same as that plotted with R [`base graphics`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2) before):
+```{r}
+ggplot(clinical_data,       ## data
+       aes(x = Age, y = OS) ## aesthetics
+       ) +
+  geom_point()              ## a layer of geometry
+```
+
+The [`ggplot()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/ggplot) function initiates the plot. Here we use the clinical_data data.frame with "Age" and "OS" columns as aesthetics ([`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes) function) and one layer of geometry ( [`geom_point()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_point) function) to draw points. 
+
+We add components (such as layers) to the plot with `+`. We can add as much layers as we want.  
+For example, if we want to add a line to our first plot, we add a layer with [`geom_line()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html).
+
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point() + geom_line()
+```
+
+The [`ggplot()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/ggplot) function returns a ggplot object which can be stored as a variable to be used later or be build step by step.  
+To display the plot we have to print the object, either by directly calling it in the console or applying the [`print()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/print) function.
+
+```{r}
+g <- ggplot(clinical_data, aes(x = Age, y = OS))
+g <- g + geom_point()
+g ## or print(g)
+```
+
+If several geometries are defined, they will be plotted in order, possibly hiding other layers.
+
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point(color = "red") + geom_line(linewidth = 2)
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_line(linewidth = 2) + geom_point(color = "red") 
+```
+
+> Remember: 
+We can add arguments to geometry function to customize it. Here `linewidth` allows to change the width of the line, and `color` to change the color of the points.
+
+
+## Geometries: different kinds of plots (layers)
+
+Several type of geometries are defined in [`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0) and can be classified according to the type and number of variables used in the plot (restricted list below). 
+
+* one variable
+    + continous
+        - [`geom_density()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_density)
+        - [`geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html)
+        - [`geom_freqpoly()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html?q=geom_freqpoly)
+    + discrete
+        - [`geom_bar()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_bar)
+* two variables
+    + continous X, continuous Y
+        - [`geom_point()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_point)
+        - [`geom_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html?q=geom_smooth)
+        - [`geom_text()`](https://ggplot2.tidyverse.org/articles/faq-annotation.html?q=geom_text)
+        - [`geom_line()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html)
+        - [`geom_rect()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+    + discrete X, continuous Y
+        - [`geom_col()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_bar)
+        - [`geom_boxplot()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_boxplot)
+        - [`geom_violin()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_violin)
+    + bivariate distribution
+        - [`geom_density2d()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_density_2d)
+        - [`geom_hex()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_hex)
+        - [`geom_bin_2d()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_bin_2d)
+    + continuous function
+        - [`geom_line()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html)
+        - [`geom_step()`](https://ggplot2.tidyverse.org/reference/geom_path.html)
+* three variables
+    +
+        - [`geom_contour()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_contour)
+        - [`geom_tile()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
+
+> Definition:  
+A discrete variable only allows a particular set of values, and in-between values are not included (like Sex, Pathology etc). A continuous variable can be any value in a range (heigt, weight, etc). It is when we get numbers with comma.
+The Age can be considered as both: it is a range from 0 to 120 (yes, I'm optimist!) so it is a continuous variable, but if we don't considere half year, it could be discrete (0, 1, 2, 3, 4, ... 120).
+
+> Note that layers are functions that can contain arguments allowing us to customize our graphs.
+
+### Histogram / Density
+
+Histograms and densities allow to represent distributions (number of each value of observations).  
+For these geometries, only the `x` aesthetic is mandatory.
+
+```{r}
+ggplot(clinical_data, aes(x = Age)) + geom_histogram()
+```
+
+We can adjust the number of bins or their width with `bins` and `binwidth` functions. We can also manually set the `breaks`.
+```{r}
+ggplot(clinical_data, aes(x = Age)) + geom_histogram(bins = 5) # 5 groups (rectangles)
+ggplot(clinical_data, aes(x = Age)) + geom_histogram(binwidth = 10) # the width of each group is 10 (here 10 years for the Age)
+ggplot(clinical_data, aes(x = Age)) + geom_histogram(breaks = c(0, 30, 50, 60, 80, 85, 90))
+```
+
+*Exercice :*  
+Draw a density graph on the "Age" of the clinical_data dataset.
+
+<details>
+<summary>Tip</summary>
+The result should looks like:
+
+```{r, echo = FALSE}
+ggplot(clinical_data, aes(x = Age)) + geom_density()
+```
+</details>
+<br>
+
+<details>
+<summary>Answer</summary>
+```{r}
+ggplot(clinical_data, aes(x = Age)) + geom_density()
+```
+</details>
+<br>
+
+### Bar graph (geom_bar versus geom_col)
+
+There are two types of bar charts: [`geom_bar()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_bar) makes the height of the bar proportional to the number of cases in each group (similar to histograms but for discrete variables). If you want the heights of the bars to represent values in the data, use [`geom_col()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_bar) instead.
+
+#### geom_bar()
+
+```{r}
+ggplot(clinical_data, aes(x = Sex)) + geom_bar()
+```
+[`geom_bar()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_bar) counts the number of female and male patients in the dataset.
+
+#### geom_col()
+
+```{r}
+ggplot(clinical_data[1:2,], aes(x = Sex, y = Age)) + geom_col()
+```
+
+[`geom_col()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_bar) represent the value in the data. To draw this plot, I selected the 2 first patients on the dataset, one male patient of 87.98yo and one female patient of 73.35yo.
+```{r}
+clinical_data[1:2, c("Sex", "Age")]
+```
+
+*Question :*  
+What does y value correspond to, if I give my entire dataset to [`geom_col()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_bar)? (The value "F" and "M" are represented several times, so we have several "Age" values for each "Sex" category)  
+
+<details>
+<summary>Answer</summary>
+```{r, echo=FALSE, eval=TRUE}
+ggplot(clinical_data, aes(x = Sex, y = Age)) + geom_col()
+```
+It makes the sum of all the ages for each category of Sex! Not very interesting...  
+To check that, we can compute these sums:
+```{r}
+sum(clinical_data[clinical_data$Sex == "F", "Age"])
+sum(clinical_data[clinical_data$Sex == "M", "Age"])
+```
+
+Be careful when you make plots, sometimes R don't return an error, but it could to not give you what you want!
+</details>
+<br>
+
+### Boxplot / Violinplot /Jitter
+
+Boxplots and Violinplot are graphs summarising a set of data, where the shape shows how the data is distributed.  
+Boxplots show quartiles of the data (0% to 25% of the data correspond to the first quartile; 25% to 50% correspond to the second quartile, etc). A rectangle is drawn to represent the second and third quartiles, usually with a horizontal line inside to indicate the median value (e.g. 50%). The lower and upper quartiles are shown as vertical lines above and below the rectangle.  
+For violinplot, the shape shows the number of observations for each values.  
+Boxplots are drawn by [`geom_boxplot()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_boxplot); violin plots are drawn with [`geom_violin()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_violin). 
+
+```{r}
+ggplot(clinical_data, aes(x = Sex, y = Age)) + geom_boxplot()
+```
+
+
+```{r}
+ggplot(clinical_data, aes(x = Sex, y = Age)) + geom_violin()
+```
+
+Jitter draws directly each values by points.
+```{r}
+ggplot(clinical_data, aes(x = Sex, y = Age)) + geom_jitter()
+```
+
+*Exercice :*  
+Draw a violinplot on the "Sex" and "Age" of the clinical_data dataset, with values too (shape and points).
+
+<details>
+<summary>Answer</summary>
+```{r}
+ggplot(clinical_data, aes(x = Sex, y = Age)) + geom_violin() + geom_jitter()
+```
+</details>
+<br>
+
+### Scatterplots
+
+Scatterplots are drawn by the [`geom_point()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_point) layer. That is the first plot that we saw at the beginning of this course.
+
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point()
+```
+
+
+## More complex plot: aes()
+
+### Aesthetics basics
+
+Aesthetics are the set of visual properties of the plot mapped to variables or set to fixed values. 
+
+We can define several aesthetics for a plot such as:
+
+* `x`
+* `y`
+* `z` 
+* `color`
+* `fill`
+* `size`
+* `text`
+* `label`
+* `shape`
+* `linetype`
+* `alpha`
+* `group`
+
+Each type of geometry uses some of the above aesthetics.
+
+The aesthetics define inside the [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes) function will refer to columns of the data.frame used, and allow us to add a third information on the graph.
+
+### Color and fill
+
+`color` and `fill` aesthetics can be mapped to continuous or discrete variables, resulting on (respectively) a gradient or a palette of colors with default values (blue gradient or rainbow colors).
+Depending on the geometry used, we can specify `color`, `fill` or both.
+
+#### Scatterplot
+
+So, if we want to color the points of the scatterplot according to another column, we add the `color` aesthetic in [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes) (a gradient of colors is automatically chosen):
+```{r}
+# palette scale: here 2 colors for Sex
+ggplot(clinical_data, aes(x = Age, y = OS, color = Sex)) + geom_point()
+# gradient scale for Age
+ggplot(clinical_data, aes(x = Age, y = OS, color = Age)) + geom_point()
+```
+
+
+If we want to define the color for data, it must be defined outside [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes).  
+For example, if we want to color all the points in blue, we define the color aesthetic outside the [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes) function.
+
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point(color = "blue") 
+
+```
+
+
+*Question :*  
+What happens if I set `color = "blue"` inside the [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes) function?
+```{r, eval = FALSE}
+ggplot(clinical_data, aes(x = Age, y = OS, color = "blue")) + geom_point() 
+```
+
+<details>
+<summary>Answer</summary>
+If we try to define the color as "blue" inside the [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes), [`ggplot()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/ggplot) will map the color to a variable with only contains the word "blue" and set a default color to it.
+
+```{r, echo = FALSE}
+ggplot(clinical_data, aes(x = Age, y = OS, color = "blue")) + geom_point() 
+```
+</details>
+<br>
+
+#### Histogram and boxplot
+
+Now, if we want to color the bar of the histogram according to another column, we add the `fill` aesthetic in [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes) (a palette of colors is automatically chosen).
+
+*Exercice :*  
+Draw again the histogram of the "Age" of the clinical_data dataset, but here according to the "Sex" thanks to the `fill` aesthetic.
+
+<details>
+<summary>Tip</summary>
+The previous histogram is:
+```{r, eval = FALSE, warning = FALSE}
+ggplot(clinical_data, aes(x = Age)) + geom_histogram()
+```
+Now add the `fill` aesthetic in [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes) for "Sex".
+</details>
+<br>
+
+<details>
+<summary>Answer</summary>
+```{r, warning = FALSE}
+ggplot(clinical_data, aes(x = Age, fill = Sex)) + geom_histogram()
+```
+</details>
+<br>
+
+Now, if we want to color the lines of the bar of the histogram according to another column, we add the `color` aesthetic in [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes) (a palette of colors is automatically chosen).
+
+*Exercice :*  
+Draw again the histogram of the "Age" of the clinical_data dataset, but here according to the "Sex" thanks to the `color` aesthetic.
+
+<details>
+<summary>Answer</summary>
+```{r}
+ggplot(clinical_data, aes(x = Age, color = Sex)) + geom_histogram()
+```
+
+
+
+</details>
+<br>
+
+*Exercice :*  
+Draw again the previous boxplot of the "Age" according to the "Sex", and according to the "Death_or_alive" status, thanks to the `fill` aesthetic.
+
+<details>
+<summary>Tip</summary>
+The previous boxplot is:
+```{r, eval = FALSE}
+ggplot(clinical_data, aes(x = Sex, y = Age)) + geom_boxplot()
+```
+
+Now add the `fill` aesthetic in [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes) for "Death_or_alive".
+</details>
+<br>
+
+<details>
+<summary>Answer</summary>
+```{r}
+ggplot(clinical_data, aes(x = Sex, y = Age, fill = Death_or_alive)) + geom_boxplot()
+
+```
+</details>
+<br>
+
+Similar to histogram, `color` can be used to color the lines of the boxplot instead of the total box.
+
+We can combine `fill` and `color`, but I think that `color` is pretty difficult to reads for histogram and boxplot.
+```{r}
+ggplot(clinical_data, aes(x = Sex, y = Age, fill = Death_or_alive, color = Hypertension)) + geom_boxplot()
+```
+
+### Point shapes
+
+The shapes of point is controlled by the `shape` aesthetic.  
+If we want to change the shape of the points of the scatterplot according to another column, we add the `shape` aesthetic in [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes). 
+
+A palette of shape is automatically chosen. 25 different shapes are available, defined by a number. The hollow shapes (0–14) have a border determined by color; the solid shapes (15–18) are filled with color; the filled shapes (21–24) have a border of color and are filled with fill. 
+```{r, eval = TRUE, echo = FALSE}
+shapes <- data.frame(
+  shape = c(0:19, 22, 21, 24, 23, 20),
+  x = 0:24 %/% 5,
+  y = -(0:24 %% 5)
+)
+ggplot(shapes, aes(x, y)) + 
+  geom_point(aes(shape = shape), size = 5, fill = "red") +
+  geom_text(aes(label = shape), hjust = 0, nudge_x = 0.15) +
+  scale_shape_identity() +
+  expand_limits(x = 4.1) +
+  scale_x_continuous(NULL, breaks = NULL) + 
+  scale_y_continuous(NULL, breaks = NULL)
+```
+
+For example, we can plot the shape of "Death_or_alive" column on the scatterplot:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS, shape = Death_or_alive)) + geom_point()
+```
+
+To change the shape, use the [`scale_shape_manual()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_manual) function, like:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS, shape = Death_or_alive)) + geom_point() + scale_shape_manual(values=c(3, 15)) #have to set 2 values (3 and 15) because Death_or_alive has 2 different values
+```
+
+*Question :*
+Can we combine `color` (or `fill`) and `shape` inside [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes)?
+
+<details>
+<summary>Tip</summary>
+Here is a graph:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point()
+```
+
+Now add `color` and `shape` inside [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes), with "Sex" and "Death_or_alive" for example.
+</details>
+<br>
+
+<details>
+<summary>Answer</summary>
+Of course we can combine them!
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS, color = Sex, shape = Death_or_alive)) + geom_point()
+```
+</details>
+<br>
+
+
+### Line types
+
+The type of lines are specified by a name or a number (from 1 to 6).
+
+```{r, echo = FALSE, eval = TRUE}
+d <- data.frame(lt=c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash"))
+ggplot() + 
+  scale_y_discrete(name="linetype") + 
+  scale_linetype_identity() + 
+  geom_segment(data=d, mapping=aes(x=0, xend=1, y=lt, yend=lt, linetype=lt)) + 
+  theme_minimal() + 
+  scale_x_continuous(breaks = NULL, name = "") + 
+  theme(panel.grid.major = element_blank())
+```
+
+For example, we can use different types of line for each "Sex" value on the line plot:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS, linetype = Sex)) + geom_line()
+```
+
+To change the linetype, use the [`scale_linetype_manual()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_manual) function, like:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS, linetype = Sex)) + geom_line() + scale_linetype_manual(values=c("twodash", "dotted")) #have to set 2 values ("twodash" and "dotted") because Sex has 2 different values
+```
+
+## Computing on aesthetics
+
+[`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0) is able to directly compute new variables from existing ones inside [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/aes).  
+Example, to plot the ending age of patients (Age + OS) according to the "Age" (of diagnostic), we can do:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = Age + OS)) + geom_point()
+```
+
+## Customization plots (layers and aes)
+
+### Title, subtitle, caption and axis names
+
+We can control the plot title, subtitle, caption and axes labels with the [`labs()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/labs) function.
+
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) +
+  geom_point() + 
+  labs(title = "This is a title", subtitle = "and this is a subtitle", 
+       caption = "and a caption", tag = "Fig. 1", x = "x label", y = "y label")
+```
+Other way  to code some of these features:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) +
+  geom_point() + 
+  ggtitle("This is a \n new title", subtitle = "and this is a \n new subtitle") +
+  xlab("x label") + 
+  ylab("y label")
+
+```
+
+> Note: to set a title on 2 lines add the line separator `\n` in your text.
+
+### Axis / Scales
+
+#### Scales transformations
+
+A series of transformation (log, square root) is implemented for scales, see [`scale_x_log10()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_continuous), [`scale_y_log10()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_continuous), [`scale_x_sqrt()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_continuous), [`scale_y_sqrt()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_continuous) and related function. 
+
+We can revert a scale with [`scale_x_reverse()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_continuous) or [`scale_y_reverse()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_continuous).
+
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point() + scale_y_log10()
+ggplot(clinical_data, aes(x = Sex, fill = Sex)) + geom_bar() + scale_y_reverse()
+```
+
+#### Coordinate system
+
+Flip axes with [`coord_flip()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/coord_flip).
+
+```{r}
+ggplot(clinical_data, aes(x = Sex, fill = Sex)) + geom_bar() + coord_flip()
+```
+
+#### Discrete scales
+
+Discrete scale are handled by [`scale_<axis>_discrete()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_x_discrete). We can change the order of levels, restrict them or add some new ones.
+
+```{r}
+# change order of levels
+ggplot(clinical_data, aes(x = Sex)) + geom_bar() + scale_x_discrete(limits = c("F", "M"))
+# restrict levels: plot only female
+ggplot(clinical_data, aes(x = Sex)) + geom_bar() + scale_x_discrete(limits = c("F"))
+# add new level
+ggplot(clinical_data, aes(x = Sex)) + geom_bar() + scale_x_discrete(limits = c("F", "M", "Other"))
+```
+
+#### Continuous scales
+
+Continuous scale are handled by [`scale_<axis>_continuous()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_continuous).  
+We can change the number of values on the axis:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point() + scale_y_continuous(breaks=seq(0, 50, by=5))
+```
+
+We can add a second axis, thanks to the the `sec.axis` argument of the [`scale_<axis>_continuous()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_continuous) function. 
+The second axis can be identical to the first one, or a computation from the first one:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + 
+  geom_point() + 
+  scale_y_continuous(name = "OS (in years)", #name of the first axis
+                     sec.axis = sec_axis(transform=~.*12, name="OS (in months)")) #add a second axis
+```
+
+*Exercice :*  
+Redo the previous graph without transformation of the second axis (the second axis have to be the same as the first one).
+
+<details>
+<summary>Tip</summary>
+You have to keep the `transform` argument to give it the data to use to trace the axis.
+</details>
+<br>
+
+<details>
+<summary>Answer</summary>
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + 
+  geom_point() + 
+  scale_y_continuous(name = "OS (in years)",
+                     sec.axis = sec_axis(transform=~.))
+```
+</details>
+<br>
+
+#### Zooms
+
+There are two ways to zoom in/out a plot depending on whether the data are clipped or not:  
+* [`xlim()`](https://ggplot2.tidyverse.org/reference/lims.html) and [`ylim()`](https://ggplot2.tidyverse.org/reference/lims.html) performed a zoom in the data (removes unseen data points)  
+* [`coord_cartesian()`](https://ggplot2.tidyverse.org/reference/coord_cartesian.html) performed a zoom in the plot without removing data (preferred)  
+
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point()
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point() + xlim(c(50, 80)) #be careful: remove data before 50 and after 80 to zoom
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point() + coord_cartesian(xlim = c(50, 80)) #just make a zoom on 50 to 80 x axis data
+```
+
+
+### Colors
+
+In R, colors can be specified either by name (e.g `col = "red"`) or as a hexadecimal RGB triplet (such as `col = "#FFCC00"`). You can also use other color systems such as ones taken from the [`RColorBrewer`](https://www.rdocumentation.org/packages/RColorBrewer/versions/1.1-3/topics/RColorBrewer) package.
+
+#### Manual colors
+
+When we need to indicate a color to R, we can mention certain colors in full such as "red" or "blue". The list of colors recognized by R is available at http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf.
+
+We can set manually the colors with [`scale_fill_manual()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_manual) and [`scale_color_manual()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_manual) depending on if you are using `fill` or `color` in aesthetic in [`ggplot()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/ggplot) function.
+
+```{r}
+ggplot(clinical_data, aes(x = Sex, fill = Death_or_alive)) + 
+  geom_bar() + 
+  scale_fill_manual(values = c("dead" = "cyan4", "alive" = "deeppink3")) # "dead" and "alive" values of the "Death_or_alive" column set in the fill function
+```
+
+In computing, colors are usually coded as Red/Green/Blue (see https://en.wikipedia.org/wiki/RGB_color_model) and represented by a 6-character hexadecimal code, preceded by the symbol `#`. This code is recognized by R, we can for example indicate "#FF0000" for the color red. The hexadecimal code of the different colors can be easily obtained on the internet, many sites being devoted to color palettes.  
+Personally, I like this one: https://htmlcolorcodes.com/
+
+```{r}
+ggplot(clinical_data, aes(x = Sex, fill = Death_or_alive)) + 
+  geom_bar() + 
+  scale_fill_manual(values = c("dead" = "#da330f", "alive" = "#12c179")) # "dead" and "alive" are the values of the "Death_or_alive" column set in the fill function
+```
+
+
+#### Palettes
+
+R natively provides some continuous color palettes that we can use by their name, such as `rainbow`, `heat.colors`, `terrain.colors`, `topo.colors` and `cm.colors`. 
+But the [`RColorBrewer`](https://www.rdocumentation.org/packages/RColorBrewer/versions/1.1-3/topics/RColorBrewer) package is an unavoidable tool to manage colors with R. It offers several color palettes (see https://r-graph-gallery.com/38-rcolorbrewers-palettes.html).
+
+If you use [`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0), the [`RColorBrewer`](https://www.rdocumentation.org/packages/RColorBrewer/versions/1.1-3/topics/RColorBrewer) palettes are directly available via the [`scale_fill_brewer()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_colour_brewer) and [`scale_colour_brewer()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/scale_colour_brewer) functions:
+
+```{r}
+ggplot(clinical_data, aes(x = Sex, fill = NSCLC_type)) + 
+  geom_bar() + 
+  scale_fill_brewer(palette = "Dark2")
+
+ggplot(clinical_data, aes(x = Sex, fill = NSCLC_type)) + 
+  geom_bar() + 
+  scale_fill_brewer(palette = "Paired")
+
+```
+> Note:  [`RColorBrewer`](https://www.rdocumentation.org/packages/RColorBrewer/versions/1.1-3/topics/RColorBrewer) palettes are only implemented for discrete variables.
+
+#### Gradients
+
+Gradients ar used to color continues variables.  
+Several function are used to set the gradients properties, depending on the number of color to set (2, 3 or n):
+```{r}
+#2 colors
+ggplot(clinical_data, aes(x = Age, y = OS, color = OS)) + 
+  geom_point() + 
+  scale_color_gradient(low = "green", high = "red")
+#3 colors
+ggplot(clinical_data, aes(x = Age, y = OS, color = OS)) + 
+  geom_point() + 
+  scale_color_gradient2(low = "green", mid = "blue", high = "red", midpoint = 20)
+#n colors
+ggplot(clinical_data, aes(x = Age, y = OS, color = OS)) + 
+  geom_point() + 
+  scale_color_gradientn(colors = c("blue", "red", "green", "yellow"))
+```
+
+We can get more control on the gradient with the `breaks` and `limits` arguments.
+
+#### Other palettes
+
+Other palettes exist, in particular those of the Viridis family whose colors are distinguished by the most common forms of color blindness. They are also implemented in gpplot2 via the functions [`scale_fill_viridis_c()`](https://ggplot2.tidyverse.org/reference/scale_viridis.html) and [`scale_colour_viridis_c()`](https://ggplot2.tidyverse.org/reference/scale_viridis.html) for continuous variables and [`scale_fill_viridis_d()`](https://ggplot2.tidyverse.org/reference/scale_viridis.html) and [`scale_colour_viridis_d()`](https://ggplot2.tidyverse.org/reference/scale_viridis.html) for discrete variables.
+These functions can take different values in the `option` argument: "magma", "inferno", "plasma", or "viridis".
+
+```{r}
+#for continuous data
+ggplot(clinical_data, aes(x = Age, y = OS, color = OS)) + 
+  geom_point() + 
+  scale_color_viridis_c(option="magma")
+
+#for discrete data
+ggplot(clinical_data, aes(x = Sex, fill = NSCLC_type)) +
+  geom_bar() +
+  scale_fill_viridis_d(option="viridis")
+```
+
+### Lines
+
+#### Line types
+
+To change the type and the size of the line, we can use the `linetype` and `linewidth` options:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_line(linetype="longdash", linewidth = 1)
+```
+
+#### Add Reference lines
+
+We can draw some lines on the plot by specifying their slope and intercept to [`geom_abline()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_abline) (like in a*x+b mathematical function).  
+To draw horizontal and vertical lines, use [`geom_hline()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_abline) and [`geom_vline()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_abline) respectively.
+
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point() + geom_abline(slope = 0.05, intercept = 2)
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point() + geom_hline(yintercept =  20, linetype = "dashed")
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point() + geom_vline(xintercept =  45, color="red")
+```
+
+As previously, we can change the `linetype`, `size` and `color` of the line.
+
+### Points
+
+#### Transparency
+
+The transparency is managed by the `alpha` aesthetic. It can be mapped to a continuous variable or set with a value between 0 (totally transparent) and 1 (totally opaque).
+
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point(alpha = 0.1)
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point(alpha = 0.5)
+```
+
+#### Colors, shape and size
+
+As previously, we can change the `shape`, `size` and `color` of the line.
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point(alpha = 0.5, shape = 17, color = "darkgreen", size = 3)
+```
+
+
+#### Text and labels
+
+Text can be written with [`geom_text()`](https://ggplot2.tidyverse.org/reference/geom_text.html) or [`geom_label()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_label) (set a box around the text).
+
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point()
+ggplot(clinical_data, aes(x = Age, y = OS, label = Subject_number)) + geom_text()
+ggplot(clinical_data, aes(x = Age, y = OS, label = Subject_number)) + geom_label()
+```
+
+To plot dots and labels:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS, label = Subject_number)) + geom_point() + geom_text(nudge_x = 3, nudge_y = 1)
+```
+`nudge_x` and `nudge_y` allow to shift labels to the right and up.
+
+We can add label manually by:
+```{r}
+my_labels <- data.frame(my_specific_labels=c("It goes UP!","It goes DOWN!"))
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point() + geom_label(
+    data = my_labels,
+    aes(label = my_specific_labels), 
+    x = c(35,75),                        # x coordinates of each label
+    y = c(25,20),                        # y coordinates of each label
+    label.padding = unit(0.55, "lines"), # rectangle size around label (let more space)
+    label.size = 0.35,                   # size text
+    color = "black",                     # color text
+    fill = c("#54a30a", "#b01515")       # color box
+  )
+```
+
+Or to add one text:
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS)) + geom_point() + 
+  geom_text(data = NULL, 
+            x = 80,                         # x coordinates of the text
+            y = 35,                         # y coordinates of the text
+            label = "This is AWSOME!!",     # the text
+            fontface=3,                     # italic
+            size=8,                         # size text
+            color = "#b01515",              # color text
+            angle = 320)                    # angle text
+```
+
+
+### Bars
+
+#### Bar position
+
+By default the position of bars are stacked, but we can change these `position` to `dodge` (side by side) or `fill` (scale to 1, similar to 100%).
+
+```{r}
+ggplot(clinical_data, aes(x = Sex, fill = Death_or_alive)) + geom_bar(position = "stack") #default
+ggplot(clinical_data, aes(x = Sex, fill = Death_or_alive)) + geom_bar(position = "dodge")
+ggplot(clinical_data, aes(x = Sex, fill = Death_or_alive)) + geom_bar(position = "fill")
+```
+
+#### Labeling on bars
+
+Similar to [`geom_point()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/geom_point) we can add label on each bar.
+
+Here an example to add the number counted of `dead` or `alive` patients by ggplot:
+```{r}
+ggplot(clinical_data, aes(x = Sex, fill = Death_or_alive)) + 
+  geom_bar(position = "stack") + 
+  geom_text(aes(label = stat(count)), stat = "count", position = position_stack(vjust = 0.5))
+```
+
+Note that you have to specify the position of labels depending on the position of the bar ("stack", "dodge" or "fill") thanks to the [`position_stack()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/position_stack), [`position_dodge()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/position_dodge) or [`position_fill()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/position_stack) functions.
+The `vjust` and `width` option allow to place labels more precisely, a little up/down/right/left related to the general position given by the `position*` functions.
+
+```{r}
+ggplot(clinical_data, aes(x = Sex, fill = Death_or_alive)) + 
+  geom_bar(position = "dodge") + 
+  geom_text(aes(label = stat(count)), stat = "count", position = position_dodge(width = 0.9), vjust = 1.5)
+
+ggplot(clinical_data, aes(x = Sex, fill = Death_or_alive)) + 
+  geom_bar(position = "fill") + 
+  geom_text(aes(label = stat(count)), stat = "count", position = position_fill(vjust = 0.5))
+```
+
+### Themes
+
+Every aspect not related to the data of the plot can be customized. We can change the background color, the font sizes, the legend position... The set of characteristics of a plot is called a `theme` and can be changed by the [`theme()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/theme) function. Some themes are predefined, but we can customize every single element by ourselves from scratch or from a predefined theme.
+
+Two predefined themes are useful for publications: [`theme_bw()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/ggtheme) and [`theme_classic()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/ggtheme).
+```{r}
+ggplot(clinical_data, aes(x = Sex)) + geom_bar() + theme_bw()
+ggplot(clinical_data, aes(x = Sex)) + geom_bar() + theme_classic()
+```
+
+Example of changing a theme from a predefined theme:
+```{r}
+ggplot(clinical_data, aes(x = Sex, fill = Sex)) + 
+  geom_bar() + 
+  theme_classic() + 
+  theme(
+    axis.line.x.bottom = element_line(color="blue"),
+    axis.line.y.left = element_line(color="darkviolet"),
+    axis.title = element_text(color = "darkorange3", face = "bold", size=20)
+  )
+```
+
+Example of creating a theme from scratch:
+```{r}
+ggplot(clinical_data, aes(x = Sex, fill = Sex)) + geom_bar() + theme(
+  legend.position = "bottom", 
+  panel.background = element_rect(fill = "white", color = "gray50"), 
+  axis.text = element_text(color = "blue", face = "bold"), 
+  axis.text.x = element_text(angle = 60, hjust = 1)
+  )
+```
+
+You can also create your own theme, to avoid copying/pasting all the customization on each of your graphs:
+```{r}
+# creation of the theme
+mytheme <- theme_classic() + # you can start from an existing theme to set up some basic elements
+           theme(plot.title = element_text(colour = "firebrick3", size = rel(2)),
+                 plot.background = element_rect(fill = "gray70"),
+                 legend.position = "left", 
+                 legend.box.background = element_rect(color = "darkblue"),
+                 legend.title = element_text(face = "bold", color = "darkslateblue"),
+                 legend.text = element_text(size = 8, colour = "deeppink2",face = "bold")
+                 )
+
+#apply the theme
+ggplot(clinical_data, aes(x = Sex, fill = Sex)) + geom_bar() + labs(title = "My ugly plot!!") + mytheme
+```
+There are far too many [`theme`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/theme) elements built into the [`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0) library to mention here, but you can find a complete list in the theme documentation: https://ggplot2.tidyverse.org/reference/theme.html
+
+
+# Facetting
+
+A key feature of [`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0) is its ability to easily produce faceted plot, where each panel represents a subset of the data. 
+
+## Facetting on one variable
+
+```{r, warning = FALSE}
+ggplot(clinical_data, aes(x = Age)) + geom_histogram() + facet_wrap(~ Sex)
+```
+
+[`facet_wrap()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/facet_wrap) tries to fit all the panels in a rectangle, automatically choosing the number of rows and columns. We can specify the number of rows/columns with `nrow` and `ncol` options.
+
+```{r, warning = FALSE}
+ggplot(clinical_data, aes(x = Age)) + geom_histogram() + facet_wrap(~ Sex, ncol = 1)
+```
+
+By default, all panels have the same scales. We can set free scales for each panel by setting the `scales` parameter.
+
+```{r, warning = FALSE}
+ggplot(clinical_data, aes(x = Age)) + geom_histogram() + facet_wrap(~ Sex, scales = "free_y")
+```
+
+Be careful, here plots are difficult to compare between Sex because scales are different now.
+
+## Faceting on two variables
+
+Faceting on two variables can be achieved by [`facet_wrap()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/facet_wrap) or by [`facet_grid()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/facet_grid) with two different behaviors. Note that [`facet_wrap()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/facet_wrap) will drop the non-existing combinations of levels where [`facet_grid()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/facet_grid) produces empty panels for them.
+
+```{r, warning = FALSE}
+ggplot(clinical_data, aes(x = Age, color = Initial_stage)) + geom_histogram() + facet_wrap(Sex ~ Initial_stage, ncol = 4)
+ggplot(clinical_data, aes(x = Age, color = Initial_stage)) + geom_histogram() + facet_grid(Sex ~ Initial_stage)
+```
+
+We have no data for male patient in grade I, so with [`facet_wrap()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/facet_wrap) we have no plot, but with [`facet_grid()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/facet_grid) we have empty plot.
+
+> Note that you can facet with more than 2 variables:
+ggplot(clinical_data, aes(x = Age, color = Initial_stage)) + geom_histogram() + facet_grid(Sex ~ Initial_stage+NSCLC_type)
+
+## Change labels into facet
+
+Facet labels can be modified using the option `labeller`, which should take a function.
+
+In the following R code, facets are labelled by combining the name of the grouping variable with group levels. The `label_both` function is used.
+```{r, warning = FALSE}
+ggplot(clinical_data, aes(x = Age, color = Initial_stage)) + geom_histogram() + facet_grid(Sex ~ Initial_stage, labeller = label_both)
+```
+
+> Note that you can facet with more than 2 variables, you should set `labeller` to `label_context`:
+ggplot(clinical_data, aes(x = Age, color = Initial_stage)) + geom_histogram() + facet_grid(Sex ~ Initial_stage+NSCLC_type, labeller = label_context)
+
+More information about labeling in facet: https://www.datanovia.com/en/blog/how-to-change-ggplot-facet-labels/
+
+# Combine plots with patchwork
+
+So far, we've used facets to split our chart into multiple viewports. However, this is limited to plotting the same variables from the same dataset.
+
+The [`patchwork()`](https://www.rdocumentation.org/packages/patchwork/versions/1.3.0) package (installation by `devtools::install_github("thomasp85/patchwork")`) makes it easy to arrange separate ggplots in the same frame with `+` (arrange the graphs next to each other), `/` (arrange one graph on top of the other), `()` (group this arrangement of graphs) as if you were writing an equation.
+
+
+```{r, warning = FALSE}
+library(patchwork)
+p1 <- ggplot(clinical_data, aes(x = Age)) + geom_histogram() + labs(title = "Plot1")
+p2 <- ggplot(clinical_data, aes(x = Sex)) + geom_bar() + labs(title = "Plot2")
+p3 <- ggplot(clinical_data, aes(x = Initial_stage)) + geom_bar() + labs(title = "Plot3")
+
+p1 + p2
+p1 + p2 + p3
+p1 / p2
+p1 / (p2 + p3)
+p1 + (p2 / p3)
+```
+
+It is often necessary to add general titles, captions, tags, etc. to a composition. This can be achieved by adding a [`plot_annotation()`](https://www.rdocumentation.org/packages/patchwork/versions/1.3.0/topics/plot_annotation) to the patchwork:
+```{r, warning = FALSE}
+p1 + p2 + plot_annotation(title = 'Distributions of clinical data',
+                          subtitle = 'These 2 plots will reveal yet-untold secrets about our beloved data-set',
+                          caption = 'Disclaimer: None of these plots are insightful',
+                          tag_levels = 'A', tag_prefix = 'Fig. ', 
+                          theme = theme(plot.title = element_text(color = "red"))
+                          )
+```
+
+To add a theme to the whole combined graph, we can use the [`theme()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/theme) function (as usual) but with the `&` symbol:
+```{r, warning = FALSE}
+p1 + p2 + plot_annotation(title = 'Distributions of clinical data',
+                          subtitle = 'These 2 plots will reveal yet-untold secrets about our beloved data-set',
+                          caption = 'Disclaimer: None of these plots are insightful',
+                          tag_levels = 'A', tag_prefix = 'Fig. ', 
+                          theme = theme(plot.title = element_text(color = "red")),
+                          ) & theme(plot.tag = element_text(color = "orange"),
+                                    plot.title = element_text(colour = "red"),
+                                    axis.line.x.bottom = element_line(color="blue"),
+                                    axis.line.y.left = element_line(color="darkviolet")
+                              )
+```
+
+Here we presented the most important features to you, however [`patchwork()`](https://www.rdocumentation.org/packages/patchwork/versions/1.3.0) allows to do more customization: give more space to certain plots rather than others, display one plot superimposed on another (for example in the corner of another plot), merge legends,...  
+Look the official documentation of [`patchwork()`](https://www.rdocumentation.org/packages/patchwork/versions/1.3.0) for more information: https://patchwork.data-imaginist.com/index.html
+
+# Save graphs
+
+In RStudio, there are many options available to you to save your figures.  
+You could copy them to the clipboard, but it is preferable to export them as a file type of your choice (or export them as any file type (png, jpg, tiff, pdf, etc).  
+You can do it by the RStudio interface with the Export button on the menu in Plots panel (lower right panel), but also by command line.
+
+[`ggsave()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/ggsave) is a useful command that saves directly to your working directory (or the absolute path if you give it in the `filename`) and allows you to specify the name of your new file, the dimensions of the plot (with `width` and `height` options), the resolution (with `res` option), etc.
+
+```{r, eval = FALSE}
+ggsave(filename = "myplot_p1_with_ggsave.png", plot = p1, width = 3, height = 3)
+ggsave(filename = "myplot_p1_with_ggsave.pdf", plot = p1, width = 10, height = 3)
+```
+[`ggsave()`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0/topics/ggsave) allow to save only one graph, so in cases where you produce many graphs (combined or not by patchwork), you should use [`jpeg()`](https://www.rdocumentation.org/packages/grDevices/versions/3.4.1/topics/png), [`png()`](https://www.rdocumentation.org/packages/grDevices/versions/3.4.1/topics/png), [`tiff()`](https://www.rdocumentation.org/packages/grDevices/versions/3.4.1/topics/png), [`bmp()`](https://www.rdocumentation.org/packages/grDevices/versions/3.4.1/topics/png) or [`pdf()`](https://www.rdocumentation.org/packages/grDevices/versions/3.6.2/topics/pdf) as follow:
+
+1. Specify files to save your image using one of the function above. Additional argument indicating the width and the height of the image can be also used.
+2. Create the plot (or plot it if it is already created).
+3. Close the file with dev.off(). Note that we need to call this function after all the plotting, to save the file and return control to the screen.
+
+
+```{r, eval = FALSE}
+pdf(file ="myplot_p1.pdf", width = 3, height = 3)
+print(p1)
+dev.off()
+
+#use patchwork to combine plots
+png(file ="myplot_p1_p2.png", width = 600, height = 300)
+print(p1 + p2 + plot_annotation(title = "These graphs were patchworked"))
+dev.off()
+
+```
+
+# Final Exercises
+
+The exercises use the same dataset that has been used until now, and need only [`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0), [`patchwork()`](https://www.rdocumentation.org/packages/patchwork/versions/1.3.0) and saving functions.  
+Remember, draw your graph step by step.
+
+*Question 1A :*  
+Redo this plot:
+
+```{r, echo = FALSE}
+ggplot(clinical_data, aes(x = NSCLC_type , fill = Initial_stage)) + geom_bar()
+```
+
+<details>
+<summary>Answer</summary>
+```{r}
+ggplot(clinical_data, aes(x = NSCLC_type , fill = Initial_stage)) + geom_bar()
+```
+</details>
+<br>
+
+*Question 1B :*  
+Change the code of the question 1A to change the main title, axis name and flip the graph, to draw this plot:
+
+```{r, echo = FALSE}
+ggplot(clinical_data, aes(x = NSCLC_type , fill = Initial_stage)) + 
+  geom_bar() + 
+  coord_flip() + 
+  labs(title = "Distribution of the NSCLC type by Initial stage", x = "", y = "Count")
+    
+```
+
+<details>
+<summary>Answer</summary>
+```{r}
+ggplot(clinical_data, aes(x = NSCLC_type , fill = Initial_stage)) + 
+  geom_bar() + 
+  coord_flip() + 
+  labs(title = "Distribution of the NSCLC type by Initial stage", x = "", y = "Count")
+```
+</details>
+<br>
+
+*Question 1C :*  
+Adapt the code of the question 1B to change the background color, draw axis, order "NSCLC_type" by alphabetical order, and change bar color, to draw this plot:
+
+```{r, echo = FALSE}
+# get NSCLC type in alphabetical order
+NSCLC_ordered <- sort(unique(clinical_data$NSCLC_type), decreasing = TRUE)
+
+# draw plot
+ggplot(clinical_data, aes(x = NSCLC_type , fill = Initial_stage)) + 
+  geom_bar() + 
+  coord_flip() + 
+  labs(title = "Distribution of the NSCLC type by Initial stage", x = "", y = "Count") +
+  theme_classic() +
+  scale_x_discrete(limits = NSCLC_ordered) +
+  scale_fill_manual(values = c("I" = "#f39c12", "II" = "#117a65", "III" = "#2980b9", "IV" = "#884ea0"))
+    
+```
+
+Colors doesn't mater (just change them), but if you want to get the same as mine: #f39c12, #117a65, #2980b9 and #884ea0.
+<details>
+<summary>Tip</summary>
+To get the alphabetical order, you can use the [`unique()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/unique) function  (`?unique`) to get unique values from a vector (of "NSCLC_type" values), then you can use the [`sort()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sort) function with its `decreasing` argument  (`?sort`).
+
+</details>
+<br>
+
+<details>
+<summary>Answer</summary>
+```{r}
+# get NSCLC type in alphabetical order
+NSCLC_ordered <- sort(unique(clinical_data$NSCLC_type), decreasing = TRUE)
+
+# draw plot
+ggplot(clinical_data, aes(x = NSCLC_type , fill = Initial_stage)) + 
+  geom_bar() + 
+  coord_flip() + 
+  labs(title = "Distribution of the NSCLC type by Initial stage", x = "", y = "Count") +
+  theme_classic() +
+  scale_x_discrete(limits = NSCLC_ordered) +
+  scale_fill_manual(values = c("I" = "#f39c12", "II" = "#117a65", "III" = "#2980b9", "IV" = "#884ea0"))
+```
+
+</details>
+<br>
+
+*Question 2A :*  
+Redo this plot:
+
+```{r, echo = FALSE}
+ggplot(clinical_data, aes(x = Age, y = OS, color = Initial_stage, shape = Death_or_alive)) + geom_point()
+```
+
+<details>
+<summary>Answer</summary>
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS, color = Initial_stage, shape = Death_or_alive)) + geom_point()
+```
+</details>
+<br>
+
+*Question 2B :*  
+Adapt the code of the question 2A to change the main title, the shape, the size of the shape, the background color, the "Initial_stage" colors, and draw axis, to draw this plot:
+
+```{r, echo = FALSE}
+ggplot(clinical_data, aes(x = Age, y = OS, color = Initial_stage, shape = Death_or_alive)) + 
+  geom_point(size = 3) +
+  labs(title = "Repartition of the Age according to the OS") + 
+  theme_classic() +
+  scale_shape_manual(values=c(16, 4)) + 
+  scale_color_manual(values = c("I" = "#f39c12", "II" = "#117a65", "III" = "#2980b9", "IV" = "#884ea0"))
+```
+
+Colors don't mater (just change them), but if you want to get the same as mine: #f39c12, #117a65, #2980b9 and #884ea0. There are the same as those of the question 1C.  
+Shapes don't mater neither, but I use the shape n°4 and the shape n°16.
+
+<details>
+<summary>Answer</summary>
+```{r}
+ggplot(clinical_data, aes(x = Age, y = OS, color = Initial_stage, shape = Death_or_alive)) + 
+  geom_point(size = 3) +
+  labs(title = "Repartition of the Age according to the OS") + 
+  theme_classic() +
+  scale_shape_manual(values=c(16, 4)) + 
+  scale_color_manual(values = c("I" = "#f39c12", "II" = "#117a65", "III" = "#2980b9", "IV" = "#884ea0"))
+```
+
+</details>
+<br>
+
+*Question 2C :*  
+Adapt the code of the question 2B to add an additional dashed vertical and horizontal lines, and the x and y values of this axis, to draw this plot:
+
+```{r, echo = FALSE}
+max_OS <- max(clinical_data$OS)
+Age_with_max_OS <- clinical_data[clinical_data$OS == max_OS,"Age"]
+
+ggplot(clinical_data, aes(x = Age, y = OS, color = Initial_stage, shape = Death_or_alive)) + 
+  geom_point(size = 3) +
+  labs(title = "Repartition of the Age according to the OS") + 
+  theme_classic() +
+  scale_shape_manual(values=c(16, 4)) + 
+  scale_color_manual(values = c("I" = "#f39c12", "II" = "#117a65", "III" = "#2980b9", "IV" = "#884ea0")) +
+  geom_hline(yintercept = max_OS, linetype = "dotdash", color = "red") +
+  geom_vline(xintercept = Age_with_max_OS, linetype = "dotdash", color = "red") +  
+  geom_text(data = NULL, x = 31, y = max_OS + 1.2, label = max_OS, size = 3, color = "red") +
+  geom_text(data = NULL, x = Age_with_max_OS + 1 , y = 0.5, label = Age_with_max_OS, size = 3, color = "red", angle = 90)
+
+```
+
+The additional lines represent the point with the maximum "OS".
+
+<details>
+<summary>Tips</summary>
+To find the values for the positions of the additional lines and for the additional texts side the lines, you can compute them before to draw the plot.
+You have to find the maximum value for "OS", so check the [`max()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/Extremes) function.
+Then to find the "Age" of the maximum value of "OS" you should filter the data.frame.
+
+<details>
+<summary>Answer for the maximum value for "OS"</summary>
+```{r}
+max_OS <- max(clinical_data$OS)
+```
+</details>
+<br>
+
+<details>
+<summary>Answer for the "Age" of the maximum value of "OS" </summary>
+```{r}
+Age_with_max_OS <- clinical_data[clinical_data$OS == max_OS,"Age"]
+```
+</details>
+<br>
+
+</details>
+<br>
+
+<details>
+<summary>Answer</summary>
+```{r}
+max_OS <- max(clinical_data$OS)
+Age_with_max_OS <- clinical_data[clinical_data$OS == max_OS,"Age"]
+
+ggplot(clinical_data, aes(x = Age, y = OS, color = Initial_stage, shape = Death_or_alive)) + 
+  geom_point(size = 3) +
+  labs(title = "Repartition of the Age according to the OS") + 
+  theme_classic() +
+  scale_shape_manual(values=c(16, 4)) + 
+  scale_color_manual(values = c("I" = "#f39c12", "II" = "#117a65", "III" = "#2980b9", "IV" = "#884ea0")) +
+  geom_hline(yintercept = max_OS, linetype="dotdash", color="red") +
+  geom_vline(xintercept = Age_with_max_OS, linetype="dotdash", color="red") +  
+  geom_text(data = NULL, x = 31, y = max_OS + 1.2, label = max_OS, size = 3, color = "red") +
+  geom_text(data = NULL, x = Age_with_max_OS + 1 , y = 0.5, label = Age_with_max_OS, size = 3, color = "red", angle=90)
+```
+</details>
+<br>
+
+*Question 3A :*  
+Do the distribution of the "Mutation_Type", classified by the "Previous_immunotherapy" according to the "Previous_radiotherapy", represented by this plot :
+```{r, echo = FALSE, warning = FALSE}
+ggplot(clinical_data, aes(x = OS, fill = Mutation_Type)) + geom_histogram() + facet_grid(Previous_immunotherapy ~ Previous_radiotherapy)
+```
+Here "OS" is considered as continuous variable.
+
+<details>
+<summary>Answer</summary>
+```{r, warning = FALSE}
+ggplot(clinical_data, aes(x = OS, fill = Mutation_Type)) + geom_histogram() + facet_grid(Previous_immunotherapy ~ Previous_radiotherapy)
+```
+</details>
+<br>
+
+*Question 3B :*  
+Adapt the code of the question 2A to add a main title, categories titles (with only "yes" or "no", we don't know what is it) and change the theme:
+```{r, echo = FALSE, warning = FALSE}
+ggplot(clinical_data, aes(x = OS, fill = Mutation_Type)) + 
+  geom_histogram() + 
+  facet_grid(Previous_immunotherapy ~ Previous_radiotherapy, labeller = label_both) + 
+  labs(title = "Distribution of mutated genes with previous immunotherapy and/or radiotherapy") +
+  theme_bw()
+```
+
+<details>
+<summary>Answer</summary>
+```{r, warning = FALSE}
+ggplot(clinical_data, aes(x = OS, fill = Mutation_Type)) + 
+  geom_histogram() + 
+  facet_grid(Previous_immunotherapy ~ Previous_radiotherapy, labeller = label_both) + 
+  labs(title = "Distribution of mutated genes with previous immunotherapy and/or radiotherapy") +
+  theme_bw()
+```
+
+</details>
+<br>
+
+*Question 4 :*  
+Combine plots (thanks to patchwork) from question 1C, question 2C and question 3B, add a main title and tags, and save it in pdf format.
+
+<details>
+<summary>Answer</summary>
+```{r, eval = FALSE, warning = FALSE}
+# Question 1C
+pQ1C <- ggplot(clinical_data, aes(x = NSCLC_type , fill = Initial_stage)) + 
+          geom_bar() + 
+          coord_flip() + 
+          labs(title = "Distribution of the NSCLC type by Initial stage", x = "", y = "Count") +
+          theme_classic() +
+          scale_x_discrete(limits = NSCLC_ordered) +
+          scale_fill_manual(values = c("I" = "#f39c12", "II" = "#117a65", "III" = "#2980b9", "IV" = "#884ea0"))
+
+# Question 2C
+pQ2C <- ggplot(clinical_data, aes(x = Age, y = OS, color = Initial_stage, shape = Death_or_alive)) + 
+          geom_point(size = 3) +
+          labs(title = "Repartition of the Age according to the OS") + 
+          theme_classic() +
+          scale_shape_manual(values=c(16, 4)) + 
+          scale_color_manual(values = c("I" = "#f39c12", "II" = "#117a65", "III" = "#2980b9", "IV" = "#884ea0")) +
+          geom_hline(yintercept = max_OS, linetype="dotdash", color="red") +
+          geom_vline(xintercept = Age_with_max_OS, linetype="dotdash", color="red") +  
+          geom_text(data = NULL, x = 31, y = max_OS + 1.2, label = max_OS, size = 3, color = "red") +
+          geom_text(data = NULL, x = Age_with_max_OS + 1 , y = 0.5, label = Age_with_max_OS, size = 3, color = "red", angle=90)
+
+# Question 3B
+pQ3B <- ggplot(clinical_data, aes(x = OS, fill = Mutation_Type)) + 
+          geom_histogram() + 
+          facet_grid(Previous_immunotherapy ~ Previous_radiotherapy, labeller = label_both) + 
+          labs(title = "Distribution of mutated genes with previous immunotherapy and/or radiotherapy")+
+          theme_bw()
+ 
+# Combination and save
+pdf(file ="my_final_combined_plots.pdf", width = 25, height = 6)
+(pQ1C + pQ2C + pQ3B) + plot_annotation(title = 'Summary of the study',
+                                       tag_levels = 'A',
+                                       tag_prefix = 'Fig. ',
+                                       theme = theme(plot.title = element_text(size = 15)))
+dev.off()
+```
+</details>
+<br>
+
+# Extensions and ressources
+
+Packages extending [`ggplot2`](https://www.rdocumentation.org/packages/ggplot2/versions/3.5.0):
+
+- `ggrepel`: smart geom_text and geom_label placement
+- `cowplot`: several plots on one page
+- `patchwork`: arrange plots together
+- `ggraph`: visualise graph
+- `ggmap`: plot data on a map
+- `factoextra`: visualise results of factorial analysis (PCA, CA, MCA, MFA, ...)
+- `ggbio`: visualise genomic data
+- `ggdendro`: visualise dendrograms and trees
+- `ggthemes`: additionnal themes
+- `ggsci`: palettes inspired by scientific journal, science fiction and TV shows
+- `ggedit`: manually edit ggplot object (change theme settings...)
+- `gganimate`: create animated plots
+- `ggforce`: new functionnalities
+- `survminer`: draw survival curves
+- `ggridges`: Ridgeline plots
+- `ggiraph`: makes ggplot interactive
+
+Resources:
+
+- http://ggplot2.tidyverse.org
+- rstudio cheatsheet https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf
+- ggplot2 book https://ggplot2-book.org/
+- Theoretical aspects of ggplot2 (Layered Grammar of Graphics) http://www.stat.columbia.edu/~gelman/bayescomputation/Wickham2010.pdf
+- General advices on data visualisation https://serialmentor.com/dataviz/
