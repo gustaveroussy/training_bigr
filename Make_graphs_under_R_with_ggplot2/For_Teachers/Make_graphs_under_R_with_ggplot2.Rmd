@@ -257,7 +257,7 @@ For these geometries, only the `x` aesthetic is mandatory.
 ggplot(clinical_data, aes(x = Age)) + geom_histogram()
 ```
 
-We can adjust the number of bins or their width with `bins` and `binwidth` functions. We can also manually set the `breaks`.
+We can adjust the number of bins or their width with `bins` and `binwidth` parameters. We can also manually set the `breaks`.
 ```{r}
 ggplot(clinical_data, aes(x = Age)) + geom_histogram(bins = 5) # 5 groups (rectangles)
 ggplot(clinical_data, aes(x = Age)) + geom_histogram(binwidth = 10) # the width of each group is 10 (here 10 years for the Age)
@@ -315,6 +315,7 @@ What does y value correspond to, if I give my entire dataset to [`geom_col()`](h
 ```{r, echo=FALSE, eval=TRUE}
 ggplot(clinical_data, aes(x = Sex, y = Age)) + geom_col()
 ```
+
 It makes the sum of all the ages for each category of Sex! Not very interesting...  
 To check that, we can compute these sums:
 ```{r}
@@ -348,7 +349,7 @@ ggplot(clinical_data, aes(x = Sex, y = Age)) + geom_jitter()
 ```
 
 *Exercice :*  
-Draw a violinplot on the "Sex" and "Age" of the clinical_data dataset, with values too (shape and points).
+Draw a violinplot on the "Age" and "Sex" of the clinical_data dataset, with values too (shape and points).
 
 <details>
 <summary>Answer</summary>
@@ -1337,7 +1338,7 @@ pQ1C <- ggplot(clinical_data, aes(x = NSCLC_type , fill = Initial_stage)) +
           scale_fill_manual(values = c("I" = "#f39c12", "II" = "#117a65", "III" = "#2980b9", "IV" = "#884ea0"))
 
 # Question 2C
-pQ2C <- ggplot(clinical_data, aes(x = Age, y = OS, color = Initial_stage, shape = Death_or_alive)) + 
+pQ2C <- ggplot(clinical_data, aes(x = Age, y = OS, color = Initial_stage, shape = Death_or_alive)) +
           geom_point(size = 3) +
           labs(title = "Repartition of the OS according to the Age") +
           theme_classic() +
