@@ -1,0 +1,1464 @@
+---
+title: "cBioPortal Interface and cBioPortal Extraction with R"
+date: "`r Sys.Date()`"
+author:
+  - name: "BiGR: Bioinformatics core facility of Gustave Roussy"
+email: "bigr@gustaveroussy.fr"
+output:
+  rmdformatsbigr::readthebigrdoc:  # if you'd like to have a nice theme
+  code_folding: show
+thumbnails: false
+lightbox: true
+highlight: true
+fig_caption: false
+
+# install.packages("remotes")
+# install.packages("git2r")
+# remotes::install_git("https://gitlab.com/bioinfo_gustaveroussy/bigr/rmdformatsbigr.git",
+#                      credentials=git2r::cred_user_pass("your_login", "your_password"))
+---
+
+```{r setup, include=FALSE, eval=FALSE}
+# options(width = 60);
+knitr::opts_chunk$set(
+  echo = TRUE,        # Print the code
+  eval = TRUE,        # Run command lines
+  message = TRUE,     # Print messages
+  prompt = FALSE,     # Do not display prompt
+  comment = NA,       # No comments on this section
+  warning = TRUE      # Display warnings
+)
+
+```
+<style type="text/css">
+summary {
+  display: list-item;
+}
+details:hover {
+  cursor: pointer
+}
+body {
+  text-align: justify
+}
+.column-left{
+  float: left;
+  width: 47%;
+  text-align: left;
+}
+.column-right{
+  float: right;
+  width: 47%;
+  text-align: left;
+}
+</style>
+
+# Purpose
+
+At the end of this session, you will be able to:  
+
+1. Exctract cBioPortal information by the online interface.  
+1. Exctract cBioPortal information by R with the cbioportalR R package.  
+
+# Introduction
+cBioPortal is a tool that allows you to explore and visualize molecular data such as DNA, RNA, proteins, which come from multiple studies whose processed data have been made available to the scientific community.  
+You can see the different studies publicly available here: https://www.cbioportal.org/  
+
+cBioPortal is distributed under a public license, meaning that the code is available and we can install a cBioPortal locally, therefore having our own cBioPortal.  
+You can see the list of available cBioPortals (local and public) here: https://installationmap.netlify.app/  
+<img src="images/cbioportal_existing_instances.jpg" alt="existing_instances" width="600"/>
+
+Thus, *Gustave Roussy* has deployed an internal local *cBioPortal*, meaning that the information is only available to Gustave Roussy employees when *connected to the GR_Intern network*: https://cbioportal.intra.igr.fr  
+**By default, no study is available. You must make a request for access to the study of interest to the DAC, using [this form](https://forms.office.com/pages/responsepage.aspx?id=yEw7gfiljU2I0BddpylfA4ZOcK9TURpKkuTAq15dQ0VUOEtLNjY0N0JERFFYOVNCNFlXNE9YTjdLRy4u&origin=IprLink&route=shorturl).
+Then, as soon as you have the green light from the DAC, you can contact the bioinformatics platform (bigr@gustaveroussy.fr) to obtain your access.  
+To get the updated list of available studies, sent an email to bigr@gustaveroussy.fr.**  
+
+For this practical, we will use the public cBioPortal https://www.cbioportal.org/, but the principle is the same with another instance of cBioPortal.  
+
+# Extract cBioPortal information by the online interface
+
+## Connexion
+
+To use the interface go to the cBioPortal website: https://www.cbioportal.org/     
+
+## Main interface
+
+<img src="images/main_interface.png" alt="main_interface" width="600"/>
+
+On the main page of the site we can see:  
+- a menu bar at the top,  
+- a request form at the center,  
+- an insert on the right where the new features and some example queries are listed.  
+
+The request form lists the studies from Gustave Roussy which are accessible via the cBioPortal.  
+Currently 5 studies are available.  
+We can see the name of the studies, followed by the number of samples for each study, the `i` logo gives a short description of the study, the book logo is a link to the publication, then the logo of the pie chart is a shortcut to the study summary page.  
+
+## Data Sets tab
+
+<img src="images/data_sets_tab.png" alt="data_sets_tab" width="600"/>
+
+This tab lists the studies from Gustave Roussy which are accessible via the cBioPortal.  
+These are the same studies as before.  
+We can see the name of the studies, the link to the publication, the total number of samples, then the number of samples for each kind of data.  
+Here we have "Mutations", "Copy Number Alteration" (CNA), and "RNA-seq" data.  
+
+But if you click on the drop-down menu on the right, you can see the other types of data available.  
+<img src="images/data_sets_tab_col_menu.png" alt="data_sets_tab_col_menu" width="600"/>
+
+
+## Study selection
+
+<img src="images/study_selection.png" alt="study_selection" width="600"/>
+
+From the request form (click on cBioPortal logo to come back to the Main interface), we can either:  
+- select a study of interest by clicking directly on the pie chart logo of the desired study line.  
+- select one, several or all, studies by checking them, then click on the “Explore Selected Studies” button on the form.  
+
+From the Data Sets tab, we can click on the name of the study of interest.  
+
+Of course if there are too many studies available, you can use the keyword search form.  
+Regardless of how you select your study of interest, you will be redirected to the same page.  
+This new page contains a general banner at the top, displaying the name of the study (a small download icon to the right of the name allows you to download all the clinical and genomic data available for this study), the number of patients and the number of samples.  
+
+The various additional tabs and buttons on this page are detailed below.  
+
+
+## Summary tab
+
+<img src="images/summary_tab.png" alt="summary_tab" width="600"/>
+
+
+The summary tab allows you to summarize the data from the selected study in a few graphs and tables.  
+This tab is made up of several elements that can be moved, enlarged (bottom right corner) or deleted.  
+The elements are dynamic, that is to say that when you pass the mouse over them, displays can appear. Likewise, in the upper right corner of each element, a menu may appear offering several options (deletion of the element, download, additional information,...).  
+
+### Tables
+
+<img src="images/summary_tab_tables.png" alt="summary_tab_tables" width="600"/>
+
+
+Tables have 3 main columns:  
+-the first column: its name varies depending on the information listed in the table ("Molecular Profile", "Genes", "Categories", etc.).  
+- the `#` column (for the `number`), corresponds to the number of samples with the characteristic of the first column.  
+- the `Freq` column (for `Frequency`), corresponds to the percentage of samples with the characteristic of the first column.  
+
+In some specific table instances we may have other additional columns:  
+- `Mutated Genes` table:  
+  - `# Mut`: total number of gene mutations. It may be higher than the number of samples with this mutation because one sample may have multiple mutations for this gene.  
+- `Structural Variant Genes` table:  
+  - `# SV`: total number of structural variants of the gene. Likewise, it may be higher than the number of samples with that structural variant because a sample may have multiple structural variants for that gene.  
+- `CNA Genes` table:  
+  - `Cytoband`: genomic region where the CNA is located (cytoband).  
+  - `CNA`: the type of CNA (AMP: amplification; HOMDEL: homozygous deletion).  
+
+> Note that you can filter the tables using the search bar at the bottom of the element, sort in alphabetical or numerical order if you click on the column names.
+
+### Graphs
+
+Several types of graphs are available to represent the data: pie charts, histograms, lineplots. or scateplots.  
+
+Pie charts allow you to represent discrete data such as gender, ethnicity, number of samples per patient, sample type, etc.  
+
+Histograms present continuous data such as age at diagnosis, fraction of altered genome, days to sample collection, etc.  
+
+Lineplots present continuous data such as Overall survival, Kaplan-Meier of disease free, etc.  
+
+Scaterplots compare 2 continuous data, such as the number of mutations as a function of the fraction of altered genome. This type of graph calculates a correlation score between the 2 variables compared (Spearman and Pearson), as well as the associated p-values.  
+
+<img src="images/summary_tab_graphs.png" alt="summary_tab_graphs" width="600"/>
+
+> Note that some graph displays the number of NA values. This is the number of samples for which we do not have the requested information.
+
+### More graphes and tables
+
+Not all tables and graphs are displayed by default.  
+You can click on the `Charts` button at the top right, wander through the different menus ("Clinical", "Genomics"...) to add graphs and even test the `X to Y` to make scaterplots, boxplots and violinplots with variables of your choice.  
+
+<img src="images/summary_tab_more_graphes_and_tables.png" alt="summary_tab_more_graphes_and_tables" width="600"/>
+
+### Sample selection
+
+To make a selection of samples you can click in the tables or in the additional displays given by the graphs when we hover our mouse over them.  
+
+<img src="images/summary_tab_sample_selection1.png" alt="summary_tab_sample_selection1" width="600"/>
+
+If you already have a list of patients or samples of interest you can use the "Custom Selection" button and put your list there.  
+
+<img src="images/summary_tab_sample_selection2.png" alt="summary_tab_sample_selection2" width="600"/>
+
+
+> Note that as soon as you have selected according to a criterion, all the tables/graphs are automatically updated to only present the information related to this selection.
+> Of course you can select according to several criteria.
+
+
+## Clinical Data tab
+
+This tab presents the clinical characteristics of the patients/samples. The available columns depend on the studies.  
+
+<img src="images/clinical_data_tab.png" alt="clinical_data_tab" width="600"/>
+
+The `Charts` button in the Summary tab has become `Columns` and allows you to show or hide columns.  
+
+<img src="images/clinical_data_tab_col_menu.png" alt="clinical_data_tab_col_menu" width="600"/>
+
+There is also a search bar and a download table button.  
+
+This tab is up to date with the sample selections made previously.  
+
+## Other tab
+
+Other tabs may be available depending on the studies, for example in the study [Glioblastoma (TCGA, Cell 2013)](https://www.cbioportal.org/study/summary?id=gbm_tcga_pub2013).
+
+In particular, the `Heatmap` tab which allows you to view heatmaps already made of the public cBioPortal). The menu on the left allows you to select a heatmap of interest among those proposed.
+
+<img src="images/other_tab_heatmap1.png" alt="other_tab_heatmap1" width="600"/>
+
+We can slightly customize these heatmaps by clicking on them which will redirect us to an editor. In this editor the left display ("Heat Map Detail") is a zoom of the complete heatmap ("Heat Map Summary") which is presented on the right. The verse element on the right heatmap corresponds to what we see on the left heatmap.
+
+<img src="images/other_tab_heatmap2.png" alt="other_tab_heatmap2" width="600"/>
+
+You can change certain heatmap parameters using the “Parameters” button.
+
+<img src="images/other_tab_heatmap3.png" alt="other_tab_heatmap3" width="600"/>
+
+
+The "CN Segments" tab allows you to explore the copy number variations along the chromosomes with an IGV type display. The color represents the number of copies and each line corresponds to a patient. There are also settings buttons to display only a chromosome or a region, change colors, save the plot,...  
+
+<img src="images/other_tab_CN_segments.png" alt="other_tab_CN_segments" width="600"/>
+
+> You can zoom by double clicking.
+
+And other tab types, including CT Scan, and probably others that I didn't come across while creating this course.  
+
+<img src="images/other_tab_CT_scan1.png" alt="other_tab_CT_scan1" width="600"/>
+
+<img src="images/other_tab_CT_scan2.png" alt="other_tab_CT_scan2" width="600"/>
+
+The “Beta Plots!” tab allows you to make your own comparison graphs of 2 variables, in a similar way with the `Charts` button of the "Summary" tab, but here we can also compare genomic data. The type of graph depends on the information to be compared.  
+
+<img src="images/other_tab_plots_beta.png" alt="other_tab_plots_beta" width="600"/>
+
+
+## Groups comparisons
+
+Once you have selected your samples of interest, you can put them in a group with the `Groups` button which will save your selection. So you can make several groups.  
+Group comparison allows you to compare their clinical and molecular characteristics.  
+
+For example, return to the "Summary" tab, select all the "Male" and make them a group then do the same with the "Female".  
+
+<img src="images/groups_comparisons1.png" alt="groups_comparisons1" width="600"/>
+
+<img src="images/groups_comparisons2.png" alt="groups_comparisons2" width="600"/>
+
+<img src="images/groups_comparisons3.png" alt="groups_comparisons3" width="600"/>
+
+<img src="images/groups_comparisons4.png" alt="groups_comparisons4" width="600"/>
+
+You see that our groups are displayed with a color (here pink for "Female" and blue for "Male").  
+Then still in the `Groups` button, select the 2 groups that we have just made, then click on `Compare`.
+
+<img src="images/groups_comparisons5.png" alt="groups_comparisons5" width="600"/>
+
+
+A new page opens with new tabs. The number and type of tabs depends on the availability of data from the selected studies.  
+
+### Overlap tab
+
+The "Overlap" tab allows you to know if you have patients or samples that are present in both groups at the same time (which can happen if you have made the selection on patients with several samples for example), thanks to a cubic Venn graph.  
+
+<img src="images/groups_comparisons_overlap_tab.png" alt="groups_comparisons_overlap_tab" width="600"/>
+
+### Overall survival and Clinical tabs
+
+The "Survival" tab compares the overall survival of the 2 groups with a Kaplan-Meier graph.  
+
+<img src="images/groups_comparisons_overall_survival_and_clinical_tabs1.png" alt="groups_comparisons_overall_survival_and_clinical_tabs1" width="600"/>
+
+
+The clinical tab compares the clinical data between the 2 groups with appropriate statistical tests and presents graphs. Results are sorted by significance and significant results are in bold.  
+As usual, you can select the columns to display, download the results table and graphs, search by word leader, change the graph display.  
+
+<img src="images/groups_comparisons_overall_survival_and_clinical_tabs2.png" alt="groups_comparisons_overall_survival_and_clinical_tabs2" width="600"/>
+
+> Note: whether for the Survival or Clinical tab, there is a banner indicating that it is necessary to "Interpret all results with caution, as they can be confounded by many different variables that are not controlled for in these analyses. Consider consulting a statistician.". So the statistical tests carried out here can give us a first insight but it is better to discuss with a specialist before making any conclusions.
+
+### Genomic Alteration tab
+
+The "Genomic Alteration" tab allows you to compare mutations between the 2 groups, in particular the frequency of alteration overall or for certain genes. As usual, you have additional displays if you hover your mouse over the graphs, you can download the graphs and change which genes are displayed.  
+
+<img src="images/groups_comparisons_genomic_alteration_tab1.png" alt="groups_comparisons_genomic_alteration_tab1" width="600"/>
+
+At the bottom you have a comparison table for each alteration. If you hover over the column names you have explanations displayed, and you with the usual selection and save options.  
+
+### Mutations Beta! tab
+
+The “Beta Mutations!” tab allows you to compare the mutations between the 2 groups, by representing them along the protein domains. Mutations are represented above or below the protein axis depending on the group of patients to which they belong.  
+
+<img src="images/groups_comparisons_mutations_beta_tab.png" alt="groups_comparisons_mutations_beta_tab" width="600"/>
+
+By default it offers you the proteins with the highest mutation frequency of their gene, but you can choose your protein/gene of interest. You can also display additional annotations by clicking on the "Add annotation Tracks" button (they are displayed at the bottom of the graph). You can view the legend by clicking the "Legend" button at the top right.  
+Do not hesitate to hover your mouse over the graphic elements, the displays are dynamic.  
+Similar to the "Genomic Alteration" tab, at the bottom you have a table which summarizes the protein changes and in which group it is enriched, with a score and significance. Note the presence of the "Annotation" column which gives you additional information from databases (OncoKB, CIViC,...).  
+
+### mRNA, Protein, DNA Methylation tabs and other data
+
+The "mRNA" tab allows you to carry out a differential expression analysis between our 2 groups. The graph displayed by default is a volcanoplot. There is also a table at the bottom with the results of the differential analysis. It is sorted by significance (q-Value) and significant genes are in bold.  
+If we click on a gene in this table, a new graph appears with the expression levels in boxplot format.  
+
+<img src="images/groups_comparisons_mRNA_protein_and_DNA_methylation_tabs.png" alt="groups_comparisons_mRNA_protein_and_DNA_methylation_tabs" width="600"/>
+
+> Note if you hover over the name of the column named "p-Value", it indicates that the test used is a Student's t-test. This is a very good example of the fact that it is necessary to seek the advice of a statician before making the interpretation, because the use of a t-test requires having a lot of samples to compare and other statistical tests are more suitable.  
+
+The “Protein” and “DNA Methylation” tabs are identical to the “mRNA” tab but for proteins or methylation.  
+
+Other data can be available like Arm-level CNA or Genetic Ancestry, depending on the study.
+
+## Search by genes
+
+Instead of selecting the samples/patients, then doing the analyses/tables/graphs, then searching for your genes of interest in each analysis/table/graph, you can indicate your genes from the start and get results already filtered.  
+
+To do this, we return to the very first page of the cBioPortal (by clicking on the logo at the top left of the page), we select the study (or studies) of interest, then we click on “Query By Gene”.  
+
+<img src="images/search_by_genes1.png" alt="search_by_genes1" width="600"/>
+
+The rest of the form unfolds and you can choose the molecular data on which you want to work; then the patients/samples of interest, for example we keep all the samples or only those which have CNA data, or we can put our own list by choosing "User-defined Case List" and putting our list of IDs. Then, we write our genes of interest (separated by a comma if you want to put several), or we can also choose pre-defined lists of genes by clicking on the drop-down menu.  
+
+Then we click on “Submit Query”.  
+
+<img src="images/search_by_genes2.png" alt="search_by_genes2" width="600"/>
+
+If you have a lot of samples, it may take a few minutes before the following page appears with multiple tabs.  
+The number and type of tabs depends on the availability of data from the selected studies.  
+
+### Oncoprint tab
+
+The first result obtained is an oncoprint.  
+This representation is widely used in publications analyzing patient cohorts because it allows a quick overview of the distribution of genetic alterations in the cohort.  
+In this graph, each vertical line corresponds to a patient. Then, horizontally, we have their clinical data (different information depending on the study and modifiable with the “Tracks” drop-down menu), and the alteration information according to our genes of interest, with the percentage of patients with an alteration in these genes and the type of alteration.  
+At the top of this table we have a banner with buttons for sorting, filtering and zooming in/out.  
+
+<img src="images/search_by_genes_oncoprint.png" alt="search_by_genes_oncoprint" width="600"/>
+
+### Cancer Type Summary tab
+
+This tab presents the same results but in the form of a cumulative histogram by type of cancer and by gene requested. You can choose the gene and cancer type level to plot with the options at the top of the graph.  
+
+<img src="images/search_by_genes_cancer_type_summary_tab.png" alt="search_by_genes_cancer_type_summary_tab" width="600"/>
+
+
+### Mutual Exclusivity tab
+
+In this tab you can see if the genes in your list are linked. In other words, if one gene is mutated, is the other gene also often mutated ("Co-occurrence") or on the contrary it never is ("Mutual exclusivity").  
+ 
+<img src="images/search_by_genes_mutual_exclusivity_tab.png" alt="search_by_genes_mutual_exclusivity_tab" width="600"/>
+
+### Plots tab
+
+In this tab we allow you to interactively generate graphs combining different types of data.  
+
+For example, we can look at the expression of TP53 according to the type of Copy Number alteration of TP53, by coloring the TP53 alteration type.  
+
+<img src="images/search_by_genes_plots_tab.png" alt="search_by_genes_plots_tab" width="600"/>
+
+Or for example, we could look at the variation in the protein level of our gene depending on its gene expression level (RNA).  
+
+### Mutations tab
+
+This tab corresponds to the tab named “Beta Mutations!” obtained when comparing several groups (except that here we have no comparison). We have the graph of the distribution of mutations along the proteins of our genes of interest, with the corresponding table.  
+
+<img src="images/search_by_genes_mutations_tab.png" alt="search_by_genes_mutations_tab" width="600"/>
+
+### Co-Expression tab
+
+The "Co-Expression" tab allows us to know if our genes of interest have genes that are co-expressed with it, in other words, genes whose expression evolves in a similar way across patients.  
+The results are in tabular form with all genes tested, the most significant at the top. We can also plot a scatterplot of the expression of the 2 genes and a correlation score is calculated. If the mutation status is available the points are colored according to this status.  
+
+Example with the Glioblastoma Multiforme study (TCGA GDC, 2025) on the public cBioPortal:
+
+<img src="images/search_by_genes_co_expression_tab.png" alt="search_by_genes_co_expression_tab" width="600"/>
+
+### Comparison/Survival tab
+
+This tab itself has several tabs, which are the same as when we compared the 2 groups of samples previously (Overlap, Survival, Clinical, Genomic Alterations, mRNA, Protein, DNA Methylation,...), but here to compare the samples with at least one alteration of our genes of interest against the samples without alteration.   
+You can also change the groups to compare:  
+- samples with at least one alteration among all our genes of interest,  
+- samples without any alteration among our genes of interest,  
+- samples with at least one alteration in a chosen gene.  
+
+<img src="images/search_by_genes_comparison_survival_tab.png" alt="search_by_genes_comparison_survival_tab" width="600"/>
+
+
+### CN Segments tab
+
+The graphs are the same as for the "CN Segments" tab seen previously, but here we have buttons for each of our genes to go directly to their genomic regions more easily.  
+
+<img src="images/search_by_genes_CN_segments_tab.png" alt="search_by_genes_CN_segments_tab" width="600"/>
+
+### Pathways tab
+
+This tab allows us to display the signaling pathways of our genes of interest.  
+There are 2 pathway databases available and each has its own viewer:  
+
+- PathwayMapper shows pathways from over fifty cancer related pathways and provides a collaborative web-based editor for creating new ones.  
+It displays network signaling pathways as well as the frequency of alteration of genes present in these pathways (if the information is available).  
+On the right is the table of results with all the signaling pathways identified (sometimes you can have several pathways for a single gene).   
+>Please note if the "Show TCGA PanCancer Atlas pathways only" option is checked then only the pathways presented in the TCGA PanCancer Atlas pathways will be shown (and not all the pathways in PathwayMapper).  
+>Note that you can move the pathway bricks to arrange them wherever you want.  
+
+<img src="images/search_by_genes_pathways_tab1.png" alt="search_by_genes_pathways_tab1" width="600"/>
+
+- NDEx shows 1,352 pathways by aggregating several other databases: NCI-PID, Signor, WikiPathways, CPTAC, CCMI and NeST. Here we have the list of signaling pathway on the left and their display on the right.  
+The display and legend are different depending on channels because they depend on the database used. But our genes of interest are always boxed in pink.  
+You can click on the name of the pathway (in the title displayed in blue) to get information on it, as well as on the genes (nodes) and the links between genes (edges). But the graphs are also dynamic so we can get this information by clicking on the genes or on the links between the genes directly.  
+
+<img src="images/search_by_genes_pathways_tab2.png" alt="search_by_genes_pathways_tab2" width="600"/>
+
+### Download tab
+
+On the public cBioPortal only, this tab allows you to download all the clinical and genomic data from the samples selected according to our genes of interest.  
+
+## Make graphs on your own data?
+
+Another interesting feature of cBioPortail is to visualize your own data.
+You can do:
+- the oncoprint.
+- the mutationmapper.
+
+To do this, click on the “Visualize Your Data” tab (at the very top of the page), then on “OncoPrinter” or “MutationMapper”.
+
+<img src="images/make_graphs_on_your_own_data.png" alt="make_graphs_on_your_own_data" width="600"/>
+
+
+Please note, all data must be anonymized before upload.
+
+### Oncoprint
+
+This allows you to make the same encoprint as seen previously.
+You can copy and paste your tables directly into the corresponding areas or load them via a file.
+To get an idea of the format you can click on "Load example data" and/or for an explanation of the format on "View data format".
+You can put genomic, ~~clinical~~ and/or heatmap information.
+Once the information has been entered, you can optionally choose an order of appearance of the genes or samples on the graph; and click on “Submit”.
+
+<img src="images/make_graphs_on_your_own_data_oncoprint1.png" alt="make_graphs_on_your_own_data_oncoprint1" width="600"/>
+
+
+The oncoplot appears (with genomic information, then ~~clinical~~, then heatmap) as well as a Mutual Exclusivity analysis.
+
+<img src="images/make_graphs_on_your_own_data_oncoprint2.png" alt="make_graphs_on_your_own_data_oncoprint2" width="600"/>
+
+### Mutationmapper
+
+Cela permet de faire le graphe représentant les mutations le long des domaines protéiques.
+Vous choisissez votre génome de référence (celui utilisé pour faire votre analyse), puis entrez les informations de votre analyse.
+Pour voir le format attenu, vous pouvez cliquer sur l'un des exemples donné dans "Load example data" et/ou pour une explication du format sur "Data format".
+
+<img src="images/make_graphs_on_your_own_data_mutationmapper1.png" alt="make_graphs_on_your_own_data_mutationmapper1" width="600"/>
+
+Puis cliquez sur "Visualize".
+
+<img src="images/make_graphs_on_your_own_data_mutationmapper2.png" alt="make_graphs_on_your_own_data_mutationmapper2" width="600"/>
+
+## Save your session
+
+To store your virtual studies and groups you can sign in with your Google or Microsoft account on public cBioPortal (similarly with your Gustave Roussy account on the Gustave Roussy cBioPortal). This will allow you to access your studies and groups from any computer, and cBioPortal will also remember your study view charts preferences for each study (i.e. order of the charts, type of charts and visibility).  
+Login is optional on the public cBioPortal and not required to access any of the other features of cBioPortal.  
+
+Also, you can share your patient selection by creating a web link to your selection.
+Click on the "Save/Share Virtual Study" button, then give a name to you selection, then click on "Save" or "Share".  
+
+<img src="images/save_your_session1.png" alt="save_your_session1" width="600"/>
+<img src="images/save_your_session2.png" alt="save_your_session2" width="600"/>
+<img src="images/save_your_session3.png" alt="save_your_session3" width="600"/>
+You can save the link to your virtutal study, to share it with your colleagues.  
+
+Also if you come back to the very first page of the cBioPortal (by clicking on the logo at the top left of the page), you can see your new virtutal study.  
+
+<img src="images/save_your_session4.png" alt="save_your_session4" width="600"/>
+
+
+# Extract cBioPortal information by R
+
+But what about reproducibility of you research on this web site? Do you remember each button you clicked, especially for study selection and sample/patient selection?  
+The easiest way is to make an R script.  
+
+There are 2 R packages that allow you to retrieve data from cBioPortal: [`cbioportalR`](https://www.karissawhiting.com/cbioportalR/index.html) and [`cBioPortalData`](https://www.bioconductor.org/packages/release/bioc/vignettes/cBioPortalData/inst/doc/cBioPortalData.html).
+Unfortunately, neither of these 2 packages allows you to recover all the data in an easily analyzable format, nor to create graphs (the graphs will have to be created by yourself).  
+
+`cbioportalR` allows to retrieve data in easily filterable data.frame format but only clinical data, mutations, copy numbers (with segments) and structural variants. Basically, it does not recover gene expression, methylation, protein levels, etc. In addition, it only provides dataframes that are not linked together, so if we filter the mutation table to only keep certain patients (for example), we must filter the clinical data accordingly on the same set of patients.  
+
+[`cBioPortalData`](https://www.bioconductor.org/packages/release/bioc/vignettes/cBioPortalData/inst/doc/cBioPortalData.html) allows you to retrieve data in a complex format called MultiAssayExperiment which is an assembly of several other objects of type SummarizedExperiment and RaggedExperiment. This assembly makes it possible to link clinical data to experimental data, and to filter everything in a single block (so we can filter clinical and experimental data at the same time). In my experience, only structural variant data is not retrieved with this package, however, it heavily filters the available information. For example, for mutations, it only loads the position of the mutation (for each mutated gene for each sample) but we no longer have the information concerning the mutated nucleotide (A?T?C?G?), the number of mutated and normal reads (so it is impossible to compute the VAF), nor any annotation (missens? impact on the protein? already known from the annotation databases (COSMIC...)?).  
+
+*Welcome to the real deep world of bioinformatics. Everything is not always obvious, but we always end up finding a solution with a little agility and imagination.*
+
+> The shortcomings of these two packages are probably due to the file formats which can be formatted differently depending on the studies. For example for rna, there can be several versions of expression tables: raw counts, in log2, in zscore, or even by gene or by transcript.  
+Limitations are also attributable to the API (application programming interface) created by the cBioPortal team. An API is an additional functionality of websites allowing information to be retrieved from the site using the command line. So these packages will query the website via the API, but if the API characteristics are limited, the packages will be limited too.
+
+For this course, we suggest using the `cbioportalR` package as a basis, then using some in-house functions to recover the missing information. The results will be in a dataframe format, easy to filter with functions dedicated to dataframes.  
+
+I strongly advise you to have understood the courses on [Tables Manipulations](https://github.com/gustaveroussy/training_bigr/blob/main/Tables_manipulation/For_Students/Tables_manipulation.html) and the one on [Making graphs with ggplot2](https://github.com/gustaveroussy/training_bigr/blob/main/Make_graphs_under_R_with_ggplot2/For_Students/Make_graphs_under_R_with_ggplot2.html). We will consider their content as acquired for the rest of this course.  
+
+
+## Setup environment and token
+
+We load `cbioportalR` R package to get data, and dplyr/tidyr R packages to manipulate data.
+
+```{r, eval=FALSE}
+# Installation
+install.packages("cbioportalR")
+```
+
+```{r}
+#Loading library
+library(cbioportalR)
+library(dplyr)
+library(tidyr)
+```
+
+
+Before accessing data you will need to connect to a cBioPortal database and set your base URL for the R session.
+
+### For the Gustave Roussy cBioPortal
+
+If you want to use the Gustave Roussy cBioPortal, you need to connect you to the GR_Intern network and establish the connection between your R and the intern cBioPortal.
+For this last point, you need to add a token to your ~/.Renviron file to authorize access:
+
+1. Go on the cBioPortal interface (https://cbioportal.intra.igr.fr), then retrieve your token (top right):
+
+<img src="images/setup_environment_and_token_for_GR_cBioportal.png" alt="setup_environment_and_token_for_GR_cBioportal" width="600"/>
+
+
+1. Modify your R environment by editing the ~/.Renviron file to add a new variable like:  
+CBIOPORTAL_TOKEN = 'YOUR_TOKEN'  
+```{r, eval=FALSE}
+#To open the file ~/.Renviron
+usethis::edit_r_environ()
+```
+
+1. Then connect you to "cbioportal.intra.igr.fr" with the `set_cbioportal_db()` function:
+```{r, eval=FALSE}
+base_url <- "cbioportal.intra.igr.fr"
+set_cbioportal_db(base_url)
+```
+**Token is valid for 30 days. After this time it will be necessary to regenerate it.**
+
+
+### For the public cBioPortal
+
+If you want to use the public cBioPortal database instance (https://www.cbioportal.org), you do not need a token to access this public website, and just connect you to "https://www.cbioportal.org" base url with the `set_cbioportal_db()` function:
+```{r, eval=TRUE}
+base_url <- "https://www.cbioportal.org"
+set_cbioportal_db(base_url)
+```
+
+In the rest of the course we will use the public cBioPortal database instance, but everything works similarly for the Gustave Roussy cBioPortal.  
+
+## Identifying available studies
+
+Now that we are successfully connected, we may want to view available studies for our chosen database to find the correct study_id corresponding to the data we want to pull.
+You can view all studies available in your database with the following:
+```{r}
+studies <- available_studies()
+head(studies)
+```
+We get several pieces of information such as the name of the studies, their description, their publication, the date of import, the number of samples,...  
+
+The number of available studies:  
+```{r}
+nrow(studies)
+```
+Hum, only 50 studies? That not a lot! Where are the ~500 studies presented on the web site?  
+This is a limitation of the API, it returns only the last 50 studies by default.  
+Unfortunately the cBioPortal package does not offer a solution, so we will have to code that by hand. I'm giving the code to you ready-made, no need to understand it in detail, that's not the subject of the course here.  
+
+```{r}
+#load packages
+library(httr) #to send HTTP requests to the API
+library(jsonlite) #to convert JSON responses to R objects
+
+#cBioPortal API base address
+studies_url <- paste0(base_url, "/api/studies")
+
+#send a GET request to the API
+res <- GET(
+    studies_url,
+    query = list(
+      pageSize = 1000, # 1000 studies requested (there are ~500 studies, so that's sufficient for this database)
+      pageNumber = 0   # the first page
+    ),
+    accept_json()     # request JSON format
+  )
+#format into data.frame
+all_studies <- fromJSON(content(res, "text", encoding = "UTF-8"))
+#print the first lines of the data.frame
+head(all_studies)
+#print the number of rows of the data.frame
+nrow(all_studies)
+```
+
+Great! Now there are over 500 studies available!  
+
+We can plot the top 20 of cancerTypeId with the largest number of studies:
+```{r}
+
+library(ggplot2)
+
+#get the top 20 cancer types
+top_cancers <- all_studies %>%
+  count(cancerTypeId) %>%
+  top_n(20, n)
+
+#plot
+ggplot(top_cancers, aes(x = reorder(cancerTypeId, n), y = n)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +  # flip axes for readability
+  labs(
+    title = "Number of Studies per Cancer Type",
+    x = "Cancer Type",
+    y = "Number of Studies"
+  ) +
+  theme_classic()
+
+```
+
+
+## Choose your study of interest
+
+If we want to search for all studies related to glioblastoma (a.k.a. that have the term "glioblastoma" in their name):
+```{r}
+as.data.frame(subset(all_studies, grepl("glioblastoma", all_studies$name, ignore.case = TRUE)))
+```
+> Note: grepl is a function that allows you to search for one or more words in a vector. It returns a logical vector (TRUE/FALSE) which is given to the subset function which will make the selection in the table. In addition, we ignore the case because in computing upper/lower case letters are discriminatory by default ("Glioblastoma" is different from "glioblastoma").
+
+For the example, we choose the study named “Glioblastoma Multiforme (TCGA, PanCancer Atlas)”, whose identifier is “gbm_tcga_pan_can_atlas_2018”:
+
+
+```{r}
+study_id <- "gbm_tcga_pan_can_atlas_2018"
+```
+
+To get more information on our studies, we can do the following:
+```{r}
+study_info <- get_study_info(study_id) %>% t()
+study_info
+```
+
+To view the list of data available in this study:
+
+```{r}
+study_profiles <- available_profiles(study_id) %>% as.data.frame()
+study_profiles
+```
+
+## Download data
+
+Now that we have chosen our study we will be able to download its data.
+
+### Get clinical data
+
+```{r}
+#get the list of all available samples
+sampleList <- available_samples(study_id = study_id)
+
+#get clinical data from the list of available samples
+clinical_data <- get_clinical_by_sample(sample_id = sampleList$sampleId,
+                                        study_id  = study_id)
+#format to get one line per patient
+clinical_data <- clinical_data %>% pivot_wider(names_from = "clinicalAttributeId") %>% as.data.frame()
+
+#print first lines
+head(clinical_data)
+ 
+```
+
+
+### Get molecular data
+
+#### Mutations, cna (with segments) and structural variants
+
+As said above the cbioportalR R package provides functions to download mutations, cna (with segments), and structural variants data only.  
+
+To pull all these genomic data in one command line, use the "get_genetics_by_study()" function (could take some minutes to download):  
+```{r}
+allGenomic <- get_genetics_by_study(study_id = study_id, return_segments = TRUE)
+```
+
+> Note: `return_segments` option allows to get segments information of cna.
+
+Then you can select interesting data by:
+```{r}
+#print all available data
+names(allGenomic)
+
+#selection
+mutation_data <- allGenomic$mutation
+cna_data <- allGenomic$cna
+SV_data <- allGenomic$structural_variant
+segment_data <- allGenomic$segment
+```
+
+Or to pull only one specific data, you can use the `get_mutations_by_study()`, the `get_cna_by_study()`, `get_segments_by_study()` or the `get_fusions_by_study()` functions to get mutations, cna, segments, and structural variants data respectively:
+```{r}
+mutation_data <- get_mutations_by_study(study_id = study_id)
+cna_data <- get_cna_by_study(study_id = study_id)
+SV_data <- get_fusions_by_study(study_id = study_id)
+segment_data <- get_segments_by_study(study_id = study_id)
+```
+
+#### Other molecular profiles
+
+##### Get data from one Molecular Profile and one gene
+
+To get other kind of molecular profiles we have to interroger l'API de cBioPortal directement. Pour cela on doit:
+1. identify the data you wish to download (molecular profile and gene)
+2. create the URL where our data of interest is located (by construction, they are always in the same format),
+3. ask the API to send us this data
+4. (optional) format data
+
+The first step is to retrieve all molecular data identifiers that are not mutations/cna/SV:
+
+```{r}
+#get all molecular profiles as a data.frame
+all_MolProf <- available_profiles(study_id)
+
+#filter out unwanted molecularProfileId values
+all_MolProf_filtered <- all_MolProf[!grepl("gistic$|mutations$|structural_variants$", all_MolProf$molecularProfileId, perl = TRUE), c("name", "description", "molecularProfileId")] #gistic is the tool used to identify cna
+
+#print
+all_MolProf_filtered
+```
+
+Then choose your molecular data of interest, for example "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna" for RNA data:
+
+```{r}
+MolProf <- "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna"
+```
+
+The queries are made by gene, we must choose a gene of interest (we will see how to make a query with several genes later in the course).  
+For example let's choose the "BRAF" gene.  
+The name "BRAF" is in the HUGO nomenclature, but the API needs the gene names in the Entre_ID nomenclature, so we have to convert.  
+For this we can use the get_entrez_id() function provided by the `cbioportalR` package:  
+```{r}
+gene_hugo <- "BRAF"
+gene_entrezId <- get_entrez_id(hugo_symbol = gene_hugo, base_url = base_url)
+gene_entrezId
+```
+
+`get_entrez_id()` returns an array (because we can give it a vector with several genes), so we only need to recover the results of the "entrezGeneId" column:  
+```{r}
+gene_entrezId <- gene_entrezId$entrezGeneId
+gene_entrezId
+```
+
+> Note that the reverse function also exists: get_hugo_symbol(enter_id = NULL, base_url = NULL). We'll use it later.
+
+
+The second step is to build the url:  
+```{r}
+# build url
+url_MolProf_gene <- paste0("molecular-profiles/",
+                           MolProf,
+                           "/molecular-data?sampleListId=",
+                           study_id,
+                           "_all&entrezGeneId=",
+                           gene_entrezId)
+url_MolProf_gene
+```
+
+The third step is to recover data:  
+```{r}
+result <- cbp_api(url_path = url_MolProf_gene, base_url = base_url)
+```
+"result" is obtained as a "cbp_api" format:  
+```{r}
+class(result)
+```
+
+Interesting results are in the "content" list:  
+```{r}
+names(result)
+head(result$content,2)
+class(result$content[[1]])
+names(result$content[[1]])
+```
+
+The results of interest are in a list of lists format, so the fourth step is to format the data obtained, in order to easily work on them afterwards, for example in a dataframe:  
+```{r}
+formated_result <- purrr::map_df(result$content, ~ as.data.frame(.x))
+head(formated_result)
+```
+Each line corresponds to a sample and the BRAF expression value is present in the “value” column.  
+
+*Question* : Get the gene expression of "PDL1".
+<details>
+
+<summary>Tips</summary>
+Be careful "PDL1" is the name of the protein and not the gene (search the gene name on the web like on [GeneCard](https://www.genecards.org)) ;)
+[PDL1 on GeneCard page](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CD274)  
+</details>
+<br>
+
+<details>  
+<summary>Answer</summary>  
+
+```{r}
+#setting parameters
+study_id <- "gbm_tcga_pan_can_atlas_2018"
+MolProf <- "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna"
+gene_hugo <- "CD274"
+
+#get entrezID
+gene_entrezId <- get_entrez_id(hugo_symbol = gene_hugo, base_url = base_url)
+gene_entrezId <- gene_entrezId$entrezGeneId
+
+#format url
+url_MolProf_gene <- paste0("molecular-profiles/",
+                           MolProf,
+                           "/molecular-data?sampleListId=",
+                           study_id,
+                           "_all&entrezGeneId=",
+                           gene_entrezId)
+#get result
+result <- cbp_api(url_path = url_MolProf_gene, base_url = base_url)
+#format result
+formated_result <- purrr::map_df(result$content, ~ as.data.frame(.x))
+#print
+head(formated_result)
+
+```
+
+</details>
+<br>
+
+##### Get data from several Molecular Profile OR several genes
+
+If you want to retrieve information for several genes or several molecular profiles, you would have to redo the previous calculations several times, which will be long and tedious if you have to do it "by hand" for each gene.  
+To make life easier (and life should always be made easier), we are going to automate the process.  
+To do this, we will put the series of computations seen previously into a function, which we will call `GetMolecularProfileData`:
+
+```{r}
+#' Function GetMolecularProfileData
+#' @param MolecularProfileID The molecular profile identifier
+#' @param gene_hugo A gene name in hugo nomenclature
+#' @param base_url Database url
+#' @param study_id Study identifier
+GetMolecularProfileData <- function(MolecularProfileID = NULL, gene_hugo = NULL, base_url = NULL, study_id = NULL){
+  #conversion into entrez_id
+  gene_entrezId <- get_entrez_id(hugo_symbol = gene_hugo, base_url = base_url)
+  gene_entrezId <- gene_entrezId$entrezGeneId
+  #build url
+  url_MolProf_gene <- paste0("molecular-profiles/", MolecularProfileID, "/molecular-data?sampleListId=",
+                             study_id,"_all&entrezGeneId=", gene_entrezId)
+  #get data for the gene
+  result <- cbp_api(url_path = url_MolProf_gene, base_url = base_url)
+  #format data
+  formated_result <- purrr::map_df(result$content, ~ as.data.frame(.x))
+  #return output
+  return(formated_result)
+}
+
+```
+
+We can test our function on the previous gene to verify that we obtain the same results:
+```{r}
+formated_result_byfunc <- GetMolecularProfileData(MolecularProfileID = MolProf,
+                                              gene_hugo = gene_hugo,
+                                              base_url = base_url,
+                                              study_id = study_id)
+head(formated_result_byfunc)
+```
+
+Now, our goal is to apply this function several times automatically (once per gene) using the R function `lapply()`. `lapply()` is a function that allows you to iterate over a vector and return a list as output.  
+`lapply(X, FUN, ...)` or `lapply(X, function(x){ FUN(x,...) })`:  
+- X : argument of the function which have to be iterated (a vector or a list),  
+- FUN : the function to be applied,  
+- x : name of the variable that will take each value of X,  
+- ... : additional arguments passed to FUN.  
+
+In other words, we tell R "for each value of our gene vector `some_gene_hugo`, apply the function named `GetMolecularProfileData()`".  
+Here our `GetMolecularProfileData()` function returns a dataframe, so `lapply()` will output a list of dataframes. You will need to reformat this list of dataframes to easily work on it afterwards.  
+Example of data recovery with a list of genes for a molecular profile:
+```{r}
+#vector of genes in HUGO format
+some_gene_hugo <- c("BRAF","GATA3","JAK2","MITF","STAT4","BRCA1","GATA4","JAK3","PDK1")
+
+#molecular profile
+MolProf <- "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna"
+
+#apply the function GetMolecularProfileData several time depending of the first argument
+some_genes_results <- lapply(some_gene_hugo,              # for each values of some_gene_hugo
+                             function(gene) {             # called "gene"
+                                GetMolecularProfileData(  # apply GetMolecularProfileData function with the next arguments
+                                                    gene_hugo = gene,
+                                                    MolecularProfileID = MolProf,
+                                                    base_url = base_url,
+                                                    study_id = study_id
+                                )
+                               Sys.sleep(0.2)             # avoid API server overload
+                             }
+                      )
+
+#check object structure
+class(some_genes_results)      # class of the results -> list where each element of the list correspond to a gene
+class(some_genes_results[[1]]) # class of the data saved into the list -> data.frame
+
+#combine the list of data.frames by row to get one big dataframe
+some_genes_results <- bind_rows(some_genes_results)
+
+#print the formatted result
+head(some_genes_results)
+
+#replace entrezId by Hugo nomenclature
+conversion_table <- as.data.frame(get_hugo_symbol(entrez_id = some_genes_results$entrezGeneId, base_url = base_url))
+some_genes_results$hugoGeneSymbol <- conversion_table[match(some_genes_results$entrezGeneId, conversion_table$entrezGeneId),"hugoGeneSymbol"]
+some_genes_results$entrezGeneId <- NULL
+
+#print the formatted result
+head(some_genes_results)
+```
+
+Example of data recovery with a list of molecular profiles for a gene:  
+```{r}
+#gene
+gene_hugo <- "BRAF"
+#vector of molecular profiles
+some_MolProf <- c("gbm_tcga_pan_can_atlas_2018_rppa", "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna")
+
+#apply the function GetMolecularProfileData several time depending of arguments
+#output: a list of dataframe, where all element of the list is a molcular profile
+some_MolProf_results <- lapply(some_MolProf,               # for each values of some_MolProf
+                             function(molprof) {           # called "molprof"
+                                GetMolecularProfileData(   # apply GetMolecularProfileData function with the next arguments
+                                                    gene_hugo = gene_hugo,
+                                                    MolecularProfileID = molprof,
+                                                    base_url = base_url,
+                                                    study_id = study_id
+                                )
+                                Sys.sleep(0.2)             # avoid API server overload
+                             }
+                        )
+
+#combine the list by row to get one big dataframe
+some_MolProf_results <- bind_rows(some_MolProf_results)
+
+#print the formatted result
+head(some_MolProf_results)
+
+#replace entrezId by Hugo nomenclature
+conversion_table <- as.data.frame(get_hugo_symbol(entrez_id = some_MolProf_results$entrezGeneId, base_url = base_url))
+some_MolProf_results$hugoGeneSymbol <- conversion_table[match(some_MolProf_results$entrezGeneId,conversion_table$entrezGeneId),"hugoGeneSymbol"]
+some_MolProf_results$entrezGeneId <- NULL
+
+#print the formatted result
+head(some_MolProf_results)
+
+```
+
+
+##### Get data from several Molecular Profile AND several genes
+
+What if we want the results of several genes **AND** several molecular profiles at the same time?
+
+`lapply()` only allows you to iterate over a single list. But here we need to iterate on 2 vectors. So let's nest the `lapply()`!
+What we want: "for each value of our gene vector `some_gene_hugo`, and for each value of our molecular profile vector `some_MolProf`, apply the function named `GetMolecularProfileData()`".
+What we ask of R:
+
+
+```{r}
+#vector of genes in HUGO format
+some_gene_hugo <- c("BRAF","GATA3","JAK2","MITF","STAT4","BRCA1","GATA4","JAK3","PDK1")
+
+#vector of molecular profiles
+some_MolProf <- c("gbm_tcga_pan_can_atlas_2018_rppa", "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna")
+
+#apply the function GetMolecularProfileData several time depending of arguments
+some_genes_MolProf_results <- lapply(some_MolProf,                    # for each values of some_MolProf
+                                     function(molprof) {              # called "molprof"
+                                       lapply(                        # apply lapply function
+                                         some_gene_hugo,              # for each values of some_gene_hugo
+                                         function(gene) {             # called "gene"
+                                            GetMolecularProfileData(  # apply GetMolecularProfileData function with the next arguments
+                                                gene_hugo = gene,
+                                                MolecularProfileID = molprof,
+                                                base_url = base_url,
+                                                study_id = study_id
+                                            )
+                                            Sys.sleep(0.2)            # avoid API server overload
+                                          }
+                                       )
+                                     }
+                              )
+
+head(some_genes_MolProf_results[[1]][[1]]) # list of lists of dataframe, where each first list correspond to a molecular profile, and each list inside the first list correspond to a gene, and the dataframe corresponds to values (a.k.a head(some_genes_MolProf_results[[some_MolProf iteration]][[some_gene_hugo iteration]])
+
+#combine the list by row and column to get one big dataframe
+some_genes_MolProf_results <- dplyr::bind_rows(unlist(some_genes_MolProf_results, recursive = FALSE))
+
+#print the formatted result
+head(some_genes_MolProf_results)
+
+#replace entrezId by Hugo nomenclature
+conversion_table <- as.data.frame(get_hugo_symbol(entrez_id = some_genes_MolProf_results$entrezGeneId, base_url = base_url))
+some_genes_MolProf_results$hugoGeneSymbol <- conversion_table[match(some_genes_MolProf_results$entrezGeneId, conversion_table$entrezGeneId),"hugoGeneSymbol"]
+some_genes_MolProf_results$entrezGeneId <- NULL
+
+#print the formatted result
+head(some_MolProf_results)
+
+```
+
+Tips:
+Are you not tired of copying the lines of code for converting enterzId to Hugo nomenclature in the results?  
+Let's do a little function.
+
+```{r}
+#' Function Convert_Entrez2Hugo
+#' @param result The formated data.frame with "entrezGeneId" column to convert into Hugo gene symbol
+#' @param base_url The database url
+ConvertEntrezToHugo <- function(result = NULL, base_url = NULL){
+  conversion_table <- as.data.frame(get_hugo_symbol(entrez_id = result$entrezGeneId, base_url = base_url))
+  result$hugoGeneSymbol <- conversion_table[match(result$entrezGeneId, conversion_table$entrezGeneId),"hugoGeneSymbol"]
+  result$entrezGeneId <- NULL
+  return(result)
+}
+```
+
+With this new function the code becomes:  
+```{r, eval=FALSE}
+#vector of genes in HUGO format
+some_gene_hugo <- c("BRAF","GATA3","JAK2","MITF","STAT4","BRCA1","GATA4","JAK3","PDK1")
+
+#vector of molecular profiles
+some_MolProf <- c("gbm_tcga_pan_can_atlas_2018_rppa", "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna")
+
+#apply the function GetMolecularProfileData several time depending of arguments
+some_genes_MolProf_results <- lapply(some_MolProf,                    # for each values of some_MolProf
+                                     function(molprof) {              # called "molprof"
+                                       lapply(                        # apply lapply function
+                                         some_gene_hugo,              # for each values of some_gene_hugo
+                                         function(gene) {             # called "gene"
+                                            GetMolecularProfileData(  # apply GetMolecularProfileData function with the next arguments
+                                                gene_hugo = gene,
+                                                MolecularProfileID = molprof,
+                                                base_url = base_url,
+                                                study_id = study_id
+                                            )
+                                            Sys.sleep(0.2)            # avoid API server overload
+                                          }
+                                       )
+                                     }
+                              )
+#combine the list by row to get one big dataframe
+some_genes_MolProf_results <- dplyr::bind_rows(unlist(some_genes_MolProf_results, recursive = FALSE))
+
+#replace entrezId by Hugo nomenclature
+some_genes_MolProf_results <- ConvertEntrezToHugo(result = some_genes_MolProf_results, base_url = base_url)
+
+```
+
+> Note: this would also work with a single gene and a single molecular profile, but they must be in vector format:  
+some_gene_hugo <- c("BRAF")  
+some_MolProf <- c("gbm_tcga_pan_can_atlas_2018_rppa")  
+
+> Note: we could even make a function that combines data recovery, formatting and gene translation, but the more functions you nest, the more difficult it becomes to debug and keep the modularity of the code, so you have to find the right balance and it's up to you to define it.  
+
+##### Get data from ALL Molecular Profile AND ALL genes
+
+For this we will retrieve the list of all the genes, the list of all the molecular profiles available, then reuse the code produced in the previous section.  
+Warning: this may require a lot of memory and time.  
+
+```{r, evale = FALSE}
+#get all available genes
+all_genes <- get_genes(base_url = base_url)
+all_genes <- all_genes$hugoGeneSymbol
+
+#get all available molecular profiles
+all_MolProf <- available_profiles(study_id)$molecularProfileId
+all_MolProf <- unlist(lapply(all_MolProf, grep, pattern = "gistic$|mutations$|structural_variants$", invert = TRUE, value = TRUE, perl = TRUE)) # gistic is the tool used to identify cna
+all_MolProf
+
+#apply the function GetMolecularProfileData several time depending of arguments
+all_genes_MolProf_results <- lapply(all_MolProf,                     # for each values of all_MolProf
+                                     function(molprof) {             # called "molprof"
+                                       lapply(                       # apply lapply function
+                                         all_genes,                  # for each values of all_genes
+                                         function(gene) {            # called "gene"
+                                            Sys.sleep(0.5)           # pause 0.5 sec to avoid server overload
+                                            GetMolecularProfileData( # apply GetMolecularProfileData function with the next arguments
+                                                gene_hugo = gene,
+                                                MolecularProfileID = molprof,
+                                                base_url = base_url,
+                                                study_id = study_id
+                                            )
+                                            Sys.sleep(0.2)           # avoid API server overload
+                                          }
+                                       )
+                                     }
+                              )
+#combine the list by row to get one big dataframe
+all_genes_MolProf_results <- dplyr::bind_rows(unlist(all_genes_MolProf_results, recursive = FALSE))
+
+#replace entrezId by Hugo nomenclature
+all_genes_MolProf_results <- ConvertEntrezToHugo(result = all_genes_MolProf_results, base_url = base_url)
+
+```
+
+## Work on downloaded data (merge, filtering, format, ...)
+
+To filter molecular data according to clinical data, we have 2 strategies:
+- either merge the molecular and clinical data, then do the filter,
+- either filter the clinical data, then filter the molecular data according to the clinical data.
+
+In both cases, you need to know how to filter and merge the data.
+
+### Filtering
+
+#### Clinical data
+
+Example to keep "Primary" tumor clinical data:
+```{r}
+#prepare
+head(clinical_data)
+colnames(clinical_data) # name of the columns on which we can filter
+
+#filtering to keep "Primary" tumor clinical data
+clinical_data_primary <- clinical_data[clinical_data$SAMPLE_TYPE == "Primary", ]
+
+```
+
+#### Genomic data
+
+Example to keep "BRCA" mutated samples:
+```{r}
+#prepare
+head(mutation_data)
+colnames(mutation_data) # name of the columns on which we can filter
+
+#keep sample with a mutation into BRCA1 
+BRCA1_mutation_data <- mutation_data[mutation_data$hugoGeneSymbol == "BRCA1", ]
+```
+
+CNA, SV and segment data can be filtered in the same way.
+
+#### Other molecular data
+
+```{r}
+#get result from one specific gene
+BRAF_some_MolProf_results <- some_genes_MolProf_results[some_genes_MolProf_results$hugoGeneSymbol == "BRAF",]
+
+#get result from 2 specific genes
+BRAF_BRCA1_some_MolProf_results <- some_genes_MolProf_results[some_genes_MolProf_results$hugoGeneSymbol %in% c("BRAF", "BRCA1"),]
+
+#get result from one specific molecular profile
+some_gene_rppa_results <- some_genes_MolProf_results[some_genes_MolProf_results$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rppa",]
+
+#get result where rna-seq expression is up to 2
+some_gene_mrna_sup2_results <- some_genes_MolProf_results[
+          some_genes_MolProf_results$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna" & 
+          some_genes_MolProf_results$value > 2 ,
+          ]
+
+```
+
+
+*Question* : How to retrieve all the lines corresponding to the genes "BRAF", "BRCA1" and "JAK2", for the molecular profile "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna", and whose values are greater than 1?  
+Start with some_genes_MolProf_results variables.
+
+<details>
+
+<summary>Answer</summary>
+
+```{r}
+selected_results <- some_genes_MolProf_results[
+  some_genes_MolProf_results$hugoGeneSymbol %in% c("BRAF", "BRCA1", "JAK2") &
+  some_genes_MolProf_results$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna" &
+  some_genes_MolProf_results$value >= 1,
+]
+
+```
+</details>
+<br>
+
+*Question* : What are the mean expression of the genes "BRAF", "BRCA1" and "JAK2" (based on "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna")?
+
+
+<details>
+
+<summary>Answer</summary>
+
+```{r}
+mean_expression <- some_genes_MolProf_results %>%
+  filter(
+    hugoGeneSymbol %in% c("BRAF", "BRCA1", "JAK2"),
+    molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna"
+  ) %>%
+  group_by(hugoGeneSymbol) %>%
+  summarise(
+    mean_value = mean(value, na.rm = TRUE)
+  )
+
+mean_expression
+
+```
+</details>
+<br>
+
+
+
+
+#### Filter molecular table following clinical table
+
+"uniqueSampleKey" is the unique ID of each sample. So it is the best column to make a correspondence between clinical and data.  
+
+Genomic data example: get the genomic data with a mutation on BRCA1 for patients with Priary tumor:  
+```{r}
+#keep sample with a mutation into BRCA1 
+BRCA1_mutation_data <- mutation_data[mutation_data$hugoGeneSymbol == "BRCA1", ]
+#keep "Primary" tumor clinical data
+clinical_data_primary <- clinical_data[clinical_data$SAMPLE_TYPE == "Primary", ]
+#filtering
+BRCA1_mutation_data_filtered <- BRCA1_mutation_data[BRCA1_mutation_data$uniqueSampleKey %in% clinical_data_primary$uniqueSampleKey,]
+
+```
+
+Genomic data example: get the rppa data for patient with an altered genome fraction greater than 0.2:
+```{r}
+#convert into numeric
+class(clinical_data_primary$FRACTION_GENOME_ALTERED)
+clinical_data_primary$FRACTION_GENOME_ALTERED <- as.numeric(clinical_data_primary$FRACTION_GENOME_ALTERED)
+class(clinical_data_primary$FRACTION_GENOME_ALTERED)
+
+#check values
+summary(clinical_data_primary$FRACTION_GENOME_ALTERED) #there are some NA values
+
+#get patient ID with an altered genome fraction greater than 0.2
+clinical_data_high_alter <- clinical_data[ !is.na(clinical_data$FRACTION_GENOME_ALTERED) & clinical_data$FRACTION_GENOME_ALTERED > 0.2,]
+
+#filtering
+some_gene_rppa_results_filtered <- some_gene_rppa_results[some_gene_rppa_results$uniqueSampleKey %in% clinical_data_high_alter$uniqueSampleKey,]
+
+```
+
+
+*Question* : What are the mean expression of the gene "BRAF" (based on "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna") for patients "Untreated" ("TUMOR_TYPE")?
+
+<details>
+
+<summary>Answer</summary>
+
+```{r}
+#check values
+table(clinical_data$TUMOR_TYPE)
+
+#get Untreated patient ID
+clinical_data_untreated <- clinical_data[ clinical_data$TUMOR_TYPE == "Glioblastoma Multiforme (GBM), Untreated", ]
+
+#get "BRAF" expression for these patients
+BRAF_exp <- some_genes_MolProf_results[
+  some_genes_MolProf_results$hugoGeneSymbol == "BRAF" &
+  some_genes_MolProf_results$uniqueSampleKey %in% clinical_data_untreated$uniqueSampleKey
+  , "value"]
+
+#compute mean
+mean(BRAF_exp)
+
+
+```
+
+</details>
+<br>
+
+
+#### Format a molecular profile like a counts table
+
+Currently, with our GetMolecularProfileData function, we have all the values of interest in a single column with the information of the corresponding gene and sample in another column. But to do certain analyzes we need a table where the rows are genes and the columns are samples.  
+
+To do this, you must filter the table to recover only one molecular profile, then format the table:  
+
+```{r}
+#filtering to keep only rnaseq expression
+some_gene_mrna_results <- some_genes_MolProf_results[some_genes_MolProf_results$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",]
+
+#filtering to keep only interesting columns
+some_gene_mrna_results <- some_gene_mrna_results[,c("uniqueSampleKey","hugoGeneSymbol","value")]
+
+#check
+summary(some_gene_mrna_results$value)
+table(is.na(some_gene_mrna_results$hugoGeneSymbol))
+table(is.na(some_gene_mrna_results$uniqueSampleKey))
+
+#format into count table
+some_gene_mrna_results2 <- pivot_wider(some_gene_mrna_results,
+                                       names_from = uniqueSampleKey,
+                                       values_from = value,
+                                       values_fill = 0) %>%
+                          as.data.frame()
+#print
+some_gene_mrna_results2[1:5,1:5]
+```
+
+
+
+### Merge clinical and molecular data
+
+```{r}
+#genomic data
+mut_clin <- merge(clinical_data, mutation_data, all = TRUE) %>% as.data.frame()
+head(mut_clin)
+
+#other molecular data
+some_gene_rppa_clin <- merge(clinical_data, some_gene_rppa_results, all = TRUE) %>% as.data.frame()
+head(some_gene_rppa_clin)
+```
+
+> Note: by default, merge merges by common column names between the 2 dataframes. `all` allows to keep all row from both dataframes, if you want to keep only all row from mutation_data but not from clinical_data, set `all.y = TRUE, all = FALSE` (for the opposite put `all.x = TRUE, all = FALSE`).
+
+
+## Summary (TLDR – Too Long Didn't Read)
+
+### Install cbioportalR package
+```{r, eval=FALSE}
+install.packages("cbioportalR")
+```
+
+### Connection
+```{r, eval=FALSE}
+#library loading
+library(cbioportalR)
+library(dplyr)
+library(tidyr)
+
+#connexion to the cbioportal
+base_url <- "cbioportal.intra.igr.fr" #intern GR (don't forget the token)
+base_url <- "https://www.cbioportal.org" # public
+set_cbioportal_db(base_url)
+```
+
+### Search studies and choose one
+```{r, eval=FALSE}
+
+# get all available studies
+library(httr) #to send HTTP requests to the API
+library(jsonlite) #to convert JSON responses to R objects
+studies_url <- paste0(base_url, "/api/studies")
+res <- GET(studies_url, 
+           query = list(pageSize = 1000, pageNumber = 0 ),
+           accept_json())
+all_studies <- fromJSON(content(res, "text", encoding = "UTF-8"))
+
+# choose a study
+study_id <- "gbm_tcga_pan_can_atlas_2018"
+
+#get all info about our study of interest
+study_info <- get_study_info(study_id) %>% t()
+
+#get all moleculary profile id
+study_profiles <- available_profiles(study_id) %>% as.data.frame()
+```
+
+### Get clinical data
+```{r, eval=FALSE}
+#get samples
+sampleList <- available_samples(study_id = study_id)
+#get clinical data
+clinical_data <- get_clinical_by_sample(sample_id = sampleList$sampleId, study_id  = study_id)
+clinical_data <- clinical_data %>% pivot_wider(names_from = clinicalAttributeId) %>% as.data.frame()
+```
+
+### Get mutations, cna (with segments) and structural variants
+```{r, eval=FALSE}
+#get all
+allGenomic <- get_genetics_by_study(study_id = study_id, return_segments = TRUE)
+#get mutations
+mutation_data <- get_mutations_by_study(study_id = study_id)
+#get cna
+cna_data <- get_cna_by_study(study_id = study_id)
+#get structural variants
+SV_data <- get_fusions_by_study(study_id = study_id)
+#get segments of cna
+segment_data <- get_segments_by_study(study_id = study_id)
+```
+
+### Get other molecular profiles
+```{r, eval=FALSE}
+
+### functions ###
+
+#' Function GetMolecularProfileData
+#' @param MolecularProfileID The molecular profile identifier
+#' @param gene_hugo A gene name in hugo nomenclature
+#' @param base_url Database url
+#' @param study_id Study identifier
+GetMolecularProfileData <- function(MolecularProfileID = NULL, gene_hugo = NULL, base_url = NULL, study_id = NULL){
+  #conversion into entrez_id
+  gene_entrezId <- get_entrez_id(hugo_symbol = gene_hugo, base_url = base_url)
+  gene_entrezId <- gene_entrezId$entrezGeneId
+  #build url
+  url_MolProf_gene <- paste0("molecular-profiles/", MolecularProfileID, "/molecular-data?sampleListId=",
+                             study_id,"_all&entrezGeneId=", gene_entrezId)
+  #get data for the gene
+  result <- cbp_api(url_path = url_MolProf_gene, base_url = base_url)
+  #format data
+  formated_result <- purrr::map_df(result$content, ~ as.data.frame(.x))
+  #return output
+  return(formated_result)
+}
+
+#' Function Convert_Entrez2Hugo
+#' @param result The formated data.frame with "entrezGeneId" column to convert into Hugo gene symbol
+#' @param base_url The database url
+ConvertEntrezToHugo <- function(result = NULL, base_url = NULL){
+  conversion_table <- as.data.frame(get_hugo_symbol(entrez_id = result$entrezGeneId, base_url = base_url))
+  result$hugoGeneSymbol <- conversion_table[match(result$entrezGeneId, conversion_table$entrezGeneId),"hugoGeneSymbol"]
+  result$entrezGeneId <- NULL
+  return(result)
+}
+
+### main ###
+
+some_gene_hugo <- c("BRAF","GATA3","JAK2","MITF","STAT4","BRCA1","GATA4","JAK3","PDK1")
+some_MolProf <- c("gbm_tcga_pan_can_atlas_2018_rppa", "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna")
+some_genes_results <- lapply(some_gene_hugo, function(gene) {
+                                GetMolecularProfileData(gene_hugo = gene,
+                                                        MolecularProfileID = MolProf,
+                                                        base_url = base_url,
+                                                        study_id = study_id)
+                                Sys.sleep(0.2)
+                      })
+some_genes_results <- bind_rows(some_genes_results)
+some_genes_MolProf_results <- ConvertEntrezToHugo(result = some_genes_MolProf_results, base_url = base_url)
+```
+
+### Filtering, format and merge
+```{r}
+#filtering result
+my_df_filtered <- my_df[my_df$hugoGeneSymbol == "BRAF",]
+my_df_filtered <- my_df[my_df$hugoGeneSymbol %in% c("BRAF", "BRCA1"),]
+my_df_filtered <- my_df[my_df$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna" & my_df$value > 2 ,]
+
+#format a molecular profile like a counts table
+my_df_rna <- my_df[my_df$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",c("uniqueSampleKey","hugoGeneSymbol","value")]
+my_df_rna <- pivot_wider(my_df_rna, names_from = uniqueSampleKey, values_from = value) %>% as.data.frame()
+
+#merge clinical and molecular data
+mut_clin <- merge(clinical_data, mutation_data, all = TRUE) %>% as.data.frame()
+
+```
+
+
+# Citation
+
+If you use cBioPortal in your reseach don't forget to cite them:
+- Cerami et al. The cBio Cancer Genomics Portal: An Open Platform for Exploring Multidimensional Cancer Genomics Data. Cancer Discovery. May 2012 2; 401. PubMed.https://pubmed.ncbi.nlm.nih.gov/22588877/
+- Gao et al. Integrative analysis of complex cancer genomics and clinical profiles using the cBioPortal. Sci. Signal. 6, pl1 (2013). PubMed. https://pubmed.ncbi.nlm.nih.gov/23550210/
+- de Bruijn et al. Analysis and Visualization of Longitudinal Genomic and Clinical Data from the AACR Project GENIE Biopharma Collaborative in cBioPortal. Cancer Res (2023). PubMed. https://pubmed.ncbi.nlm.nih.gov/37668528/
+
+Remember also to cite the source of the data if you are using a publicly available dataset.
+
+# Ressources
+
+For more information, please read :  
+cBioPortal FAQ: https://docs.cbioportal.org/user-guide/faq  
+cBioPortail tutorials: https://docs.cbioportal.org/user-guide/overview/  
+Script R:
+- https://www.karissawhiting.com/cbioportalR/articles/overview-of-workflow.html  
+- https://cran.r-project.org/web/packages/cbioportalR/readme/README.html  
