@@ -448,13 +448,13 @@ The oncoplot appears (with genomic information, then ~~clinical~~, then heatmap)
 
 ### Mutationmapper
 
-Cela permet de faire le graphe représentant les mutations le long des domaines protéiques.
-Vous choisissez votre génome de référence (celui utilisé pour faire votre analyse), puis entrez les informations de votre analyse.
-Pour voir le format attenu, vous pouvez cliquer sur l'un des exemples donné dans "Load example data" et/ou pour une explication du format sur "Data format".
+This allows you to create a graph representing mutations along protein domains.  
+You choose your reference genome (the one used for your analysis), then enter your analysis data.  
+To see the expected format, you can click on one of the examples given in "Load example data" and/or for an explanation of the format, click on "Data format".  
 
 <img src="images/make_graphs_on_your_own_data_mutationmapper1.png" alt="make_graphs_on_your_own_data_mutationmapper1" width="600"/>
 
-Puis cliquez sur "Visualize".
+Then click on "Visualize".
 
 <img src="images/make_graphs_on_your_own_data_mutationmapper2.png" alt="make_graphs_on_your_own_data_mutationmapper2" width="600"/>
 
@@ -493,7 +493,7 @@ Unfortunately, neither of these 2 packages allows you to recover all the data in
 > The shortcomings of these two packages are probably due to the file formats which can be formatted differently depending on the studies. For example for rna, there can be several versions of expression tables: raw counts, in log2, in zscore, or even by gene or by transcript.  
 Limitations are also attributable to the API (application programming interface) created by the cBioPortal team. An API is an additional functionality of websites allowing information to be retrieved from the site using the command line. So these packages will query the website via the API, but if the API characteristics are limited, the packages will be limited too.
 
-For this course, we suggest using the `cbioportalR` package as a basis, then using some in-house functions to recover the missing information. The results will be in a dataframe format, easy to filter with functions dedicated to dataframes.  
+For this course, we suggest using the `cbioportalR` package. The results will be in a dataframe format, easy to filter with functions dedicated to dataframes.  
 
 I strongly advise you to have understood the courses on [Tables Manipulations](https://github.com/gustaveroussy/training_bigr/blob/main/Tables_manipulation/For_Students/Tables_manipulation.html) and the one on [Making graphs with ggplot2](https://github.com/gustaveroussy/training_bigr/blob/main/Make_graphs_under_R_with_ggplot2/For_Students/Make_graphs_under_R_with_ggplot2.html). We will consider their content as acquired for the rest of this course.  
 
@@ -673,8 +673,6 @@ head(clinical_data)
 
 ### Get molecular data
 
-#### Mutations, cna (with segments) and structural variants
-
 As said above the cbioportalR R package provides functions to download mutations, cna (with segments), and structural variants data only.  
 You can use the `get_mutations_by_study()`, the `get_cna_by_study()`, `get_segments_by_study()` or the `get_fusions_by_study()` functions to get mutations, cna, segments, and structural variants data respectively:  
 ```{r}
@@ -682,404 +680,6 @@ mutation_data <- get_mutations_by_study(study_id = study_id)
 cna_data <- get_cna_by_study(study_id = study_id)
 SV_data <- get_fusions_by_study(study_id = study_id)
 segment_data <- get_segments_by_study(study_id = study_id)
-```
-
-#### Other molecular profiles
-
-##### Get data from one Molecular Profile and one gene
-
-To get other kind of molecular profiles we have to interroger l'API de cBioPortal directement. Pour cela on doit:
-1. identify the data you wish to download (molecular profile and gene)
-2. create the URL where our data of interest is located (by construction, they are always in the same format),
-3. ask the API to send us this data
-4. (optional) format data
-
-The first step is to retrieve all molecular data identifiers that are not mutations/cna/SV:
-
-```{r}
-#get all molecular profiles as a data.frame
-all_MolProf <- available_profiles(study_id)
-
-#filter out unwanted molecularProfileId values
-all_MolProf_filtered <- all_MolProf[!grepl("gistic$|mutations$|structural_variants$", all_MolProf$molecularProfileId, perl = TRUE), c("name", "description", "molecularProfileId")] #gistic is the tool used to identify cna
-
-#print
-all_MolProf_filtered
-```
-
-Then choose your molecular data of interest, for example "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna" for RNA data:
-
-```{r}
-MolProf <- "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna"
-```
-
-The queries are made by gene, we must choose a gene of interest (we will see how to make a query with several genes later in the course).  
-For example let's choose the "BRAF" gene.  
-The name "BRAF" is in the HUGO nomenclature, but the API needs the gene names in the Entre_ID nomenclature, so we have to convert.  
-For this we can use the get_entrez_id() function provided by the `cbioportalR` package:  
-```{r}
-gene_hugo <- "BRAF"
-gene_entrezId <- get_entrez_id(hugo_symbol = gene_hugo, base_url = base_url)
-gene_entrezId
-```
-
-`get_entrez_id()` returns an array (because we can give it a vector with several genes), so we only need to recover the results of the "entrezGeneId" column:  
-```{r}
-gene_entrezId <- gene_entrezId$entrezGeneId
-gene_entrezId
-```
-
-> Note that the reverse function also exists: get_hugo_symbol(enter_id = NULL, base_url = NULL). We'll use it later.
-
-
-The second step is to build the url:  
-```{r}
-# build url
-url_MolProf_gene <- paste0("molecular-profiles/",
-                           MolProf,
-                           "/molecular-data?sampleListId=",
-                           study_id,
-                           "_all&entrezGeneId=",
-                           gene_entrezId)
-url_MolProf_gene
-```
-
-The third step is to recover data:  
-```{r}
-result <- cbp_api(url_path = url_MolProf_gene, base_url = base_url)
-```
-"result" is obtained as a "cbp_api" format:  
-```{r}
-class(result)
-```
-
-Interesting results are in the "content" list:  
-```{r}
-names(result)
-head(result$content,2)
-class(result$content[[1]])
-names(result$content[[1]])
-```
-
-The results of interest are in a list of lists format, so the fourth step is to format the data obtained, in order to easily work on them afterwards, for example in a dataframe:  
-```{r}
-formated_result <- purrr::map_df(result$content, ~ as.data.frame(.x))
-head(formated_result)
-```
-Each line corresponds to a sample and the BRAF expression value is present in the “value” column.  
-
-*Question* : Get the gene expression of "PDL1".
-<details>
-
-<summary>Tips</summary>
-Be careful "PDL1" is the name of the protein and not the gene (search the gene name on the web like on [GeneCard](https://www.genecards.org)) ;)
-[PDL1 on GeneCard page](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CD274)  
-</details>
-<br>
-
-<details>  
-<summary>Answer</summary>  
-
-```{r}
-#setting parameters
-study_id <- "gbm_tcga_pan_can_atlas_2018"
-MolProf <- "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna"
-gene_hugo <- "CD274"
-
-#get entrezID
-gene_entrezId <- get_entrez_id(hugo_symbol = gene_hugo, base_url = base_url)
-gene_entrezId <- gene_entrezId$entrezGeneId
-
-#format url
-url_MolProf_gene <- paste0("molecular-profiles/",
-                           MolProf,
-                           "/molecular-data?sampleListId=",
-                           study_id,
-                           "_all&entrezGeneId=",
-                           gene_entrezId)
-#get result
-result <- cbp_api(url_path = url_MolProf_gene, base_url = base_url)
-#format result
-formated_result <- purrr::map_df(result$content, ~ as.data.frame(.x))
-#print
-head(formated_result)
-
-```
-
-</details>
-<br>
-
-##### Get data from several Molecular Profile OR several genes
-
-If you want to retrieve information for several genes or several molecular profiles, you would have to redo the previous calculations several times, which will be long and tedious if you have to do it "by hand" for each gene.  
-To make life easier (and life should always be made easier), we are going to automate the process.  
-To do this, we will put the series of computations seen previously into a function, which we will call `GetMolecularProfileData`:
-
-```{r}
-#' Function GetMolecularProfileData
-#' @param MolecularProfileID The molecular profile identifier
-#' @param gene_hugo A gene name in hugo nomenclature
-#' @param base_url Database url
-#' @param study_id Study identifier
-GetMolecularProfileData <- function(MolecularProfileID = NULL, gene_hugo = NULL, base_url = NULL, study_id = NULL){
-  #conversion into entrez_id
-  gene_entrezId <- get_entrez_id(hugo_symbol = gene_hugo, base_url = base_url)
-  gene_entrezId <- gene_entrezId$entrezGeneId
-  #build url
-  url_MolProf_gene <- paste0("molecular-profiles/", MolecularProfileID, "/molecular-data?sampleListId=",
-                             study_id,"_all&entrezGeneId=", gene_entrezId)
-  #get data for the gene
-  result <- cbp_api(url_path = url_MolProf_gene, base_url = base_url)
-  #format data
-  formated_result <- purrr::map_df(result$content, ~ as.data.frame(.x))
-  #return output
-  return(formated_result)
-}
-
-```
-
-We can test our function on the previous gene to verify that we obtain the same results:
-```{r}
-formated_result_byfunc <- GetMolecularProfileData(MolecularProfileID = MolProf,
-                                              gene_hugo = gene_hugo,
-                                              base_url = base_url,
-                                              study_id = study_id)
-head(formated_result_byfunc)
-```
-
-Now, our goal is to apply this function several times automatically (once per gene) using the R function `lapply()`. `lapply()` is a function that allows you to iterate over a vector and return a list as output.  
-`lapply(X, FUN, ...)` or `lapply(X, function(x){ FUN(x,...) })`:  
-- X : argument of the function which have to be iterated (a vector or a list),  
-- FUN : the function to be applied,  
-- x : name of the variable that will take each value of X,  
-- ... : additional arguments passed to FUN.  
-
-In other words, we tell R "for each value of our gene vector `some_gene_hugo`, apply the function named `GetMolecularProfileData()`".  
-Here our `GetMolecularProfileData()` function returns a dataframe, so `lapply()` will output a list of dataframes. You will need to reformat this list of dataframes to easily work on it afterwards.  
-Example of data recovery with a list of genes for a molecular profile:
-```{r}
-#vector of genes in HUGO format
-some_gene_hugo <- c("BRAF","GATA3","JAK2","MITF","STAT4","BRCA1","GATA4","JAK3","PDK1")
-
-#molecular profile
-MolProf <- "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna"
-
-#apply the function GetMolecularProfileData several time depending of the first argument
-some_genes_results <- lapply(some_gene_hugo,              # for each values of some_gene_hugo
-                             function(gene) {             # called "gene"
-                                GetMolecularProfileData(  # apply GetMolecularProfileData function with the next arguments
-                                                    gene_hugo = gene,
-                                                    MolecularProfileID = MolProf,
-                                                    base_url = base_url,
-                                                    study_id = study_id
-                                )
-                               Sys.sleep(0.2)             # avoid API server overload
-                             }
-                      )
-
-#check object structure
-class(some_genes_results)      # class of the results -> list where each element of the list correspond to a gene
-class(some_genes_results[[1]]) # class of the data saved into the list -> data.frame
-
-#combine the list of data.frames by row to get one big dataframe
-some_genes_results <- bind_rows(some_genes_results)
-
-#print the formatted result
-head(some_genes_results)
-
-#replace entrezId by Hugo nomenclature
-conversion_table <- as.data.frame(get_hugo_symbol(entrez_id = some_genes_results$entrezGeneId, base_url = base_url))
-some_genes_results$hugoGeneSymbol <- conversion_table[match(some_genes_results$entrezGeneId, conversion_table$entrezGeneId),"hugoGeneSymbol"]
-some_genes_results$entrezGeneId <- NULL
-
-#print the formatted result
-head(some_genes_results)
-```
-
-Example of data recovery with a list of molecular profiles for a gene:  
-```{r}
-#gene
-gene_hugo <- "BRAF"
-#vector of molecular profiles
-some_MolProf <- c("gbm_tcga_pan_can_atlas_2018_rppa", "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna")
-
-#apply the function GetMolecularProfileData several time depending of arguments
-#output: a list of dataframe, where all element of the list is a molcular profile
-some_MolProf_results <- lapply(some_MolProf,               # for each values of some_MolProf
-                             function(molprof) {           # called "molprof"
-                                GetMolecularProfileData(   # apply GetMolecularProfileData function with the next arguments
-                                                    gene_hugo = gene_hugo,
-                                                    MolecularProfileID = molprof,
-                                                    base_url = base_url,
-                                                    study_id = study_id
-                                )
-                                Sys.sleep(0.2)             # avoid API server overload
-                             }
-                        )
-
-#combine the list by row to get one big dataframe
-some_MolProf_results <- bind_rows(some_MolProf_results)
-
-#print the formatted result
-head(some_MolProf_results)
-
-#replace entrezId by Hugo nomenclature
-conversion_table <- as.data.frame(get_hugo_symbol(entrez_id = some_MolProf_results$entrezGeneId, base_url = base_url))
-some_MolProf_results$hugoGeneSymbol <- conversion_table[match(some_MolProf_results$entrezGeneId,conversion_table$entrezGeneId),"hugoGeneSymbol"]
-some_MolProf_results$entrezGeneId <- NULL
-
-#print the formatted result
-head(some_MolProf_results)
-
-```
-
-
-##### Get data from several Molecular Profile AND several genes
-
-What if we want the results of several genes **AND** several molecular profiles at the same time?
-
-`lapply()` only allows you to iterate over a single list. But here we need to iterate on 2 vectors. So let's nest the `lapply()`!
-What we want: "for each value of our gene vector `some_gene_hugo`, and for each value of our molecular profile vector `some_MolProf`, apply the function named `GetMolecularProfileData()`".
-What we ask of R:
-
-
-```{r}
-#vector of genes in HUGO format
-some_gene_hugo <- c("BRAF","GATA3","JAK2","MITF","STAT4","BRCA1","GATA4","JAK3","PDK1")
-
-#vector of molecular profiles
-some_MolProf <- c("gbm_tcga_pan_can_atlas_2018_rppa", "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna")
-
-#apply the function GetMolecularProfileData several time depending of arguments
-some_genes_MolProf_results <- lapply(some_MolProf,                    # for each values of some_MolProf
-                                     function(molprof) {              # called "molprof"
-                                       lapply(                        # apply lapply function
-                                         some_gene_hugo,              # for each values of some_gene_hugo
-                                         function(gene) {             # called "gene"
-                                            GetMolecularProfileData(  # apply GetMolecularProfileData function with the next arguments
-                                                gene_hugo = gene,
-                                                MolecularProfileID = molprof,
-                                                base_url = base_url,
-                                                study_id = study_id
-                                            )
-                                            Sys.sleep(0.2)            # avoid API server overload
-                                          }
-                                       )
-                                     }
-                              )
-
-head(some_genes_MolProf_results[[1]][[1]]) # list of lists of dataframe, where each first list correspond to a molecular profile, and each list inside the first list correspond to a gene, and the dataframe corresponds to values (a.k.a head(some_genes_MolProf_results[[some_MolProf iteration]][[some_gene_hugo iteration]])
-
-#combine the list by row and column to get one big dataframe
-some_genes_MolProf_results <- dplyr::bind_rows(unlist(some_genes_MolProf_results, recursive = FALSE))
-
-#print the formatted result
-head(some_genes_MolProf_results)
-
-#replace entrezId by Hugo nomenclature
-conversion_table <- as.data.frame(get_hugo_symbol(entrez_id = some_genes_MolProf_results$entrezGeneId, base_url = base_url))
-some_genes_MolProf_results$hugoGeneSymbol <- conversion_table[match(some_genes_MolProf_results$entrezGeneId, conversion_table$entrezGeneId),"hugoGeneSymbol"]
-some_genes_MolProf_results$entrezGeneId <- NULL
-
-#print the formatted result
-head(some_MolProf_results)
-
-```
-
-Tips:
-Are you not tired of copying the lines of code for converting enterzId to Hugo nomenclature in the results?  
-Let's do a little function.
-
-```{r}
-#' Function Convert_Entrez2Hugo
-#' @param result The formated data.frame with "entrezGeneId" column to convert into Hugo gene symbol
-#' @param base_url The database url
-ConvertEntrezToHugo <- function(result = NULL, base_url = NULL){
-  conversion_table <- as.data.frame(get_hugo_symbol(entrez_id = result$entrezGeneId, base_url = base_url))
-  result$hugoGeneSymbol <- conversion_table[match(result$entrezGeneId, conversion_table$entrezGeneId),"hugoGeneSymbol"]
-  result$entrezGeneId <- NULL
-  return(result)
-}
-```
-
-With this new function the code becomes:  
-```{r, eval=FALSE}
-#vector of genes in HUGO format
-some_gene_hugo <- c("BRAF","GATA3","JAK2","MITF","STAT4","BRCA1","GATA4","JAK3","PDK1")
-
-#vector of molecular profiles
-some_MolProf <- c("gbm_tcga_pan_can_atlas_2018_rppa", "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna")
-
-#apply the function GetMolecularProfileData several time depending of arguments
-some_genes_MolProf_results <- lapply(some_MolProf,                    # for each values of some_MolProf
-                                     function(molprof) {              # called "molprof"
-                                       lapply(                        # apply lapply function
-                                         some_gene_hugo,              # for each values of some_gene_hugo
-                                         function(gene) {             # called "gene"
-                                            GetMolecularProfileData(  # apply GetMolecularProfileData function with the next arguments
-                                                gene_hugo = gene,
-                                                MolecularProfileID = molprof,
-                                                base_url = base_url,
-                                                study_id = study_id
-                                            )
-                                            Sys.sleep(0.2)            # avoid API server overload
-                                          }
-                                       )
-                                     }
-                              )
-#combine the list by row to get one big dataframe
-some_genes_MolProf_results <- dplyr::bind_rows(unlist(some_genes_MolProf_results, recursive = FALSE))
-
-#replace entrezId by Hugo nomenclature
-some_genes_MolProf_results <- ConvertEntrezToHugo(result = some_genes_MolProf_results, base_url = base_url)
-
-```
-
-> Note: this would also work with a single gene and a single molecular profile, but they must be in vector format:  
-some_gene_hugo <- c("BRAF")  
-some_MolProf <- c("gbm_tcga_pan_can_atlas_2018_rppa")  
-
-> Note: we could even make a function that combines data recovery, formatting and gene translation, but the more functions you nest, the more difficult it becomes to debug and keep the modularity of the code, so you have to find the right balance and it's up to you to define it.  
-
-##### Get data from ALL Molecular Profile AND ALL genes
-
-For this we will retrieve the list of all the genes, the list of all the molecular profiles available, then reuse the code produced in the previous section.  
-Warning: this may require a lot of memory and time.  
-
-```{r, evale = FALSE}
-#get all available genes
-all_genes <- get_genes(base_url = base_url)
-all_genes <- all_genes$hugoGeneSymbol
-
-#get all available molecular profiles
-all_MolProf <- available_profiles(study_id)$molecularProfileId
-all_MolProf <- unlist(lapply(all_MolProf, grep, pattern = "gistic$|mutations$|structural_variants$", invert = TRUE, value = TRUE, perl = TRUE)) # gistic is the tool used to identify cna
-all_MolProf
-
-#apply the function GetMolecularProfileData several time depending of arguments
-all_genes_MolProf_results <- lapply(all_MolProf,                     # for each values of all_MolProf
-                                     function(molprof) {             # called "molprof"
-                                       lapply(                       # apply lapply function
-                                         all_genes,                  # for each values of all_genes
-                                         function(gene) {            # called "gene"
-                                            Sys.sleep(0.5)           # pause 0.5 sec to avoid server overload
-                                            GetMolecularProfileData( # apply GetMolecularProfileData function with the next arguments
-                                                gene_hugo = gene,
-                                                MolecularProfileID = molprof,
-                                                base_url = base_url,
-                                                study_id = study_id
-                                            )
-                                            Sys.sleep(0.2)           # avoid API server overload
-                                          }
-                                       )
-                                     }
-                              )
-#combine the list by row to get one big dataframe
-all_genes_MolProf_results <- dplyr::bind_rows(unlist(all_genes_MolProf_results, recursive = FALSE))
-
-#replace entrezId by Hugo nomenclature
-all_genes_MolProf_results <- ConvertEntrezToHugo(result = all_genes_MolProf_results, base_url = base_url)
-
 ```
 
 ## Work on downloaded data (merge, filtering, format, ...)
@@ -1119,77 +719,12 @@ BRCA1_mutation_data <- mutation_data[mutation_data$hugoGeneSymbol == "BRCA1", ]
 
 CNA, SV and segment data can be filtered in the same way.
 
-#### Other molecular data
-
-```{r}
-#get result from one specific gene
-BRAF_some_MolProf_results <- some_genes_MolProf_results[some_genes_MolProf_results$hugoGeneSymbol == "BRAF",]
-
-#get result from 2 specific genes
-BRAF_BRCA1_some_MolProf_results <- some_genes_MolProf_results[some_genes_MolProf_results$hugoGeneSymbol %in% c("BRAF", "BRCA1"),]
-
-#get result from one specific molecular profile
-some_gene_rppa_results <- some_genes_MolProf_results[some_genes_MolProf_results$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rppa",]
-
-#get result where rna-seq expression is up to 2
-some_gene_mrna_sup2_results <- some_genes_MolProf_results[
-          some_genes_MolProf_results$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna" & 
-          some_genes_MolProf_results$value > 2 ,
-          ]
-
-```
-
-
-*Question* : How to retrieve all the lines corresponding to the genes "BRAF", "BRCA1" and "JAK2", for the molecular profile "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna", and whose values are greater than 1?  
-Start with some_genes_MolProf_results variables.
-
-<details>
-
-<summary>Answer</summary>
-
-```{r}
-selected_results <- some_genes_MolProf_results[
-  some_genes_MolProf_results$hugoGeneSymbol %in% c("BRAF", "BRCA1", "JAK2") &
-  some_genes_MolProf_results$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna" &
-  some_genes_MolProf_results$value >= 1,
-]
-
-```
-</details>
-<br>
-
-*Question* : What are the mean expression of the genes "BRAF", "BRCA1" and "JAK2" (based on "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna")?
-
-
-<details>
-
-<summary>Answer</summary>
-
-```{r}
-mean_expression <- some_genes_MolProf_results %>%
-  filter(
-    hugoGeneSymbol %in% c("BRAF", "BRCA1", "JAK2"),
-    molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna"
-  ) %>%
-  group_by(hugoGeneSymbol) %>%
-  summarise(
-    mean_value = mean(value, na.rm = TRUE)
-  )
-
-mean_expression
-
-```
-</details>
-<br>
-
-
-
 
 #### Filter molecular table following clinical table
 
 "uniqueSampleKey" is the unique ID of each sample. So it is the best column to make a correspondence between clinical and data.  
 
-Genomic data example: get the genomic data with a mutation on BRCA1 for patients with Priary tumor:  
+Genomic data example: get the mutation data with a mutation on BRCA1 for patients with Priary tumor:  
 ```{r}
 #keep sample with a mutation into BRCA1 
 BRCA1_mutation_data <- mutation_data[mutation_data$hugoGeneSymbol == "BRCA1", ]
@@ -1200,7 +735,7 @@ BRCA1_mutation_data_filtered <- BRCA1_mutation_data[BRCA1_mutation_data$uniqueSa
 
 ```
 
-Genomic data example: get the rppa data for patient with an altered genome fraction greater than 0.2:
+Genomic data example: get the mutation data for patients with an altered genome fraction greater than 0.2:
 ```{r}
 #convert into numeric
 class(clinical_data_primary$FRACTION_GENOME_ALTERED)
@@ -1214,68 +749,9 @@ summary(clinical_data_primary$FRACTION_GENOME_ALTERED) #there are some NA values
 clinical_data_high_alter <- clinical_data[ !is.na(clinical_data$FRACTION_GENOME_ALTERED) & clinical_data$FRACTION_GENOME_ALTERED > 0.2,]
 
 #filtering
-some_gene_rppa_results_filtered <- some_gene_rppa_results[some_gene_rppa_results$uniqueSampleKey %in% clinical_data_high_alter$uniqueSampleKey,]
+mutation_data_filtered <- mutation_data[mutation_data$uniqueSampleKey %in% clinical_data_high_alter$uniqueSampleKey,]
 
 ```
-
-
-*Question* : What are the mean expression of the gene "BRAF" (based on "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna") for patients "Untreated" ("TUMOR_TYPE")?
-
-<details>
-
-<summary>Answer</summary>
-
-```{r}
-#check values
-table(clinical_data$TUMOR_TYPE)
-
-#get Untreated patient ID
-clinical_data_untreated <- clinical_data[ clinical_data$TUMOR_TYPE == "Glioblastoma Multiforme (GBM), Untreated", ]
-
-#get "BRAF" expression for these patients
-BRAF_exp <- some_genes_MolProf_results[
-  some_genes_MolProf_results$hugoGeneSymbol == "BRAF" &
-  some_genes_MolProf_results$uniqueSampleKey %in% clinical_data_untreated$uniqueSampleKey
-  , "value"]
-
-#compute mean
-mean(BRAF_exp)
-
-
-```
-
-</details>
-<br>
-
-
-#### Format a molecular profile like a counts table
-
-Currently, with our GetMolecularProfileData function, we have all the values of interest in a single column with the information of the corresponding gene and sample in another column. But to do certain analyzes we need a table where the rows are genes and the columns are samples.  
-
-To do this, you must filter the table to recover only one molecular profile, then format the table:  
-
-```{r}
-#filtering to keep only rnaseq expression
-some_gene_mrna_results <- some_genes_MolProf_results[some_genes_MolProf_results$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",]
-
-#filtering to keep only interesting columns
-some_gene_mrna_results <- some_gene_mrna_results[,c("uniqueSampleKey","hugoGeneSymbol","value")]
-
-#check
-summary(some_gene_mrna_results$value)
-table(is.na(some_gene_mrna_results$hugoGeneSymbol))
-table(is.na(some_gene_mrna_results$uniqueSampleKey))
-
-#format into count table
-some_gene_mrna_results2 <- pivot_wider(some_gene_mrna_results,
-                                       names_from = uniqueSampleKey,
-                                       values_from = value,
-                                       values_fill = 0) %>%
-                          as.data.frame()
-#print
-some_gene_mrna_results2[1:5,1:5]
-```
-
 
 
 ### Merge clinical and molecular data
@@ -1284,146 +760,9 @@ some_gene_mrna_results2[1:5,1:5]
 #genomic data
 mut_clin <- merge(clinical_data, mutation_data, all = TRUE) %>% as.data.frame()
 head(mut_clin)
-
-#other molecular data
-some_gene_rppa_clin <- merge(clinical_data, some_gene_rppa_results, all = TRUE) %>% as.data.frame()
-head(some_gene_rppa_clin)
 ```
 
 > Note: by default, merge merges by common column names between the 2 dataframes. `all` allows to keep all row from both dataframes, if you want to keep only all row from mutation_data but not from clinical_data, set `all.y = TRUE, all = FALSE` (for the opposite put `all.x = TRUE, all = FALSE`).
-
-
-## Summary (TLDR – Too Long Didn't Read)
-
-### Install cbioportalR package
-```{r, eval=FALSE}
-install.packages("cbioportalR")
-```
-
-### Connection
-```{r, eval=FALSE}
-#library loading
-library(cbioportalR)
-library(dplyr)
-library(tidyr)
-
-#connexion to the cbioportal
-base_url <- "cbioportal.intra.igr.fr" #intern GR (don't forget the token)
-base_url <- "https://www.cbioportal.org" # public
-set_cbioportal_db(base_url)
-```
-
-### Search studies and choose one
-```{r, eval=FALSE}
-
-# get all available studies
-library(httr) #to send HTTP requests to the API
-library(jsonlite) #to convert JSON responses to R objects
-studies_url <- paste0(base_url, "/api/studies")
-res <- GET(studies_url, 
-           query = list(pageSize = 1000, pageNumber = 0 ),
-           accept_json())
-all_studies <- fromJSON(content(res, "text", encoding = "UTF-8"))
-
-# choose a study
-study_id <- "gbm_tcga_pan_can_atlas_2018"
-
-#get all info about our study of interest
-study_info <- get_study_info(study_id) %>% t()
-
-#get all moleculary profile id
-study_profiles <- available_profiles(study_id) %>% as.data.frame()
-```
-
-### Get clinical data
-```{r, eval=FALSE}
-#get samples
-sampleList <- available_samples(study_id = study_id)
-#get clinical data
-clinical_data <- get_clinical_by_sample(sample_id = sampleList$sampleId, study_id  = study_id)
-clinical_data <- clinical_data %>% pivot_wider(names_from = clinicalAttributeId) %>% as.data.frame()
-```
-
-### Get mutations, cna (with segments) and structural variants
-```{r, eval=FALSE}
-#get all
-allGenomic <- get_genetics_by_study(study_id = study_id, return_segments = TRUE)
-#get mutations
-mutation_data <- get_mutations_by_study(study_id = study_id)
-#get cna
-cna_data <- get_cna_by_study(study_id = study_id)
-#get structural variants
-SV_data <- get_fusions_by_study(study_id = study_id)
-#get segments of cna
-segment_data <- get_segments_by_study(study_id = study_id)
-```
-
-### Get other molecular profiles
-```{r, eval=FALSE}
-
-### functions ###
-
-#' Function GetMolecularProfileData
-#' @param MolecularProfileID The molecular profile identifier
-#' @param gene_hugo A gene name in hugo nomenclature
-#' @param base_url Database url
-#' @param study_id Study identifier
-GetMolecularProfileData <- function(MolecularProfileID = NULL, gene_hugo = NULL, base_url = NULL, study_id = NULL){
-  #conversion into entrez_id
-  gene_entrezId <- get_entrez_id(hugo_symbol = gene_hugo, base_url = base_url)
-  gene_entrezId <- gene_entrezId$entrezGeneId
-  #build url
-  url_MolProf_gene <- paste0("molecular-profiles/", MolecularProfileID, "/molecular-data?sampleListId=",
-                             study_id,"_all&entrezGeneId=", gene_entrezId)
-  #get data for the gene
-  result <- cbp_api(url_path = url_MolProf_gene, base_url = base_url)
-  #format data
-  formated_result <- purrr::map_df(result$content, ~ as.data.frame(.x))
-  #return output
-  return(formated_result)
-}
-
-#' Function Convert_Entrez2Hugo
-#' @param result The formated data.frame with "entrezGeneId" column to convert into Hugo gene symbol
-#' @param base_url The database url
-ConvertEntrezToHugo <- function(result = NULL, base_url = NULL){
-  conversion_table <- as.data.frame(get_hugo_symbol(entrez_id = result$entrezGeneId, base_url = base_url))
-  result$hugoGeneSymbol <- conversion_table[match(result$entrezGeneId, conversion_table$entrezGeneId),"hugoGeneSymbol"]
-  result$entrezGeneId <- NULL
-  return(result)
-}
-
-### main ###
-
-some_gene_hugo <- c("BRAF","GATA3","JAK2","MITF","STAT4","BRCA1","GATA4","JAK3","PDK1")
-some_MolProf <- c("gbm_tcga_pan_can_atlas_2018_rppa", "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna")
-some_genes_results <- lapply(some_gene_hugo, function(gene) {
-                                GetMolecularProfileData(gene_hugo = gene,
-                                                        MolecularProfileID = MolProf,
-                                                        base_url = base_url,
-                                                        study_id = study_id)
-                                Sys.sleep(0.2)
-                      })
-some_genes_results <- bind_rows(some_genes_results)
-some_genes_MolProf_results <- ConvertEntrezToHugo(result = some_genes_MolProf_results, base_url = base_url)
-```
-
-### Filtering, format and merge
-```{r}
-#filtering result
-my_df_filtered <- my_df[my_df$hugoGeneSymbol == "BRAF",]
-my_df_filtered <- my_df[my_df$hugoGeneSymbol %in% c("BRAF", "BRCA1"),]
-my_df_filtered <- my_df[my_df$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna" & my_df$value > 2 ,]
-
-#format a molecular profile like a counts table
-my_df_rna <- my_df[my_df$molecularProfileId == "gbm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",c("uniqueSampleKey","hugoGeneSymbol","value")]
-my_df_rna <- pivot_wider(my_df_rna, names_from = uniqueSampleKey, values_from = value) %>% as.data.frame()
-
-#merge clinical and molecular data
-mut_clin <- merge(clinical_data, mutation_data, all = TRUE) %>% as.data.frame()
-
-```
-
 
 # Citation
 
