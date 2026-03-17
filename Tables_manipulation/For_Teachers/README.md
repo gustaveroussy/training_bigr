@@ -7,5 +7,5 @@ wget https://zenodo.org/records/13963480/files/formation_bigr_tables_manipulatio
 singularity exec --no-home -B ./:/home/ formation_bigr_tables_manipulation.simg R -e 'rmarkdown::render("/home/Tables_manipulation.Rmd")'  
 mv Tables_manipulation.html ../For_Students/  
 rm -r Clinical*  
-rm -r Sample*
+rm -r Sample*  
 rm formation_bigr_tables_manipulation.simg
