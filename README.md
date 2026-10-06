@@ -2,8 +2,9 @@
 This repository contains all training material from the bioinformatics platform at Gustave Roussy (BiGR).  
 All courses are free, no registration, you can come as long as there are free seats in the room!
 
-### To see the planning (what/when/where), click [here](https://gustaveroussyfr.sharepoint.com/:l:/s/Plateformedebioinformatique-Formationsinternes/FA02Wok_gEVKn_WrC000wOUBkXVcZUHym7GgyN7-pvFzbA?e=fhDNn7)
-### Subscription [here](https://forms.gle/vtWVNbXr47VoQH3o7)
+### 📅 Planning [here](https://gustaveroussyfr.sharepoint.com/:l:/s/Plateformedebioinformatique-Formationsinternes/FA02Wok_gEVKn_WrC000wOUBkXVcZUHym7GgyN7-pvFzbA?e=fhDNn7) (what / when / where)
+
+### 📝 Registration [here](https://forms.gle/vtWVNbXr47VoQH3o7)
 
 _________________________________
 
